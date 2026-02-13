@@ -1,513 +1,513 @@
-Sequence     Count
-------------------
-lls             65
-cks             64
-nts             54
-lly             52
-ngs             52
-sts             52
-nks             50
-nds             45
-rks             44
-tch             42
-ffs             41
-nny             41
-tty             39
-mps             38
-ppy             37
-ddy             35
-rds             34
-lts             33
-bby             32
-ggy             32
-rns             31
-rts             31
-cky             31
-sty             31
-rry             30
-rls             30
-nch             29
-mmy             26
-nky             25
-ndy             23
-rms             23
-sks             23
-ssy             23
-ths             23
-nty             22
-lks             21
-shy             21
-tts             20
-rrs             20
-sky             20
-scr             20
-fts             19
-lds             19
-str             19
-rth             18
-rps             18
-ngy             18
-dgy             18
-mpy             18
-ght             17
-ffy             17
-rdy             16
-rky             16
-wns             16
-wls             15
-zzy             15
-mbs             15
-spr             14
-rbs             14
-lch             14
-lky             13
-cht             13
-rfs             13
-ggs             13
-rty             13
-thy             13
-rly             13
-rst             13
-rch             12
-wks             12
-fty             12
-lps             12
-chy             12
-lty             12
-nns             11
-vvy             11
-hyl             11
-sps             11
-chs             10
-ghs             10
-lms             10
-yly             10
-lfs             10
-psy             10
-yth             10
-thr             10
-ply              9
-phs              9
-hym              9
-try              9
-typ              9
-yls              8
-tsy              8
-rby              8
-rny              8
-mph              8
-ynd              8
-mpt              8
-spy              8
-wts              8
-lys              8
-sch              8
-pyr              8
-fly              7
-gry              7
-tly              7
-dly              7
-tyl              7
-rcs              7
-mby              7
-wps              7
-yst              7
-ncy              7
-cts              7
-nsy              7
-wny              7
-phy              7
-syn              7
-kyl              6
-lph              6
-ntr              6
-syl              6
-ccy              6
-rmy              6
-wds              6
-wdy              6
-gly              6
-lyp              6
-hrs              6
-wth              6
-ryp              6
-dry              6
-lyt              6
-rsh              6
-sht              6
-gyr              6
-xyl              6
-hyp              6
-tyr              6
-shr              6
-cry              5
-ryl              5
-lth              5
-mbr              5
-zym              5
-lmy              5
-bbs              5
-rsy              5
-rvy              5
-wry              5
-cym              5
-wly              5
-rgy              5
-wsy              5
-ymp              5
-gyp              5
-pps              5
-yss              4
-lyl              4
-khs              4
-ldy              4
-rgs              4
-kky              4
-rtz              4
-rnt              4
-hyn              4
-cyc              4
-ycl              4
-mns              4
-ynt              4
-dst              4
-wfs              4
-dyk              4
-mys              4
-tym              4
-nly              4
-lpy              4
-yph              4
-ryk              4
-gyn              4
-lsh              4
-hyd              4
-ydr              4
-dyl              4
-wnd              4
-nth              4
-syc              4
-pyx              4
-dds              4
-rhy              4
-sly              4
-spl              4
-syb              4
-rgh              3
-bys              3
-cch              3
-cyl              3
-ggr              3
-mpl              3
-ncl              3
-ngl              3
-pts              3
-zyg              3
-ncs              3
-rfy              3
-wrs              3
-hls              3
-ypt              3
-rcy              3
-rpy              3
-rvs              3
-xys              3
-cty              3
-dyn              3
-pty              3
-rzy              3
-wky              3
-sms              3
-rrl              3
-ypp              3
-gyv              3
-wyl              3
-msh              3
-kyr              3
-kyt              3
-lyc              3
-ync              3
-myn              3
-myt              3
-xts              3
-nyl              3
-shm              3
-pry              3
-ymy              3
-rym              3
-skr              3
-syp              3
-syr              3
-tyn              3
-wyt              3
-ddl              2
-dyt              2
-yts              2
-kyd              2
-mbl              2
-myl              2
-ndr              2
-ngr              2
-nkl              2
-ppl              2
-ndh              2
-wty              2
-lby              2
-lgy              2
-bly              2
-xty              2
-yfs              2
-mfs              2
-byd              2
-byk              2
-byl              2
-byr              2
-nct              2
-mms              2
-ryn              2
-cyt              2
-ych              2
-mly              2
-scs              2
-tzy              2
-nsh              2
-dzh              2
-myd              2
-yds              2
-lsy              2
-yby              2
-hns              2
-fry              2
-bsy              2
-fyk              2
-ytt              2
-ghy              2
-yll              2
-nys              2
-grr              2
-lfy              2
-gyb              2
-ynn              2
-yps              2
-wms              2
-wff              2
-hys              2
-hyt              2
-mpr              2
-lns              2
-kyn              2
-lym              2
-lyn              2
-lyr              2
-rsk              2
-ltz              2
-msy              2
-nrt              2
-chr              2
-gmy              2
-rys              2
-psh              2
-dsy              2
-pyg              2
-pyn              2
-shl              2
-nhs              2
-tyt              2
-syk              2
-wyn              2
-bmh              1
-ysm              1
-ccr              1
-ddr              1
-dvt              1
-vts              1
-ffl              1
-bry              1
-gst              1
-nkh              1
-ppr              1
-ppt              1
-ptl              1
-rdr              1
-rgl              1
-rtl              1
-vyz              1
-wdl              1
-dls              1
-wmr              1
-mry              1
-ygr              1
-ygy              1
-yms              1
-gsy              1
-hts              1
-ntz              1
-rzz              1
-ygs              1
-ysy              1
-lbs              1
-ndt              1
-njy              1
-sby              1
-yrl              1
-byt              1
-byw              1
-lyx              1
-nst              1
-nqs              1
-cly              1
-mfy              1
-nfs              1
-crw              1
-rwt              1
-cwt              1
-wtc              1
-cyb              1
-cyd              1
-cyn              1
-cys              1
-wgs              1
-bts              1
-lft              1
-pth              1
-mky              1
-vns              1
-nsk              1
-nzy              1
-thn              1
-ttl              1
-xtr              1
-fth              1
-qhs              1
-lyb              1
-fyc              1
-fyl              1
-fyr              1
-yrd              1
-fyt              1
-wcy              1
-rlf              1
-rrr              1
-ryc              1
-ryd              1
-ggl              1
-gym              1
-gyt              1
-nry              1
-wgh              1
-hwy              1
-hyg              1
-ygg              1
-hyk              1
-ymn              1
-hyr              1
-ckl              1
-llt              1
-nby              1
-nfr              1
-nsp              1
-stl              1
-xtl              1
-khy              1
-kyb              1
-kyp              1
-xly              1
-ycr              1
-nxy              1
-rkn              1
-sls              1
-mmk              1
-rph              1
-hly              1
-lct              1
-njs              1
-sth              1
-myr              1
-yrr              1
-rrh              1
-myx              1
-bks              1
-wbs              1
-ngw              1
-rtt              1
-nym              1
-hry              1
-ctl              1
-ldl              1
-mdd              1
-tby              1
-wch              1
-ysd              1
-rsp              1
-pff              1
-fft              1
-ftt              1
-phl              1
-php              1
-hph              1
-pht              1
-phw              1
-ynx              1
-wlt              1
-pwn              1
-ygm              1
-pyl              1
-qqs              1
-dny              1
-tls              1
-gby              1
-ryb              1
-ymm              1
-ryt              1
-ngh              1
-chm              1
-chw              1
-scl              1
-scy              1
-kts              1
-nvy              1
-shc              1
-hch              1
-shw              1
-gns              1
-xth              1
-skl              1
-kyf              1
-yrs              1
-sny              1
-srs              1
-rsl              1
-ybb              1
-ylp              1
-ylv              1
-sym              1
-sys              1
-syt              1
-syv              1
-bls              1
-kht              1
-lcs              1
-lcy              1
-yns              1
-wzy              1
-tsk              1
-twy              1
-tyk              1
-ltr              1
-npl              1
-pby              1
-pdr              1
-ldt              1
-zhd              1
-vyg              1
-dts              1
-kfs              1
-qfs              1
-lkt              1
-why              1
-dth              1
-rld              1
-ylk              1
-dhs              1
-yrn              1
-krs              1
+Sequence     Count  Words
+------------------  ----------------------------------------
+lls             65  balls, bells, bills, bolls, bulls, calls, cells, cills, colls, culls, dells, dills, dolls, dulls, falls, fells, fills, fulls, galls, gills, gulls, halls, hells, hills, hulls, jells, jills, jolls, kells, kills, lalls, lills, lolls, lulls, malls, mells, mills, molls, mulls, nills, nolls, nulls, palls, pells, pills, polls, pulls, rills, rolls, sells, sills, sulls, talls, tells, tills, tolls, vells, vills, walls, wells, wills, wulls, yells, yills, zills
+cks             64  backs, becks, bocks, bucks, cacks, cocks, cucks, dacks, decks, dicks, docks, ducks, fecks, fucks, gecks, gucks, hacks, hecks, hicks, hocks, hucks, jacks, jocks, kacks, kecks, kicks, lacks, licks, locks, lucks, macks, mecks, micks, mocks, mucks, necks, nicks, nocks, oicks, packs, pecks, picks, pocks, pucks, racks, recks, ricks, rocks, rucks, sacks, sicks, socks, sucks, tacks, ticks, tocks, tucks, wacks, wicks, wocks, yacks, yocks, yucks, zacks
+nts             54  antsy, aunts, bants, bents, bints, bunts, cants, cents, cunts, dants, dents, dints, dunts, fents, fonts, funts, gants, gents, hants, hents, hints, hunts, kants, kents, lants, lints, lunts, mants, ments, mints, munts, nants, oints, oonts, pants, pents, pints, ponts, punts, rants, rents, ronts, runts, sants, sents, sunts, tents, tints, vants, vents, vints, wants, wents, wonts
+lly             52  allyl, bally, belly, billy, bully, celly, colly, cully, dally, delly, dilly, dolly, dully, felly, filly, folly, fully, gally, gelly, gilly, golly, gully, helly, hilly, holly, hully, jelly, jolly, kelly, lolly, milly, molly, nelly, nully, pally, polly, pully, rally, rilly, rolly, rully, sally, silly, sully, tally, telly, tilly, tolly, wally, welly, willy, wolly
+ngs             52  angst, bangs, bings, bongs, bungs, cangs, dangs, dings, dongs, dungs, fangs, fungs, gangs, gings, gongs, hangs, hings, hongs, jings, jongs, kangs, kings, lengs, lings, longs, lungs, mangs, mengs, mings, mongs, mungs, nongs, pangs, pings, pongs, pungs, rangs, rengs, rings, rungs, sangs, sings, songs, tangs, tings, tongs, tungs, vangs, wangs, wings, yangs, zings
+sts             52  basts, bests, busts, casts, cists, costs, cysts, dusts, easts, fasts, fests, fists, fusts, gasts, gests, gists, gusts, hests, hists, hosts, jests, justs, kests, kists, lasts, lests, lists, lusts, masts, mists, mosts, musts, nests, oasts, ousts, pasts, pests, posts, rests, rists, rosts, rusts, sists, tests, vasts, vests, wasts, wests, wists, xysts, yests, zests
+nks             50  banks, binks, bonks, bunks, conks, danks, dinks, dunks, fanks, fenks, finks, funks, ganks, ginks, gonks, gunks, hanks, honks, hunks, jinks, junks, kinks, konks, lanks, links, lunks, manks, minks, monks, nunks, oinks, panks, penks, pinks, ponks, punks, ranks, renks, rinks, sinks, sunks, tanks, tinks, tonks, wanks, winks, wonks, yanks, yonks, zonks
+nds             45  bands, bends, binds, bonds, bunds, fands, fends, finds, fonds, funds, hands, hends, hinds, honds, kinds, kunds, kynds, lands, lends, linds, mands, mends, minds, munds, pands, pends, pinds, ponds, rands, rends, rinds, runds, rynds, sands, sends, sinds, synds, tends, tinds, tunds, vends, wands, wends, winds, wynds
+rks             44  barks, berks, birks, borks, burks, carks, corks, darks, dirks, dorks, firks, forks, gurks, harks, horks, jarks, jerks, karks, kirks, larks, lirks, lurks, marks, merks, mirks, murks, narks, nerks, norks, parks, perks, pirks, porks, rarks, sarks, serks, turks, warks, works, yarks, yerks, yirks, yorks, zerks
+tch             42  aitch, batch, bitch, botch, butch, catch, cotch, cutch, cwtch, ditch, dutch, fetch, fitch, gatch, gitch, gotch, hatch, hitch, hotch, hutch, itchy, ketch, kotch, kutch, latch, letch, match, mitch, mutch, natch, notch, patch, pitch, potch, ratch, retch, rotch, sitch, titch, vetch, watch, witch
+ffs             41  baffs, biffs, boffs, buffs, caffs, coffs, cuffs, daffs, diffs, doffs, duffs, faffs, fuffs, gaffs, goffs, guffs, haffs, huffs, jeffs, jiffs, koffs, luffs, meffs, miffs, muffs, naffs, niffs, nuffs, puffs, raffs, riffs, ruffs, teffs, tiffs, toffs, tuffs, viffs, waffs, wuffs, yaffs, ziffs
+nny             41  benny, bonny, bunny, canny, cunny, danny, donny, dunny, fanny, fenny, finny, funny, genny, ginny, gunny, gynny, henny, hinny, janny, jenny, linny, manny, minny, nanny, ninny, nonny, nunny, panny, penny, pinny, punny, ranny, runny, sonny, sunny, tenny, tinny, tunny, vinny, wenny, yonny
+tty             39  batty, betty, bitty, botty, butty, catty, cutty, ditty, dotty, fatty, gutty, hatty, hotty, jetty, jitty, jotty, jutty, kitty, letty, matty, motty, natty, netty, nitty, nutty, patty, petty, potty, putty, ratty, rotty, rutty, tatty, titty, totty, tutty, vutty, witty, zitty
+mps             38  bumps, camps, comps, damps, dimps, dumps, gamps, gimps, gumps, gymps, hemps, humps, jumps, kemps, lamps, limps, lumps, mumps, nimps, numps, pimps, pomps, pumps, ramps, romps, rumps, samps, simps, sumps, tamps, temps, timps, tumps, tymps, vamps, wimps, yomps, yumps
+ppy             37  bippy, boppy, buppy, coppy, cuppy, dappy, dippy, duppy, gappy, gippy, guppy, gyppy, happy, hippy, hoppy, lappy, lippy, loppy, mappy, moppy, nappy, nippy, pappy, peppy, pippy, poppy, puppy, sappy, sippy, soppy, tippy, toppy, yappy, yippy, yuppy, zappy, zippy
+ddy             35  baddy, biddy, buddy, caddy, cuddy, daddy, diddy, doddy, duddy, faddy, fuddy, giddy, kiddy, laddy, maddy, middy, muddy, neddy, noddy, nuddy, paddy, poddy, puddy, raddy, reddy, ruddy, saddy, soddy, teddy, tiddy, toddy, voddy, waddy, widdy, wuddy
+rds             34  bards, birds, bords, burds, cards, cords, curds, eards, fards, fords, fyrds, girds, hards, herds, hurds, jirds, lards, lords, mards, merds, nards, nerds, nurds, pards, sards, sords, surds, tards, turds, wards, words, yards, yerds, yirds
+lts             33  belts, bolts, celts, colts, cults, dalts, delts, dolts, felts, gelts, gilts, halts, hilts, holts, jilts, jolts, kelts, kilts, lilts, malts, melts, milts, molts, pelts, polts, salts, silts, tilts, tolts, volts, welts, wilts, yelts
+bby             32  babby, bobby, bubby, cabby, cobby, cubby, debby, dobby, dubby, fabby, fubby, gabby, gobby, hobby, hubby, lobby, mobby, nabby, nebby, nibby, nobby, nubby, pobby, pubby, ribby, rubby, subby, tabby, tubby, webby, yabby, yobby
+ggy             32  baggy, biggy, boggy, buggy, ciggy, daggy, doggy, faggy, figgy, foggy, fuggy, huggy, jaggy, jiggy, laggy, leggy, loggy, moggy, muggy, naggy, noggy, peggy, piggy, poggy, puggy, raggy, ruggy, saggy, soggy, taggy, vuggy, wiggy
+rns             31  airns, barns, burns, carns, corns, curns, darns, derns, durns, earns, ferns, firns, girns, gurns, harns, herns, horns, karns, kerns, kirns, larns, morns, perns, pirns, porns, sorns, tarns, terns, turns, warns, yarns
+rts             31  airts, artsy, borts, carts, certs, darts, dirts, dorts, farts, forts, girts, harts, hurts, jorts, karts, marts, morts, nerts, nurts, parts, perts, ports, rorts, sorts, tarts, terts, torts, verts, warts, worts, yurts
+cky             31  backy, bicky, cacky, cocky, dicky, ducky, gucky, hacky, jacky, jocky, kicky, lacky, locky, lucky, micky, mocky, mucky, nicky, packy, pecky, picky, pocky, rocky, sicky, sucky, tacky, ticky, tocky, wacky, wicky, yucky
+sty             31  busty, dusty, festy, fisty, fusty, gusty, hasty, lusty, masty, misty, musty, nasty, nesty, pasty, pesty, resty, rusty, styed, styes, style, styli, stylo, styme, stymy, styre, styte, tasty, testy, vasty, yesty, zesty
+rry             30  barry, berry, burry, carry, curry, derry, durry, ferry, firry, furry, gurry, harry, herry, hurry, jerry, kerry, lorry, lurry, marry, merry, murry, parry, perry, purry, serry, sorry, tarry, terry, verry, worry
+rls             30  birls, burls, byrls, carls, cirls, curls, darls, dirls, earls, eorls, farls, furls, girls, grrls, gurls, harls, herls, hurls, jarls, marls, merls, mirls, murls, nirls, nurls, perls, pirls, purls, tirls, virls
+nch             29  ancho, bench, bunch, cinch, conch, dench, dunch, finch, ganch, ginch, gonch, hanch, hench, hunch, kench, lanch, linch, lunch, lynch, munch, panch, pinch, punch, ranch, runch, synch, tench, wench, winch
+mmy             26  bammy, commy, dummy, emmys, femmy, gammy, gemmy, gummy, hammy, jammy, jemmy, jimmy, lammy, lummy, mammy, mommy, mummy, nummy, pommy, rammy, rummy, sammy, tammy, tommy, tummy, yummy
+nky             25  banky, binky, conky, dinky, funky, gunky, hanky, hinky, honky, hunky, janky, junky, kinky, lanky, linky, manky, nunky, pinky, punky, sinky, tanky, wanky, winky, wonky, zinky
+ndy             23  bandy, bendy, bundy, candy, cundy, dandy, fendy, fundy, gandy, gundy, handy, kandy, kindy, lindy, mandy, oundy, pandy, pondy, randy, rindy, sandy, windy, yandy
+rms             23  barms, berms, borms, corms, derms, dorms, farms, ferms, firms, forms, garms, germs, gorms, harms, herms, marms, norms, parms, perms, terms, turms, warms, worms
+sks             23  basks, bisks, bosks, busks, casks, cusks, desks, disks, dusks, fisks, fusks, hasks, husks, lisks, lusks, masks, mosks, musks, risks, rusks, tasks, tusks, yesks
+ssy             23  bassy, bossy, cissy, fussy, gassy, gussy, hissy, hussy, jessy, kissy, lassy, lossy, massy, messy, missy, mossy, mussy, pissy, pussy, sassy, sissy, tossy, wussy
+ths             23  baths, beths, coths, gaths, goths, heths, kiths, laths, liths, maths, meths, moths, myths, oaths, paths, piths, raths, ruths, seths, soths, taths, teths, withs
+nty             22  aunty, banty, benty, bunty, canty, genty, janty, jonty, linty, manty, minty, monty, nanty, panty, ponty, punty, ranty, runty, tanty, tenty, tinty, wanty
+lks             21  balks, bilks, bolks, bulks, calks, filks, folks, holks, hulks, milks, oulks, polks, pulks, silks, sulks, talks, volks, walks, welks, yelks, yolks
+shy             21  bushy, cushy, dashy, dishy, fishy, gashy, gushy, hashy, hushy, imshy, lushy, mashy, meshy, mushy, pushy, rushy, shyer, shyly, toshy, tushy, washy
+tts             20  batts, bitts, botts, butts, cotts, ditts, fetts, fitts, matts, mitts, motts, mutts, netts, potts, putts, ritts, setts, tatts, watts, yetts
+rrs             20  birrs, burrs, carrs, currs, dorrs, durrs, furrs, girrs, mirrs, murrs, nurrs, parrs, pirrs, purrs, serrs, tirrs, torrs, turrs, yarrs, yirrs
+sky             20  bosky, busky, casky, dusky, ensky, husky, misky, musky, pesky, pisky, risky, rusky, skyed, skyer, skyey, skyfs, skyre, skyrs, skyte, tusky
+scr             20  scrab, scrae, scrag, scram, scran, scrap, scrat, scraw, scray, scree, screw, scrim, scrip, scrob, scrod, scrog, scroo, scrow, scrub, scrum
+fts             19  bafts, gifts, hafts, hefts, lefts, lifts, lofts, mafts, rafts, rifts, sifts, softs, tifts, tofts, tufts, wafts, wefts, wifts, yufts
+lds             19  balds, bolds, colds, eilds, folds, gelds, gilds, golds, holds, melds, milds, molds, silds, solds, velds, walds, welds, wilds, wolds
+str             19  estro, strad, strae, strag, strak, strap, straw, stray, strep, strew, stria, strig, strim, strip, strop, strow, stroy, strum, strut
+rth             18  airth, berth, birth, derth, earth, firth, forth, furth, garth, girth, mirth, murth, north, ortho, porth, tirth, worth, yirth
+rps             18  barps, burps, carps, corps, dorps, gorps, harps, herps, jarps, lerps, parps, perps, purps, rurps, tarps, turps, warps, yorps
+ngy             18  bingy, bungy, dingy, dungy, gungy, kingy, lingy, mangy, mingy, mungy, pongy, pungy, rangy, ringy, songy, tangy, wingy, zingy
+dgy             18  bodgy, cadgy, dodgy, fudgy, gadgy, hedgy, judgy, kedgy, ledgy, midgy, nudgy, podgy, pudgy, radgy, ridgy, sedgy, wedgy, wodgy
+mpy             18  bumpy, campy, dampy, dumpy, gimpy, hempy, humpy, jimpy, jumpy, kempy, lumpy, pumpy, rompy, rumpy, tumpy, vampy, wimpy, yampy
+ght             17  aight, aught, bight, dight, eight, fight, hight, kight, light, might, night, ought, pight, right, sight, tight, wight
+ffy             17  baffy, biffy, buffy, daffy, faffy, fuffy, huffy, jiffy, miffy, muffy, niffy, puffy, raffy, riffy, ruffy, taffy, toffy
+rdy             16  bardy, cardy, curdy, gurdy, hardy, lardy, lordy, mardy, nerdy, nurdy, pardy, perdy, purdy, tardy, vardy, wordy
+rky             16  barky, corky, darky, dorky, forky, jerky, kerky, larky, mirky, murky, narky, parky, perky, porky, sarky, worky
+wns             16  bawns, dawns, downs, fawns, gowns, jawns, lawns, lowns, mawns, pawns, powns, rawns, rowns, towns, yawns, zawns
+wls             15  bawls, bowls, cowls, dowls, fowls, gowls, howls, jowls, mewls, nowls, pawls, sowls, wawls, yawls, yowls
+zzy             15  bezzy, bizzy, buzzy, dizzy, fezzy, fizzy, fuzzy, huzzy, jazzy, lezzy, mizzy, muzzy, nazzy, pozzy, tizzy
+mbs             15  bombs, combs, dumbs, gambs, iambs, jambs, kembs, lambs, limbs, nimbs, numbs, tombs, wembs, wombs, zimbs
+spr             14  aspro, sprad, sprag, sprat, spray, spred, spree, sprew, sprig, sprit, sprod, sprog, sprue, sprug
+rbs             14  barbs, burbs, carbs, curbs, darbs, dorbs, forbs, garbs, gorbs, herbs, kerbs, sorbs, verbs, warbs
+lch             14  belch, culch, elchi, felch, filch, gulch, hilch, melch, milch, mulch, pelch, pilch, welch, zilch
+lky             13  alkyd, alkyl, balky, bulky, folky, hulky, malky, milky, selky, silky, sulky, talky, yolky
+cht             13  aucht, dicht, docht, fecht, hecht, licht, micht, nicht, oucht, richt, sicht, wecht, yacht
+rfs             13  barfs, curfs, kerfs, larfs, nerfs, perfs, serfs, surfs, terfs, turfs, werfs, zarfs, zurfs
+ggs             13  biggs, haggs, hoggs, jaggs, maggs, miggs, muggs, noggs, raggs, riggs, teggs, vuggs, yeggs
+rty             13  borty, certy, dirty, dorty, forty, hurty, nrtya, party, porty, purty, rorty, tarty, warty
+thy             13  bothy, ethyl, gothy, lathy, methy, mothy, mythy, othyl, pithy, thyme, thymi, thymy, withy
+rly             13  burly, curly, early, ferly, girly, gurly, hurly, marly, mirly, murly, nirly, parly, surly
+rst             13  burst, curst, durst, earst, first, horst, hurst, karst, perst, verst, warst, worst, wurst
+rch             12  archi, birch, curch, larch, lurch, march, merch, mirch, parch, perch, porch, torch
+wks             12  bawks, cawks, cowks, dawks, gawks, gowks, hawks, howks, lawks, mawks, pawks, rawks
+fty             12  bufty, fifty, hefty, lefty, lofty, mifty, nifty, rafty, rifty, softy, tufty, wifty
+lps             12  calps, golps, gulps, helps, kelps, kilps, palps, pulps, salps, tulps, yelps, yolps
+chy             12  chyle, chyme, chynd, duchy, itchy, lochy, mochy, ruchy, techy, tichy, vichy, yechy
+lty             12  culty, felty, jolty, kelty, kilty, lilty, malty, melty, milty, salty, silty, walty
+nns             11  banns, bunns, canns, conns, janns, jinns, linns, ranns, sunns, winns, wynns
+vvy             11  bevvy, bivvy, civvy, divvy, lavvy, luvvy, mivvy, navvy, nevvy, pavvy, savvy
+hyl             11  chyle, ethyl, ghyll, hylas, hyleg, hyles, hylic, othyl, phyla, phyle, shyly
+sps             11  cusps, gasps, hasps, hesps, jasps, lisps, rasps, risps, rosps, wasps, wisps
+chs             10  bachs, lochs, machs, mechs, mochs, pechs, sechs, tachs, techs, yechs
+ghs             10  baghs, eughs, highs, hoghs, nighs, peghs, sighs, sughs, vughs, yoghs
+lms             10  balms, calms, culms, films, halms, helms, holms, malms, palms, yelms
+yly             10  boyly, coyly, doyly, dryly, feyly, gayly, shyly, slyly, wryly, xylyl
+lfs             10  calfs, delfs, golfs, gulfs, halfs, milfs, pelfs, rolfs, selfs, wolfs
+psy             10  copsy, gipsy, gypsy, kipsy, mopsy, oopsy, popsy, psych, psyop, tipsy
+yth             10  hythe, kythe, lythe, mythi, myths, mythy, rythe, sythe, tythe, wythe
+thr             10  thrae, thraw, three, threw, thrid, thrip, throb, throe, throw, thrum
+ply              9  amply, apply, duply, haply, hiply, imply, plyer, reply, unply
+phs              9  caphs, kaphs, kophs, ouphs, qophs, sophs, syphs, tophs, umphs
+hym              9  chyme, hymen, hymns, phyma, rhyme, rhymy, thyme, thymi, thymy
+try              9  entry, mitry, nitry, retry, tryer, tryke, tryma, tryps, tryst
+typ              9  ptype, typal, typed, types, typey, typic, typos, typps, typto
+yls              8  acyls, amyls, aryls, hwyls, idyls, moyls, odyls, rayls
+tsy              8  antsy, artsy, bitsy, ditsy, gutsy, nutsy, patsy, potsy
+rby              8  barby, carby, corby, derby, forby, herby, kirby, warby
+rny              8  barny, carny, corny, curny, derny, ferny, horny, porny
+mph              8  bumph, humph, lymph, mumph, nymph, oomph, sumph, umphs
+ynd              8  chynd, hynde, kynde, kynds, rynds, synds, tynde, wynds
+mpt              8  compt, dempt, empts, empty, kempt, nempt, tempt, umpty
+spy              8  cuspy, gaspy, paspy, raspy, spyal, spyre, waspy, wispy
+wts              8  dawts, dowts, lowts, newts, nowts, rowts, tawts, towts
+lys              8  lysed, lyses, lysin, lysis, lysol, lyssa, molys, polys
+sch              8  misch, pasch, pesch, schav, schif, schmo, schul, schwa
+pyr              8  pyral, pyran, pyres, pyrex, pyric, pyros, pyrus, spyre
+fly              7  affly, flyby, flyer, flyin, flype, flyte, refly
+gry              7  aggry, angry, gryce, gryde, gryke, grype, grypt
+tly              7  aptly, artly, fatly, fitly, hotly, patly, wetly
+dly              7  badly, godly, madly, oddly, oldly, redly, sadly
+tyl              7  butyl, cetyl, octyl, style, styli, stylo, tyler
+rcs              7  circs, marcs, mercs, narcs, parcs, percs, torcs
+mby              7  comby, jumby, lamby, limby, nimby, pamby, womby
+wps              7  cowps, dowps, gawps, lowps, mawps, sowps, yawps
+yst              7  cysts, mayst, royst, sayst, tryst, xysti, xysts
+ncy              7  dancy, fancy, mincy, nancy, noncy, poncy, zincy
+cts              7  dicts, ducts, facts, pacts, pects, sects, tacts
+nsy              7  donsy, eensy, funsy, pansy, pensy, sonsy, tansy
+wny              7  downy, fawny, lawny, powny, tawny, towny, yawny
+phy              7  hyphy, phyla, phyle, phyma, phynx, physa, sophy
+syn              7  synch, syncs, synds, syned, synes, synod, synth
+kyl              6  alkyl, kyles, kylie, kylin, kylix, kyloe
+lph              6  alpha, delph, gulph, ralph, sulph, sylph
+ntr              6  antra, antre, entre, entry, intra, intro
+syl              6  asyla, mesyl, sylis, sylph, sylva, tosyl
+ccy              6  baccy, biccy, laccy, leccy, piccy, reccy
+rmy              6  barmy, dormy, germy, gormy, permy, wormy
+wds              6  bawds, dawds, dowds, gawds, gowds, nowds
+wdy              6  bawdy, bewdy, dowdy, howdy, rawdy, rowdy
+gly              6  bigly, dogly, eagly, fugly, glyph, pigly
+lyp              6  blype, clype, flype, glyph, polyp, slype
+hrs              6  buhrs, lehrs, mahrs, mohrs, tahrs, tehrs
+wth              6  crwth, fowth, lowth, rewth, rowth, sowth
+ryp              6  crypt, grype, grypt, ryper, rypin, tryps
+dry              6  dryad, dryas, dryer, dryly, redry, updry
+lyt              6  flyte, lyted, lytes, lythe, lytic, lytta
+rsh              6  girsh, gursh, harsh, marsh, qursh, wersh
+sht              6  gosht, shtar, shtik, shtum, shtup, wisht
+gyr              6  gyral, gyred, gyres, gyron, gyros, gyrus
+xyl              6  hexyl, xylan, xylem, xylic, xylol, xylyl
+hyp              6  hyped, hyper, hypes, hypha, hyphy, hypos
+tyr              6  satyr, styre, tyran, tyred, tyres, tyros
+shr              6  shred, shrew, shris, shrow, shrub, shrug
+cry              5  acryl, cryer, cryne, crypt, decry
+ryl              5  acryl, aryls, beryl, dryly, wryly
+lth              5  altho, filth, fulth, illth, tilth
+mbr              5  ambry, mbret, ombre, umbra, umbre
+zym              5  azyme, azyms, enzym, zymes, zymic
+lmy              5  balmy, calmy, filmy, malmy, palmy
+bbs              5  bibbs, cobbs, dibbs, jibbs, sibbs
+rsy              5  birsy, gorsy, horsy, karsy, pursy
+rvy              5  carvy, curvy, marvy, nervy, pervy
+wry              5  cowry, dowry, lowry, wryer, wryly
+cym              5  cymae, cymar, cymas, cymes, cymol
+wly              5  dowly, jowly, lowly, newly, rawly
+rgy              5  durgy, lurgy, morgy, porgy, surgy
+wsy              5  gawsy, lawsy, newsy, powsy, towsy
+ymp              5  gymps, lymph, nymph, tymps, ympes
+gyp              5  gypes, gypos, gyppo, gyppy, gypsy
+pps              5  kipps, repps, ripps, typps, yapps
+yss              4  abyss, byssi, lyssa, nyssa
+lyl              4  allyl, slyly, tolyl, xylyl
+khs              4  ankhs, lakhs, rukhs, sukhs
+ldy              4  baldy, goldy, laldy, moldy
+rgs              4  bergs, burgs, dargs, margs
+kky              4  bikky, mokky, takky, yukky
+rtz              4  bortz, hertz, nertz, nurtz
+rnt              4  burnt, earnt, larnt, turnt
+hyn              4  chynd, hynde, phynx, rhyne
+cyc              4  cycad, cycas, cycle, cyclo
+ycl              4  cycle, cyclo, yclad, ycled
+mns              4  damns, hymns, limns, nemns
+ynt              4  daynt, meynt, poynt, synth
+dst              4  didst, hadst, kydst, midst
+wfs              4  dowfs, gowfs, howfs, sowfs
+dyk              4  dyked, dykes, dykey, dykon
+mys              4  emmys, kumys, mysid, mysie
+tym              4  etyma, styme, stymy, tymps
+nly              4  fonly, manly, sonly, wanly
+lpy              4  gilpy, gulpy, kelpy, pulpy
+yph              4  glyph, hypha, hyphy, syphs
+ryk              4  gryke, ryked, rykes, tryke
+gyn              4  gynae, gynie, gynny, gynos
+lsh              4  halsh, mulsh, pelsh, welsh
+hyd              4  hydel, hydra, hydro, whyda
+ydr              4  hydra, hydro, ydrad, ydred
+dyl              4  idyll, idyls, odyle, odyls
+wnd              4  lownd, pownd, rownd, sownd
+nth              4  month, ninth, synth, tenth
+syc              4  psych, sycee, syces, sycon
+pyx              4  pyxed, pyxes, pyxie, pyxis
+dds              4  redds, rudds, sudds, wadds
+rhy              4  rhyme, rhymy, rhyne, rhyta
+sly              4  slyer, slyly, slype, srsly
+spl              4  splat, splay, split, splog
+syb              4  sybbe, sybil, syboe, sybow
+rgh              3  aargh, burgh, murgh
+bys              3  abysm, abyss, byssi
+cch              3  accha, yecch, yucch
+cyl              3  acyls, cylix, decyl
+ggr              3  aggri, aggro, aggry
+mpl              3  ample, amply, imply
+ncl              3  ancle, incle, uncle
+ngl              3  angle, anglo, ingle
+pts              3  appts, empts, septs
+zyg              3  azygy, zygal, zygon
+ncs              3  bancs, syncs, zincs
+rfy              3  barfy, surfy, turfy
+wrs              3  bawrs, bowrs, mawrs
+hls              3  buhls, dahls, kohls
+ypt              3  crypt, grypt, typto
+rcy              3  darcy, farcy, mercy
+rpy              3  derpy, harpy, purpy
+rvs              3  dervs, mirvs, pervs
+xys              3  dexys, xysti, xysts
+cty              3  dicty, facty, octyl
+dyn              3  dynel, dynes, dynos
+pty              3  empty, ptype, umpty
+rzy              3  furzy, karzy, tarzy
+wky              3  gawky, mawky, pawky
+sms              3  gisms, jisms, wasms
+rrl              3  grrls, grrrl, mirrl
+ypp              3  gyppo, gyppy, typps
+gyv              3  gyved, gyver, gyves
+wyl              3  hwyls, wyled, wyles
+msh              3  imshi, imshy, ramsh
+kyr              3  kyrie, skyre, skyrs
+kyt              3  kytes, kythe, skyte
+lyc              3  lycea, lycee, lycra
+ync              3  lynch, synch, syncs
+myn              3  mynah, mynas, womyn
+myt              3  mythi, myths, mythy
+xts              3  nexts, sexts, texts
+nyl              3  nonyl, nylon, vinyl
+shm              3  pashm, shmek, shmoe
+pry              3  pryan, pryer, pryse
+ymy              3  rhymy, stymy, thymy
+rym              3  rymer, rymme, tryma
+skr              3  skran, skrik, skroo
+syp              3  syped, sypes, syphs
+syr              3  syrah, syren, syrup
+tyn              3  tynde, tyned, tynes
+wyt              3  wyted, wytes, wythe
+ddl              2  addle, oddly
+dyt              2  adyta, adyts
+yts              2  adyts, bayts
+kyd              2  alkyd, kydst
+mbl              2  amble, umble
+myl              2  amyls, mylar
+ndr              2  andro, indri
+ngr              2  angry, ngram
+nkl              2  ankle, inkle
+ppl              2  apple, apply
+ndh              2  bandh, bundh
+wty              2  bawty, nowty
+lby              2  bilby, colby
+lgy              2  bilgy, bulgy
+bly              2  blype, nobly
+xty              2  boxty, sixty
+yfs              2  boyfs, skyfs
+mfs              2  bumfs, humfs
+byd              2  byded, bydes
+byk              2  byked, bykes
+byl              2  bylaw, sibyl
+byr              2  byres, byrls
+nct              2  cinct, tinct
+mms              2  comms, mumms
+ryn              2  cryne, rynds
+cyt              2  cytes, cyton
+ych              2  daych, psych
+mly              2  dimly, rumly
+scs              2  discs, fiscs
+tzy              2  ditzy, ritzy
+nsh              2  dunsh, mensh
+dzh              2  dzhos, nudzh
+myd              2  emyde, emyds
+yds              2  emyds, kydst
+lsy              2  falsy, palsy
+yby              2  flyby, layby
+hns              2  fohns, johns
+fry              2  fryer, refry
+bsy              2  fubsy, pubsy
+fyk              2  fyked, fykes
+ytt              2  fytte, lytta
+ghy              2  ghyll, vughy
+yll              2  ghyll, idyll
+nys              2  gonys, nyssa
+grr              2  grrls, grrrl
+lfy              2  gulfy, selfy
+gyb              2  gybed, gybes
+ynn              2  gynny, wynns
+yps              2  gypsy, tryps
+wms              2  hawms, sowms
+wff              2  howff, sowff
+hys              2  hyson, physa
+hyt              2  hythe, rhyta
+mpr              2  impro, mpret
+lns              2  kilns, vulns
+kyn              2  kynde, kynds
+lym              2  lymes, lymph
+lyn              2  lynch, lynes
+lyr              2  lyres, lyric
+rsk              2  mersk, torsk
+ltz              2  miltz, waltz
+msy              2  mimsy, mumsy
+nrt              2  nrtta, nrtya
+chr              2  ochre, ochry
+gmy              2  pigmy, pygmy
+rys              2  pryse, tryst
+psh              2  pshaw, pshut
+dsy              2  pudsy, sudsy
+pyg              2  pygal, pygmy
+pyn              2  pyned, pynes
+shl              2  shlep, shlub
+nhs              2  sinhs, tanhs
+tyt              2  styte, tythe
+syk              2  syker, sykes
+wyn              2  wynds, wynns
+bmh              1  abmho
+ysm              1  abysm
+ccr              1  accra
+ddr              1  addra
+dvt              1  advts
+vts              1  advts
+ffl              1  affly
+bry              1  ambry
+gst              1  angst
+nkh              1  ankhs
+ppr              1  appro
+ppt              1  appts
+ptl              1  aptly
+rdr              1  ardri
+rgl              1  argle
+rtl              1  artly
+vyz              1  avyze
+wdl              1  awdls
+dls              1  awdls
+wmr              1  awmry
+mry              1  awmry
+ygr              1  aygre
+ygy              1  azygy
+yms              1  azyms
+gsy              1  bagsy
+hts              1  bahts
+ntz              1  bantz
+rzz              1  birzz
+ygs              1  boygs
+ysy              1  boysy
+lbs              1  bulbs
+ndt              1  bundt
+njy              1  bunjy
+sby              1  busby
+yrl              1  byrls
+byt              1  bytes
+byw              1  byway
+lyx              1  calyx
+nst              1  canst
+nqs              1  cinqs
+cly              1  clype
+mfy              1  comfy
+nfs              1  confs
+crw              1  crwth
+rwt              1  crwth
+cwt              1  cwtch
+wtc              1  cwtch
+cyb              1  cyber
+cyd              1  cyder
+cyn              1  cynic
+cys              1  cysts
+wgs              1  dawgs
+bts              1  debts
+lft              1  delft
+pth              1  depth
+mky              1  dumky
+vns              1  eevns
+nsk              1  ensky
+nzy              1  enzym
+thn              1  ethne
+ttl              1  ettle
+xtr              1  extra
+fth              1  fifth
+qhs              1  fiqhs
+lyb              1  flyby
+fyc              1  fyces
+fyl              1  fyles
+fyr              1  fyrds
+yrd              1  fyrds
+fyt              1  fytte
+wcy              1  gawcy
+rlf              1  girlf
+rrr              1  grrrl
+ryc              1  gryce
+ryd              1  gryde
+ggl              1  guggl
+gym              1  gymps
+gyt              1  gytes
+nry              1  henry
+wgh              1  hewgh
+hwy              1  hwyls
+hyg              1  hygge
+ygg              1  hygge
+hyk              1  hykes
+ymn              1  hymns
+hyr              1  hyrax
+ckl              1  ickle
+llt              1  illth
+nby              1  inbye
+nfr              1  infra
+nsp              1  inspo
+stl              1  istle
+xtl              1  ixtle
+khy              1  khyal
+kyb              1  kybos
+kyp              1  kypes
+xly              1  laxly
+ycr              1  lycra
+nxy              1  minxy
+rkn              1  mirkn
+sls              1  misls
+mmk              1  mmkay
+rph              1  morph
+hly              1  muhly
+lct              1  mulct
+njs              1  munjs
+sth              1  musth
+myr              1  myrrh
+yrr              1  myrrh
+rrh              1  myrrh
+myx              1  myxos
+bks              1  nabks
+wbs              1  newbs
+ngw              1  ngwee
+rtt              1  nrtta
+nym              1  nymph
+hry              1  ochry
+ctl              1  octli
+ldl              1  oldly
+mdd              1  omdda
+tby              1  outby
+wch              1  owche
+ysd              1  paysd
+rsp              1  persp
+pff              1  pfftt
+fft              1  pfftt
+ftt              1  pfftt
+phl              1  phlox
+php              1  phpht
+hph              1  phpht
+pht              1  phpht
+phw              1  phwat
+ynx              1  phynx
+wlt              1  powlt
+pwn              1  pwned
+ygm              1  pygmy
+pyl              1  pylon
+qqs              1  riqqs
+dny              1  rodny
+tls              1  rotls
+gby              1  rugby
+ryb              1  rybat
+ymm              1  rymme
+ryt              1  rythe
+ngh              1  sangh
+chm              1  schmo
+chw              1  schwa
+scl              1  sclim
+scy              1  scyes
+kts              1  sekts
+nvy              1  senvy
+shc              1  shchi
+hch              1  shchi
+shw              1  shwas
+gns              1  signs
+xth              1  sixth
+skl              1  sklim
+kyf              1  skyfs
+yrs              1  skyrs
+sny              1  snyes
+srs              1  srsly
+rsl              1  srsly
+ybb              1  sybbe
+ylp              1  sylph
+ylv              1  sylva
+sym              1  symar
+sys              1  sysop
+syt              1  sythe
+syv              1  syver
+bls              1  tabls
+kht              1  takht
+lcs              1  talcs
+lcy              1  talcy
+yns              1  tiyns
+wzy              1  towzy
+tsk              1  tsked
+twy              1  twyer
+tyk              1  tykes
+ltr              1  ultra
+npl              1  unply
+pby              1  upbye
+pdr              1  updry
+ldt              1  veldt
+zhd              1  vozhd
+vyg              1  vygie
+dts              1  wadts
+kfs              1  wakfs
+qfs              1  waqfs
+lkt              1  welkt
+why              1  whyda
+dth              1  width
+rld              1  world
+ylk              1  ylkes
+dhs              1  yodhs
+yrn              1  yrneh
+krs              1  zikrs

@@ -28,19 +28,23 @@ def main():
     with open(WORD_LIST) as f:
         words = json.load(f)
 
-    counts: dict[str, int] = {}
+    seq_words: dict[str, list[str]] = {}
     for word in words:
+        seen = set()
         for seq in find_three_consonant_sequences(word.lower()):
-            counts[seq] = counts.get(seq, 0) + 1
+            if seq not in seen:
+                seen.add(seq)
+                seq_words.setdefault(seq, []).append(word)
 
-    ranked = sorted(counts.items(), key=lambda item: item[1], reverse=True)
+    ranked = sorted(seq_words.items(), key=lambda item: len(item[1]), reverse=True)
 
     with open(OUTPUT_FILE, "w") as f:
-        f.write(f"{'Sequence':<12}{'Count':>6}\n")
-        f.write(f"{'-' * 12}{'-' * 6}\n")
-        for seq, count in ranked:
-            f.write(f"{seq:<12}{count:>6}\n")
+        f.write(f"{'Sequence':<12}{'Count':>6}  {'Words'}\n")
+        f.write(f"{'-' * 12}{'-' * 6}  {'-' * 40}\n")
+        for seq, word_list in ranked:
+            f.write(f"{seq:<12}{len(word_list):>6}  {', '.join(word_list)}\n")
 
+    total = sum(len(wl) for _, wl in ranked)
     print(f"Found {len(ranked)} unique three-consonant sequences across {len(words)} words.")
     print(f"Output written to {OUTPUT_FILE}")
 
