@@ -37,37 +37,6 @@ entries = [
     ([YELLOW, GRAY, GRAY, YELLOW, GRAY],        "SHORT"),   # R+S,  24 cands
     ([YELLOW, GRAY, YELLOW, GRAY, GRAY],        "DROIT"),   # R+I,  23 cands
     ([GRAY, GRAY, YELLOW, YELLOW, GRAY],        "STOIC"),   # I+S,  21 cands
-    ([GRAY, YELLOW, GRAY, YELLOW, GREEN],       "SKATE"),   # A+S+e, 19 cands
-    ([YELLOW, GREEN, GRAY, GRAY, YELLOW],       "TAPER"),   # R+E+a, 28 cands
-    ([YELLOW, YELLOW, GRAY, GRAY, GREEN],       "GRACE"),   # R+A+e, 26 cands
-    ([GREEN, YELLOW, GRAY, GRAY, YELLOW],       "RELAY"),   # A+E+r, 13 cands
-    ([YELLOW, GRAY, GREEN, GRAY, YELLOW],       "FRIED"),   # R+E+i, 12 cands
-    ([YELLOW, GRAY, GRAY, YELLOW, GREEN],       "SCREE"),   # R+S+e, 10 cands
-    ([YELLOW, YELLOW, GRAY, GREEN, GRAY],       "BRASH"),   # R+A+s,  8 cands
-    ([GREEN, GRAY, YELLOW, GRAY, YELLOW],       "RIPER"),   # I+E+r,  8 cands
-    ([YELLOW, GRAY, GRAY, GREEN, YELLOW],       "CRESS"),   # R+E+s,  7 cands
-    ([GRAY, GREEN, YELLOW, YELLOW, GRAY],       "BASIC"),   # I+S yellow, A green, 5 cands
-    ([GRAY, YELLOW, GRAY, GREEN, YELLOW],       "BEAST"),   # A+E yellow, S green, 5 cands
-    ([GRAY, GRAY, YELLOW, YELLOW, GREEN],       "SIEGE"),   # I+S yellow, E green, 5 cands
-    ([YELLOW, GRAY, GREEN, YELLOW, GRAY],       "SHIRK"),   # R+S yellow, I green, 5 cands
-    ([YELLOW, YELLOW, GREEN, GRAY, GRAY],       "BRIAR"),   # R+A yellow, I green, 4 cands
-    ([GRAY, GRAY, GREEN, YELLOW, YELLOW],       "SHIED"),   # S+E yellow, I green, 3 cands
-    ([YELLOW, YELLOW, GRAY, GREEN, GREEN],      "AROSE"),   # R+A+se, 2 cands
-    ([YELLOW, GRAY, YELLOW, GRAY, GREEN],       "DIRGE"),   # R+I+e,  2 cands
-    ([GRAY, YELLOW, YELLOW, GRAY, GREEN],       "IMAGE"),   # A+I+e,  2 cands
-    ([YELLOW, GREEN, YELLOW, GRAY, GRAY],       "NADIR"),   # R+I+a,  2 cands
-    ([GREEN, GRAY, GRAY, YELLOW, YELLOW],       "REBUS"),   # S+E+r,  2 cands
-    ([YELLOW, GREEN, GRAY, YELLOW, GRAY],       "SATYR"),   # R+S+a,  2 cands
-    ([YELLOW, GRAY, GREEN, YELLOW, GREEN],      "SHIRE"),   # R+I+e,  2 cands
-    ([YELLOW, YELLOW, GREEN, GRAY, GREEN],      "AFIRE"),   # R+A+ie, 1 cand
-    ([GRAY, YELLOW, GREEN, GRAY, YELLOW],       "ALIEN"),   # A+E+i,  1 cand
-    ([YELLOW, YELLOW, GREEN, GREEN, GREEN],     "ARISE"),   # R+A+ise,1 cand
-    ([GRAY, YELLOW, GREEN, YELLOW, GREEN],      "ASIDE"),   # A+I+se, 1 cand
-    ([GRAY, GREEN, GRAY, YELLOW, YELLOW],       "EASEL"),   # S+E+a,  1 cand
-    ([YELLOW, GRAY, YELLOW, GREEN, GRAY],       "FIRST"),   # R+I+s,  1 cand
-    ([GRAY, YELLOW, YELLOW, GREEN, GRAY],       "QUASI"),   # A+I+s,  1 cand
-    ([GREEN, GRAY, YELLOW, YELLOW, GRAY],       "RISKY"),   # I+S+r,  1 cand
-    ([GREEN, YELLOW, YELLOW, GRAY, GRAY],       "RIVAL"),   # A+I+r,  1 cand
 ]
 
 
