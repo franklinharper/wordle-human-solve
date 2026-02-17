@@ -43,13 +43,21 @@ def pattern_text(colors):
     Examples:
         All gray          -> "all gray"
         Only E yellow     -> "yellow e"
+        R and E yellow    -> "yellow r, e"
         A yellow, E green -> "yellow a  green e"
     """
-    parts = []
+    color_letters = {}
     for letter, color in zip(WORD, colors):
         if color != GRAY:
-            parts.append(f"{color_name(color)} {letter.lower()}")
-    return "  ".join(parts) if parts else "all gray"
+            if color not in color_letters:
+                color_letters[color] = []
+            color_letters[color].append(letter.lower())
+    if not color_letters:
+        return "all gray"
+    parts = []
+    for color, letters in color_letters.items():
+        parts.append(f"{color_name(color)} {', '.join(letters)}")
+    return "  ".join(parts)
 
 
 def colored_span(text, hex_color):
@@ -59,17 +67,23 @@ def colored_span(text, hex_color):
 
 def make_front(colors):
     """Build the front HTML: color-letter pattern as styled text."""
-    parts = []
+    color_letters = {}
     for letter, color in zip(WORD, colors):
         if color != GRAY:
+            if color not in color_letters:
+                color_letters[color] = []
+            color_letters[color].append(letter.lower())
+    if not color_letters:
+        description = "all gray"
+    else:
+        parts = []
+        for color, letters in color_letters.items():
             name = color_name(color)
-            parts.append(colored_span(f"{name} {letter.lower()}", color))
-    description = "&nbsp;&nbsp;".join(parts) if parts else "all gray"
+            parts.append(colored_span(f"{name} {', '.join(letters)}", color))
+        description = "&nbsp;&nbsp;".join(parts)
     return (
         '<div style="text-align:center;padding:20px;'
         'font-family:Arial,sans-serif;">'
-        '<div style="font-size:16px;color:#555;margin-bottom:16px;">'
-        "After RAISE — what's your next guess?</div>"
         f'<div style="font-size:36px;letter-spacing:2px;">'
         f"{description}</div></div>"
     )
