@@ -1,0 +1,71 @@
+Opener: RAISE | Patterns with green+yellow in [0, 1, 2]: 21 | Guess pool: answers
+
+[01/21] ⬛⬛⬛⬛⬛ (00000) cands=167 -> could
+[02/21] ⬛⬛⬛⬛🟨 (00001) cands=120 -> betel
+[03/21] ⬛⬛🟨⬛⬛ (00100) cands=107 -> pilot
+[04/21] 🟨⬛⬛⬛⬛ (10000) cands=103 -> truly
+[05/21] 🟨⬛⬛⬛🟨 (10001) cands=102 -> outer
+[06/21] ⬛🟨⬛⬛⬛ (01000) cands= 91 -> cloak
+[07/21] ⬛🟩⬛⬛⬛ (02000) cands= 91 -> tangy
+[08/21] ⬛⬛⬛🟨⬛ (00010) cands= 80 -> stunk
+[09/21] 🟨🟨⬛⬛⬛ (11000) cands= 77 -> acorn
+[10/21] ⬛🟨⬛⬛🟨 (01001) cands= 69 -> cleat
+[11/21] ⬛⬛⬛⬛🟩 (00002) cands= 61 -> lunge
+[12/21] ⬛⬛🟩⬛⬛ (00200) cands= 51 -> cling
+[13/21] ⬛🟨⬛🟨⬛ (01010) cands= 43 -> stalk
+[14/21] ⬛⬛⬛🟨🟨 (00011) cands= 41 -> spelt
+[15/21] ⬛⬛🟨⬛🟨 (00101) cands= 35 -> widen
+[16/21] ⬛🟨🟨⬛⬛ (01100) cands= 34 -> tidal
+[17/21] 🟨⬛⬛🟨⬛ (10010) cands= 24 -> short
+[18/21] 🟨⬛🟨⬛⬛ (10100) cands= 23 -> droit
+[19/21] ⬛⬛🟨🟨⬛ (00110) cands= 21 -> stoic
+[20/21] ⬛⬛⬛🟩⬛ (00020) cands= 17 -> floss
+[21/21] 🟩⬛⬛⬛⬛ (20000) cands= 10 -> ruddy
+
+Per-pattern optimal second guess:
+Pattern  Codes  #Cands Best G2   E[rem]    Info
+----------------------------------------------------
+⬛⬛⬛⬛⬛    00000     167 could       6.31   5.142
+⬛⬛⬛⬛🟨    00001     120 betel       4.90   5.068
+⬛⬛🟨⬛⬛    00100     107 pilot       6.38   4.693
+🟨⬛⬛⬛⬛    10000     103 truly       6.15   4.623
+🟨⬛⬛⬛🟨    10001     102 outer       8.69   4.094
+⬛🟨⬛⬛⬛    01000      91 cloak       4.16   4.643
+⬛🟩⬛⬛⬛    02000      91 tangy       7.48   4.031
+⬛⬛⬛🟨⬛    00010      80 stunk       4.85   4.498
+🟨🟨⬛⬛⬛    11000      77 acorn       5.78   4.132
+⬛🟨⬛⬛🟨    01001      69 cleat       3.35   4.637
+⬛⬛⬛⬛🟩    00002      61 lunge       4.18   4.230
+⬛⬛🟩⬛⬛    00200      51 cling       3.59   4.074
+⬛🟨⬛🟨⬛    01010      43 stalk       2.95   4.145
+⬛⬛⬛🟨🟨    00011      41 spelt       2.22   4.424
+⬛⬛🟨⬛🟨    00101      35 widen       2.60   3.986
+⬛🟨🟨⬛⬛    01100      34 tidal       2.35   4.080
+🟨⬛⬛🟨⬛    10010      24 short       2.25   3.605
+🟨⬛🟨⬛⬛    10100      23 droit       1.87   3.816
+⬛⬛🟨🟨⬛    00110      21 stoic       1.86   3.713
+⬛⬛⬛🟩⬛    00020      17 floss       1.47   3.617
+🟩⬛⬛⬛⬛    20000      10 ruddy       1.40   2.922
+
+Optimal word list (deduplicated):
+  could: used by  1 patterns, covers 167 answers
+  betel: used by  1 patterns, covers 120 answers
+  pilot: used by  1 patterns, covers 107 answers
+  truly: used by  1 patterns, covers 103 answers
+  outer: used by  1 patterns, covers 102 answers
+  cloak: used by  1 patterns, covers  91 answers
+  tangy: used by  1 patterns, covers  91 answers
+  stunk: used by  1 patterns, covers  80 answers
+  acorn: used by  1 patterns, covers  77 answers
+  cleat: used by  1 patterns, covers  69 answers
+  lunge: used by  1 patterns, covers  61 answers
+  cling: used by  1 patterns, covers  51 answers
+  stalk: used by  1 patterns, covers  43 answers
+  spelt: used by  1 patterns, covers  41 answers
+  widen: used by  1 patterns, covers  35 answers
+  tidal: used by  1 patterns, covers  34 answers
+  short: used by  1 patterns, covers  24 answers
+  droit: used by  1 patterns, covers  23 answers
+  stoic: used by  1 patterns, covers  21 answers
+  floss: used by  1 patterns, covers  17 answers
+  ruddy: used by  1 patterns, covers  10 answers

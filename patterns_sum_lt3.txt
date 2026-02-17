@@ -1,0 +1,57 @@
+# Wordle feedback patterns with count(yellow + green) < 3
+# Sorted by empirical likelihood for opener RAISE against answers.txt
+# Format: description optimal_answer_guess answers probability
+# Total answers: 2309
+# Patterns listed: 51
+
+all gray	could	167	0.072326
+yellow E	betel	120	0.051971
+yellow I	pilot	107	0.046340
+yellow R	truly	103	0.044608
+yellow R E	outer	102	0.044175
+yellow A	cloak	91	0.039411
+green A	tangy	91	0.039411
+yellow S	stunk	80	0.034647
+yellow R A	acorn	77	0.033348
+yellow A E	cleat	69	0.029883
+green E	lunge	61	0.026418
+green I	cling	51	0.022087
+yellow A S	stalk	43	0.018623
+yellow S E	spelt	41	0.017757
+yellow A green E	plate	41	0.017757
+yellow R green E	prove	40	0.017324
+yellow I E	widen	35	0.015158
+yellow A I	tidal	34	0.014725
+yellow S green I	stink	29	0.012560
+yellow R green I	print	28	0.012126
+green A E	cable	26	0.011260
+yellow R green A	party	26	0.011260
+yellow I green E	binge	25	0.010827
+yellow R S	short	24	0.010394
+green I E	utile	23	0.009961
+yellow R I	droit	23	0.009961
+yellow A green S	slash	22	0.009528
+yellow I S	stoic	21	0.009095
+green S E	loose	20	0.008662
+yellow E green A	navel	20	0.008662
+yellow S green A	salon	20	0.008662
+yellow E green R	ruler	20	0.008662
+yellow S green E	stone	17	0.007362
+green S	floss	17	0.007362
+yellow E green I	edict	15	0.006496
+yellow I green A	panic	14	0.006063
+yellow R green S	crust	13	0.005630
+yellow A green I	axion	12	0.005197
+green R	ruddy	10	0.004331
+yellow E green S	chess	9	0.003898
+green I S	hoist	9	0.003898
+green R A	randy	9	0.003898
+green A S	salsa	7	0.003032
+yellow I green S	tipsy	6	0.002599
+green A I	faint	6	0.002599
+green R E	rogue	6	0.002599
+yellow I green R	robin	4	0.001732
+yellow A green R	royal	4	0.001732
+yellow S green R	rusty	1	0.000433
+green R S	roost	1	0.000433
+green R I	rhino	1	0.000433
