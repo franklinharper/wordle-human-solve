@@ -35,8 +35,6 @@ def make_front(description):
     return (
         '<div style="text-align:center;padding:24px;'
         'font-family:Arial,sans-serif;">'
-        '<div style="font-size:16px;color:#555;margin-bottom:16px;">'
-        "After RAISE, what is the best next guess?</div>"
         f'<div style="font-size:38px;font-weight:700;">{description}</div>'
         "</div>"
     )
@@ -46,8 +44,6 @@ def make_back(answer):
     return (
         '<div style="text-align:center;padding:24px;'
         'font-family:Arial,sans-serif;">'
-        '<div style="font-size:16px;color:#555;margin-bottom:16px;">'
-        "Optimal answer-pool guess</div>"
         f'<div style="font-size:52px;font-weight:800;letter-spacing:4px;">{answer.upper()}</div>'
         "</div>"
     )
