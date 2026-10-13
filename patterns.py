@@ -6,14 +6,17 @@ Answers questions like "how many answers end in ER?" or
 
 Pattern syntax: 5 characters, '_' is a wildcard, a letter must match
 that exact position (case-insensitive). Examples:
-    "___er"  -> words ending in ER          (141 answers)
-    "__re_"  -> RE in positions 3 and 4     (17 answers)
+    "___er"  -> words ending in ER
+    "__re_"  -> RE in positions 3 and 4
     "s____"  -> words starting with S
     "_a_e_"  -> A in position 2 and E in position 4
 
+Every query reports counts over BOTH word lists: the answer list
+(words that can actually be the day's answer) and the valid-guess list
+(everything Wordle accepts as a guess).
+
 Usage:
-    python3 patterns.py "__re_" "___er"                  # answer list (2,309)
-    python3 patterns.py --guesses "__re_" "___er"         # valid guesses (14,855)
+    python3 patterns.py "__re_" "___er"
     python3 patterns.py --top-bigrams
 """
 
@@ -37,19 +40,30 @@ def count_pattern(words: list[str], pattern: str) -> int:
     return len(match_pattern(words, pattern))
 
 
-def report(words: list[str], patterns: list[str], show_examples: int = 8,
-           label: str = "words") -> None:
-    """Print a count table for several patterns, with example matches."""
-    n = len(words)
-    print(f"{label.capitalize()}: {n} words\n")
-    print(f"  {'Pattern':<10} {'Count':>6} {'Share':>7}  Examples")
+def report(patterns: list[str], show_examples: int = 6) -> None:
+    """Print a count table for patterns over both the answer and guess lists."""
+    answers = load_answers()
+    guesses = load_all_guesses()
+    na, ng = len(answers), len(guesses)
+    print(f"Answers: {na} words | Valid guesses: {ng} words\n")
+    print(f"  {'Pattern':<10}{'Answers':>15}{'Valid guesses':>18}")
     for pat in patterns:
-        matches = match_pattern(words, pat)
-        pct = len(matches) / n * 100
-        ex = ", ".join(matches[:show_examples])
-        if len(matches) > show_examples:
-            ex += ", ..."
-        print(f"  {pat:<10} {len(matches):>6} {pct:>6.1f}%  {ex}")
+        ma = match_pattern(answers, pat)
+        mg = match_pattern(guesses, pat)
+        print(f"  {pat:<10}{len(ma):>7} ({len(ma) / na * 100:4.1f}%)"
+              f"{len(mg):>9} ({len(mg) / ng * 100:4.1f}%)")
+    print()
+    for pat in patterns:
+        ma = match_pattern(answers, pat)
+        mg = match_pattern(guesses, pat)
+        ea = ", ".join(ma[:show_examples])
+        eg = ", ".join(mg[:show_examples])
+        if len(ma) > show_examples:
+            ea += ", ..."
+        if len(mg) > show_examples:
+            eg += ", ..."
+        print(f"  {pat} answers: {ea}")
+        print(f"  {pat} guesses: {eg}")
 
 
 def positional_bigram_counts(words: list[str]) -> dict[tuple[int, str], int]:
@@ -77,16 +91,15 @@ def top_bigrams(words: list[str], top_n: int = 10) -> None:
 
 
 if __name__ == "__main__":
-    use_guesses = "--guesses" in sys.argv
-    words = load_all_guesses() if use_guesses else load_answers()
-    label = "valid guess" if use_guesses else "answer"
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     if "--top-bigrams" in sys.argv:
-        print(f"=== MOST COMMON 2-LETTER COMBOS BY POSITION ({label} list) ===")
-        top_bigrams(words)
+        print("=== MOST COMMON 2-LETTER COMBOS BY POSITION: ANSWERS ===")
+        top_bigrams(load_answers())
+        print()
+        print("=== MOST COMMON 2-LETTER COMBOS BY POSITION: VALID GUESSES ===")
+        top_bigrams(load_all_guesses())
     elif args:
-        report(words, args, label="valid guesses" if use_guesses else "answers")
+        report(args)
     else:
         # Default demo: the question that started this file.
-        report(words, ["___er", "__re_"],
-               label="valid guesses" if use_guesses else "answers")
+        report(["___er", "__re_"])
