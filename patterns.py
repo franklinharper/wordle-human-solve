@@ -45,12 +45,12 @@ def report(patterns: list[str], show_examples: int = 6) -> None:
     answers = load_answers()
     guesses = load_all_guesses()
     na, ng = len(answers), len(guesses)
-    print(f"Answers: {na} words | Valid guesses: {ng} words\n")
-    print(f"  {'Pattern':<10}{'Answers':>15}{'Valid guesses':>18}")
+    print(f"Valid answers: {na} words | Valid guesses: {ng} words\n")
+    print(f"  {'Pattern':<10}{'Valid answers':>20}{'Valid guesses':>18}")
     for pat in patterns:
         ma = match_pattern(answers, pat)
         mg = match_pattern(guesses, pat)
-        print(f"  {pat:<10}{len(ma):>7} ({len(ma) / na * 100:4.1f}%)"
+        print(f"  {pat:<10}{len(ma):>12} ({len(ma) / na * 100:4.1f}%)"
               f"{len(mg):>9} ({len(mg) / ng * 100:4.1f}%)")
     print()
     for pat in patterns:
@@ -62,8 +62,8 @@ def report(patterns: list[str], show_examples: int = 6) -> None:
             ea += ", ..."
         if len(mg) > show_examples:
             eg += ", ..."
-        print(f"  {pat} answers: {ea}")
-        print(f"  {pat} guesses: {eg}")
+        print(f"  {pat} valid answers: {ea}")
+        print(f"  {pat} valid guesses: {eg}")
 
 
 def positional_bigram_counts(words: list[str]) -> dict[tuple[int, str], int]:

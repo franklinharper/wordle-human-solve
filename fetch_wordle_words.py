@@ -3,7 +3,7 @@
 
 The two lists, unambiguously:
   valid guesses -- Every word the game accepts as a guess. Includes all answers.
-  answers       -- Words that can be the day's solution.
+  valid answers -- Words that can be the day's solution.
 
 Update policy: the fetched lists are validated before anything is written.
 The repo's canonical files (wordle_valid_guesses.json, answers.txt) are only
@@ -197,7 +197,7 @@ def main():
 
     print(f"  valid guesses: {len(guesses):,} words -> {GUESSES_FILE}")
     print(f"      {DESC_GUESSES}")
-    print(f"  answers:        {len(answers):,} words -> {ANSWERS_FILE}")
+    print(f"  valid answers:  {len(answers):,} words -> {ANSWERS_FILE}")
     print(f"      {DESC_ANSWERS}")
     print("\n  checks against the NYT data:")
 
@@ -205,7 +205,7 @@ def main():
     ok &= check(all(len(w) == 5 and w.isalpha() and w == w.lower()
                     for w in guesses + answers),
                 "all words 5 letters, lowercase")
-    ok &= check(set(answers) <= set(guesses), "every answer is a valid guess")
+    ok &= check(set(answers) <= set(guesses), "every valid answer is a valid guess")
     if not ok:
         fail("sanity check failed; refusing to overwrite the word lists")
 
@@ -221,7 +221,7 @@ def main():
              if g_added else "")
           + (f" | removed: {', '.join(g_removed[:10])}"
              f"{'...' if len(g_removed) > 10 else ''}" if g_removed else ""))
-    print(f"    - answers:       +{len(a_added)} added, -{len(a_removed)} removed"
+    print(f"    - valid answers: +{len(a_added)} added, -{len(a_removed)} removed"
           + (f" ({', '.join(a_added[:10])}{'...' if len(a_added) > 10 else ''}"
              if a_added else "")
           + (f" | removed: {', '.join(a_removed[:10])}"
