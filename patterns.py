@@ -85,8 +85,8 @@ if __name__ == "__main__":
         print(f"=== MOST COMMON 2-LETTER COMBOS BY POSITION ({label} list) ===")
         top_bigrams(words)
     elif args:
-        report(words, args, label=f"valid {label}s" if use_guesses else "answers")
+        report(words, args, label="valid guesses" if use_guesses else "answers")
     else:
         # Default demo: the question that started this file.
         report(words, ["___er", "__re_"],
-               label=f"valid {label}s" if use_guesses else "answers")
+               label="valid guesses" if use_guesses else "answers")
