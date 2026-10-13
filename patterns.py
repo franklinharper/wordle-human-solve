@@ -12,14 +12,15 @@ that exact position (case-insensitive). Examples:
     "_a_e_"  -> A in position 2 and E in position 4
 
 Usage:
-    python3 patterns.py "__re_" "___er"
+    python3 patterns.py "__re_" "___er"                  # answer list (2,309)
+    python3 patterns.py --guesses "__re_" "___er"         # valid guesses (14,855)
     python3 patterns.py --top-bigrams
 """
 
 import sys
 from collections import Counter
 
-from analysis import load_answers
+from analysis import load_answers, load_all_guesses
 
 
 def match_pattern(words: list[str], pattern: str) -> list[str]:
@@ -36,10 +37,11 @@ def count_pattern(words: list[str], pattern: str) -> int:
     return len(match_pattern(words, pattern))
 
 
-def report(words: list[str], patterns: list[str], show_examples: int = 8) -> None:
+def report(words: list[str], patterns: list[str], show_examples: int = 8,
+           label: str = "words") -> None:
     """Print a count table for several patterns, with example matches."""
     n = len(words)
-    print(f"Answer list: {n} words\n")
+    print(f"{label.capitalize()}: {n} words\n")
     print(f"  {'Pattern':<10} {'Count':>6} {'Share':>7}  Examples")
     for pat in patterns:
         matches = match_pattern(words, pat)
@@ -75,13 +77,16 @@ def top_bigrams(words: list[str], top_n: int = 10) -> None:
 
 
 if __name__ == "__main__":
-    answers = load_answers()
+    use_guesses = "--guesses" in sys.argv
+    words = load_all_guesses() if use_guesses else load_answers()
+    label = "valid guess" if use_guesses else "answer"
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     if "--top-bigrams" in sys.argv:
-        print("=== MOST COMMON 2-LETTER COMBOS BY POSITION ===")
-        top_bigrams(answers)
+        print(f"=== MOST COMMON 2-LETTER COMBOS BY POSITION ({label} list) ===")
+        top_bigrams(words)
     elif args:
-        report(answers, args)
+        report(words, args, label=f"valid {label}s" if use_guesses else "answers")
     else:
         # Default demo: the question that started this file.
-        report(answers, ["___er", "__re_"])
+        report(words, ["___er", "__re_"],
+               label=f"valid {label}s" if use_guesses else "answers")
