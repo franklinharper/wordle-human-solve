@@ -58,6 +58,7 @@ allot
 allow
 alloy
 aloft
+aloha
 alone
 along
 aloof
@@ -114,8 +115,10 @@ ascot
 ashen
 aside
 askew
+aspic
 assay
 asset
+aster
 atoll
 atone
 attic
@@ -174,6 +177,7 @@ begat
 beget
 begin
 begun
+beige
 being
 belch
 belie
@@ -299,6 +303,7 @@ built
 bulge
 bulky
 bully
+bumpy
 bunch
 bunny
 burly
@@ -330,10 +335,12 @@ canny
 canoe
 canon
 caper
+capon
 caput
 carat
 cargo
 carol
+carom
 carry
 carve
 caste
@@ -423,6 +430,7 @@ cluck
 clued
 clump
 clung
+clunk
 coach
 coast
 cobra
@@ -498,6 +506,7 @@ crush
 crust
 crypt
 cubic
+cubit
 cumin
 curio
 curly
@@ -562,6 +571,7 @@ ditch
 ditto
 ditty
 diver
+divot
 dizzy
 dodge
 dodgy
@@ -650,6 +660,7 @@ email
 embed
 ember
 emcee
+emoji
 empty
 enact
 endow
@@ -847,6 +858,7 @@ geeky
 geese
 genie
 genre
+geode
 ghost
 ghoul
 giant
@@ -938,6 +950,7 @@ gulch
 gully
 gumbo
 gummy
+gunky
 guppy
 gusto
 gusty
@@ -1007,6 +1020,7 @@ hurry
 husky
 hussy
 hutch
+hydra
 hydro
 hyena
 hymen
@@ -1036,6 +1050,7 @@ inlay
 inlet
 inner
 input
+intel
 inter
 intro
 ionic
@@ -1136,6 +1151,7 @@ liner
 lingo
 lipid
 lithe
+liven
 liver
 livid
 llama
@@ -1203,6 +1219,7 @@ masse
 match
 matey
 mauve
+maven
 maxim
 maybe
 mayor
@@ -1219,6 +1236,7 @@ mercy
 merge
 merit
 merry
+messy
 metal
 meter
 metro
@@ -1297,6 +1315,7 @@ newly
 nicer
 niche
 niece
+nifty
 night
 ninja
 ninny
@@ -1317,6 +1336,7 @@ nutty
 nylon
 nymph
 oaken
+oasis
 obese
 occur
 ocean
@@ -1359,6 +1379,7 @@ oxide
 ozone
 paddy
 pagan
+pager
 paint
 paler
 palsy
@@ -1387,6 +1408,7 @@ peach
 pearl
 pecan
 pedal
+peeve
 penal
 pence
 penne
@@ -1483,6 +1505,8 @@ proxy
 prude
 prune
 psalm
+pshaw
+psych
 pubic
 pudgy
 puffy
@@ -1566,6 +1590,7 @@ relax
 relay
 relic
 remit
+remix
 renal
 renew
 repay
@@ -1594,6 +1619,7 @@ riper
 risen
 riser
 risky
+ritzy
 rival
 river
 rivet
@@ -1623,6 +1649,7 @@ rugby
 ruler
 rumba
 rumor
+runny
 rupee
 rural
 rusty
@@ -1720,6 +1747,7 @@ shelf
 shell
 shied
 shift
+shill
 shine
 shiny
 shire
@@ -1737,6 +1765,7 @@ shout
 shove
 shown
 showy
+shred
 shrew
 shrub
 shrug
@@ -1838,6 +1867,7 @@ sooth
 sooty
 sorry
 sound
+soupy
 south
 sower
 space
@@ -1943,6 +1973,7 @@ stove
 strap
 straw
 stray
+strew
 strip
 strut
 stuck
@@ -2065,6 +2096,7 @@ tipsy
 titan
 tithe
 title
+toady
 toast
 today
 toddy
@@ -2133,6 +2165,7 @@ tutor
 twang
 tweak
 tweed
+tween
 tweet
 twice
 twine
@@ -2144,6 +2177,7 @@ udder
 ulcer
 ultra
 umbra
+uncap
 uncle
 uncut
 under
@@ -2171,6 +2205,7 @@ usher
 using
 usual
 usurp
+usury
 utile
 utter
 vague
@@ -2222,6 +2257,7 @@ wager
 wagon
 waist
 waive
+waken
 waltz
 warty
 waste
@@ -2302,6 +2338,7 @@ yacht
 yearn
 yeast
 yield
+yodel
 young
 youth
 zebra

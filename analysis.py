@@ -11,16 +11,95 @@ guess pool shrinks along with the candidate pool.
 
 import json
 import math
+import os
+import sys
 from collections import Counter
 from typing import Optional
 
+REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
+META_FILE = os.path.join(REPO_ROOT, "wordlists.meta.json")
 
-def load_answers(path="answers.txt"):
+_freshness_checked = False
+
+
+def _stale_ok():
+    return os.environ.get("WORDLE_STALE_OK") == "1"
+
+
+def _max_stale_hours():
+    try:
+        return float(os.environ.get("WORDLE_MAX_STALE_HOURS", "24"))
+    except ValueError:
+        return 24.0
+
+
+def _loud_fail(label, detail, hint):
+    print(f"ERROR: Wordle word-list refresh failed ({label}): {detail}",
+          file=sys.stderr)
+    print("  The local word lists may be stale; refusing to run analysis on them.",
+          file=sys.stderr)
+    print(f"  Hint: {hint}", file=sys.stderr)
+    sys.exit(1)
+
+
+def ensure_wordlists_fresh():
+    """Refresh the word lists if the freshness clock has expired.
+
+    Runs at most once per process. On refresh failure the error is loud
+    and the process exits non-zero -- analysis never runs silently on
+    stale data. WORDLE_STALE_OK=1 bypasses with a visible warning.
+    """
+    global _freshness_checked
+    if _freshness_checked:
+        return
+    _freshness_checked = True
+
+    stale = True
+    if os.path.exists(META_FILE):
+        try:
+            import datetime
+            meta = json.load(open(META_FILE))
+            fetched = datetime.datetime.fromisoformat(meta["fetched_at"])
+            if fetched.tzinfo is None:
+                fetched = fetched.replace(tzinfo=datetime.timezone.utc)
+            age_h = (datetime.datetime.now(datetime.timezone.utc)
+                     - fetched).total_seconds() / 3600
+            stale = age_h > _max_stale_hours()
+        except Exception:
+            stale = True  # unreadable meta -> treat as stale
+    if not stale:
+        return
+
+    if _stale_ok():
+        print("WARNING: WORDLE_STALE_OK=1 -- skipping word-list refresh; "
+              "analysis is running on possibly-stale data.", file=sys.stderr)
+        return
+
+    try:
+        from fetch_wordle_words import (
+            refresh_all, WordleRefreshError,
+        )
+        summary = refresh_all(REPO_ROOT)
+    except WordleRefreshError as e:
+        _loud_fail(e.label(), str(e), e.hint)
+    except Exception as e:
+        _loud_fail("unexpected error", str(e), WordleRefreshError.hint)
+    if summary["changed"]:
+        print("word lists updated -- consider committing.", file=sys.stderr)
+
+
+def load_answers(path=None):
+    if path is None:
+        ensure_wordlists_fresh()
+        path = os.path.join(REPO_ROOT, "answers.txt")
     with open(path) as f:
         return [line.strip() for line in f if line.strip()]
 
 
-def load_all_guesses(path="wordle_valid_guesses.json"):
+def load_all_guesses(path=None):
+    if path is None:
+        ensure_wordlists_fresh()
+        path = os.path.join(REPO_ROOT, "wordle_valid_guesses.json")
     with open(path) as f:
         return json.load(f)
 
