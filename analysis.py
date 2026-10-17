@@ -75,6 +75,11 @@ def ensure_wordlists_fresh():
               "analysis is running on possibly-stale data.", file=sys.stderr)
         return
 
+    # The refresh below hits the network and can take ~20s (NYT page +
+    # JS bundles + daily-solution endpoint). Say so on stderr -- otherwise
+    # a simple patterns.py query looks hung while it works.
+    print(f"word lists are stale (>{_max_stale_hours():.0f}h old) -- "
+          "refreshing from NYT (takes ~20s)...", file=sys.stderr)
     try:
         from fetch_wordle_words import (
             refresh_all, WordleRefreshError,
@@ -86,6 +91,8 @@ def ensure_wordlists_fresh():
         _loud_fail("unexpected error", str(e), WordleRefreshError.hint)
     if summary["changed"]:
         print("word lists updated -- consider committing.", file=sys.stderr)
+    else:
+        print("word lists refreshed -- no changes.", file=sys.stderr)
 
 
 def load_answers(path=None):
