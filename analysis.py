@@ -33,12 +33,14 @@ def _max_stale_hours():
         return 24.0
 
 
+def _err(msg):
+    print(msg, file=sys.stderr)
+
+
 def _loud_fail(label, detail, hint):
-    print(f"ERROR: Wordle word-list refresh failed ({label}): {detail}",
-          file=sys.stderr)
-    print("  The local word lists may be stale; refusing to run analysis on them.",
-          file=sys.stderr)
-    print(f"  Hint: {hint}", file=sys.stderr)
+    _err(f"ERROR: Wordle word-list refresh failed ({label}): {detail}")
+    _err("  The local word lists may be stale; refusing to run analysis on them.")
+    _err(f"  Hint: {hint}")
     sys.exit(1)
 
 
@@ -71,15 +73,15 @@ def ensure_wordlists_fresh():
         return
 
     if _stale_ok():
-        print("WARNING: WORDLE_STALE_OK=1 -- skipping word-list refresh; "
-              "analysis is running on possibly-stale data.", file=sys.stderr)
+        _err("WARNING: WORDLE_STALE_OK=1 -- skipping word-list refresh; "
+             "analysis is running on possibly-stale data.")
         return
 
     # The refresh below hits the network and can take ~20s (NYT page +
     # JS bundles + daily-solution endpoint). Say so on stderr -- otherwise
     # a simple patterns.py query looks hung while it works.
-    print(f"word lists are stale (>{_max_stale_hours():.0f}h old) -- "
-          "refreshing from NYT (takes ~20s)...", file=sys.stderr)
+    _err(f"word lists are stale (>{_max_stale_hours():.0f}h old) -- "
+         "refreshing from NYT (takes ~20s)...")
     try:
         from fetch_wordle_words import (
             refresh_all, WordleRefreshError,
@@ -90,9 +92,9 @@ def ensure_wordlists_fresh():
     except Exception as e:
         _loud_fail("unexpected error", str(e), WordleRefreshError.hint)
     if summary["changed"]:
-        print("word lists updated -- consider committing.", file=sys.stderr)
+        _err("word lists updated -- consider committing.")
     else:
-        print("word lists refreshed -- no changes.", file=sys.stderr)
+        _err("word lists refreshed -- no changes.")
 
 
 def load_answers(path=None):
