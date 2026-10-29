@@ -57,12 +57,18 @@ def cloze_pair(sentence_text, token):
 
 notes = []
 
-# 1. Cloze cards, in text order. Each note carries a stable key (used for
-# its GUID below) naming the card's role, not its wording.
-for sentence_text, tokens in TEXT:
-    for token in tokens:
-        front, back = cloze_pair(sentence_text, token)
-        notes.append((f"cloze:{token}", front, back))
+# 1. Cloze cards, interleaved round-robin across the three sentences
+# (1st word of each sentence, then 2nd word of each, ...). Grouping one
+# sentence's cards together made each too easy -- the neighbouring cards
+# give the sentence away -- so consecutive cards always come from
+# different sentences. Each note carries a stable key (used for its GUID
+# below) naming the card's role, not its wording.
+for i in range(max(len(tokens) for _, tokens in TEXT)):
+    for sentence_text, tokens in TEXT:
+        if i < len(tokens):
+            token = tokens[i]
+            front, back = cloze_pair(sentence_text, token)
+            notes.append((f"cloze:{token}", front, back))
 
 # 2. Whole-sentence recall cards.
 for i, (sentence_text, _) in enumerate(TEXT, start=1):
