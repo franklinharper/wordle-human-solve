@@ -995,6 +995,7 @@ hitch
 hoard
 hobby
 hoist
+holey
 holly
 homer
 honey
@@ -2137,6 +2138,7 @@ tribe
 trice
 trick
 tried
+trill
 tripe
 trite
 troll
