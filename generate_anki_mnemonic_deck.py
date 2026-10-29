@@ -16,8 +16,8 @@ import genanki
 # The mnemonic, verbatim as Frank settled it (2026-10-29). Tokens are the
 # words exactly as written in the text (hence "pilot's" and "cleats").
 TEXT = [
-    ("The olden tangy cloth stunk.",
-     ["olden", "tangy", "cloth", "stunk"]),
+    ("The tangy olden cloth stunk.",
+     ["tangy", "olden", "cloth", "stunk"]),
     ("The court pilot's cleats glint and float.",
      ["court", "pilot's", "cleats", "glint", "float"]),
     ("Adorn it, deter it, lunge!",
@@ -57,28 +57,32 @@ def cloze_pair(sentence_text, token):
 
 notes = []
 
-# 1. Cloze cards, in text order.
+# 1. Cloze cards, in text order. Each note carries a stable key (used for
+# its GUID below) naming the card's role, not its wording.
 for sentence_text, tokens in TEXT:
     for token in tokens:
         front, back = cloze_pair(sentence_text, token)
-        notes.append((front, back))
+        notes.append((f"cloze:{token}", front, back))
 
 # 2. Whole-sentence recall cards.
 for i, (sentence_text, _) in enumerate(TEXT, start=1):
     front = wrap(prompt(f"Mnemonic &mdash; sentence {i} of {len(TEXT)}")
                  + '<div style="font-size:28px;">Recite it.</div>')
     back = wrap(sentence(sentence_text))
-    notes.append((front, back))
+    notes.append((f"sentence:{i}", front, back))
 
 # 3. Full-text recall card.
 full_text = " ".join(s for s, _ in TEXT)
 front = wrap(prompt("Wordle guess-2 mnemonic")
              + '<div style="font-size:28px;">Recite the whole text.</div>')
 back = wrap(sentence(full_text.replace(". ", ".<br>")))
-notes.append((front, back))
+notes.append(("full-text", front, back))
 
 # Stable IDs (fixed literals) so re-running this generator and re-importing
-# updates the same model/deck in Anki instead of duplicating them.
+# updates the same model/deck in Anki instead of duplicating them. Notes
+# likewise get stable GUIDs derived from their role keys, so editing the
+# mnemonic text later updates the existing cards in place (genanki's
+# default GUID hashes the field text, which would orphan the old cards).
 model = genanki.Model(
     1473829056,
     "Wordle Mnemonic",
@@ -97,8 +101,12 @@ model = genanki.Model(
 
 deck = genanki.Deck(1903847562, "Wordle – Guess-2 Mnemonic")
 
-for front, back in notes:
-    deck.add_note(genanki.Note(model=model, fields=[front, back]))
+for key, front, back in notes:
+    deck.add_note(genanki.Note(
+        model=model,
+        fields=[front, back],
+        guid=genanki.guid_for("wordle-guess2-mnemonic", key),
+    ))
 
 genanki.Package(deck).write_to_file("wordle_guess2_mnemonic.apkg")
 print(f"Wrote wordle_guess2_mnemonic.apkg with {len(notes)} cards")
