@@ -24,7 +24,16 @@ TEXT = [
      ["Adorn", "deter", "lunge"]),
 ]
 
-BLANK = "________"
+# Fail loudly if a token ever diverges from its sentence: str.replace
+# would otherwise no-op silently and produce an unblanked cloze card.
+for sentence_text, tokens in TEXT:
+    for token in tokens:
+        occurrences = sentence_text.count(token)
+        if occurrences != 1:
+            raise SystemExit(
+                f"error: token {token!r} occurs {occurrences} times in "
+                f"{sentence_text!r}; expected exactly once"
+            )
 
 
 def wrap(inner):
@@ -34,23 +43,25 @@ def wrap(inner):
     )
 
 
-def prompt(text):
+def prompt_div(text):
     return (
         f'<div style="font-size:16px;color:#555;margin-bottom:12px;">'
         f"{text}</div>"
     )
 
 
-def sentence(text):
+def body_div(text):
     return f'<div style="font-size:28px;line-height:1.5;">{text}</div>'
 
 
 def cloze_pair(sentence_text, token):
+    # "________" is the blank that stands in for the missing word.
+    blanked = sentence_text.replace(token, "________", 1)
     front = wrap(
-        prompt("Mnemonic &mdash; fill in the blank")
-        + sentence(sentence_text.replace(token, BLANK, 1))
+        prompt_div("Mnemonic &mdash; fill in the blank")
+        + body_div(blanked)
     )
-    back = wrap(sentence(sentence_text.replace(
+    back = wrap(body_div(sentence_text.replace(
         token, f"<b>{token}</b>", 1)))
     return front, back
 
@@ -72,16 +83,16 @@ for i in range(max(len(tokens) for _, tokens in TEXT)):
 
 # 2. Whole-sentence recall cards.
 for i, (sentence_text, _) in enumerate(TEXT, start=1):
-    front = wrap(prompt(f"Mnemonic &mdash; sentence {i} of {len(TEXT)}")
-                 + '<div style="font-size:28px;">Recite it.</div>')
-    back = wrap(sentence(sentence_text))
+    front = wrap(prompt_div(f"Mnemonic &mdash; sentence {i} of {len(TEXT)}")
+                 + body_div("Recite it."))
+    back = wrap(body_div(sentence_text))
     notes.append((f"sentence:{i}", front, back))
 
 # 3. Full-text recall card.
 full_text = " ".join(s for s, _ in TEXT)
-front = wrap(prompt("Wordle guess-2 mnemonic")
-             + '<div style="font-size:28px;">Recite the whole text.</div>')
-back = wrap(sentence(full_text.replace(". ", ".<br>")))
+front = wrap(prompt_div("Wordle guess-2 mnemonic")
+             + body_div("Recite the whole text."))
+back = wrap(body_div(full_text.replace(". ", ".<br>")))
 notes.append(("full-text", front, back))
 
 # Stable IDs (fixed literals) so re-running this generator and re-importing
