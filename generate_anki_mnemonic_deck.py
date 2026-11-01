@@ -9,6 +9,9 @@ applying the words, so there are deliberately no pattern->word cards):
      the back is that complete sentence with the word bolded.
   2. Whole-sentence recall cards ("Sentence N of the mnemonic").
   3. One full-text recall card.
+  4. Letter-chant cards for the frequency chant in strategy.md
+     (EAROT-LISN-CUY): one cloze per chunk, a full-chant recall card,
+     a purpose card, and one application card.
 """
 
 import genanki
@@ -94,6 +97,65 @@ front = wrap(prompt_div("Wordle guess-2 mnemonic")
              + body_div("Recite the whole text."))
 back = wrap(body_div(full_text.replace(". ", ".<br>")))
 notes.append(("full-text", front, back))
+
+# 4. Letter-chant cards. The chant is the 12 most common letters across
+# all Wordle answers, in frequency order, grouped 5-4-3 so the chunks
+# themselves are easy to hold. Same guard as the mnemonic tokens: a
+# chunk that diverges from the chant text must fail loudly, not blank
+# nothing.
+CHANT_CHUNKS = ["EAROT", "LISN", "CUY"]
+CHANT_TEXT = " – ".join(CHANT_CHUNKS)
+for chunk in CHANT_CHUNKS:
+    occurrences = CHANT_TEXT.count(chunk)
+    if occurrences != 1:
+        raise SystemExit(
+            f"error: chunk {chunk!r} occurs {occurrences} times in "
+            f"{CHANT_TEXT!r}; expected exactly once"
+        )
+
+
+def chant_cloze_pair(chunk):
+    blanked = CHANT_TEXT.replace(chunk, "________", 1)
+    front = wrap(
+        prompt_div("Letter chant &mdash; fill in the blank")
+        + body_div(blanked)
+    )
+    back = wrap(body_div(CHANT_TEXT.replace(
+        chunk, f"<b>{chunk}</b>", 1)))
+    return front, back
+
+
+for chunk in CHANT_CHUNKS:
+    front, back = chant_cloze_pair(chunk)
+    notes.append((f"chant:cloze:{chunk}", front, back))
+
+# Full-chant recall.
+front = wrap(prompt_div("Wordle letter chant")
+             + body_div("Recite all 12 letters."))
+back = wrap(body_div(CHANT_TEXT)
+            + prompt_div("The 12 most common letters in Wordle answers, "
+                         "in order. Groups of 5, 4, 3."))
+notes.append(("chant:full", front, back))
+
+# Purpose: what the chant is for, and what the keyboard is for.
+front = wrap(prompt_div("Wordle letter chant")
+             + body_div("What is the chant for &mdash; and what is the "
+                        "keyboard for?"))
+back = wrap(body_div("Chant: the order to try untested letters in.<br>"
+                     "Keyboard: only to check which letters are still "
+                     "alive."))
+notes.append(("chant:purpose", front, back))
+
+# Application, from a real game (2026-11-01, VIPER): RAISE returned
+# R, I, E yellow with A and S dead.
+front = wrap(prompt_div("Letter chant &mdash; apply it")
+             + body_div("RAISE: R, I, E yellow; A, S dead. Running the "
+                        "chant, what are the first four NEW letters to "
+                        "try?"))
+back = wrap(body_div("O, T, L, N")
+            + prompt_div("As in LITER or TILER &mdash; two new letters "
+                         "per guess."))
+notes.append(("chant:apply", front, back))
 
 # Stable IDs (fixed literals) so re-running this generator and re-importing
 # updates the same model/deck in Anki instead of duplicating them. Notes

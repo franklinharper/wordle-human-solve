@@ -75,14 +75,25 @@ principles in order:
 
 ### Rule 1: If you can think of only 1-2 possible words, just guess one.
 
-### Rule 2: Test untested common letters.
+### Rule 2: Test untested common letters — scan by the chant, not the keyboard.
 
-The letter priority order (after RAISE already tested R, A, I, S, E):
+**The chant: EAROT – LISN – CUY** — the 12 most common letters across all
+Wordle answers, in frequency order. Between them they fill ~74% of all
+letter slots in answers. When hunting for a letter to try:
 
-> **O, T, L, N, U, C, Y, H, D, P, G, M, B**
-
-Think of a valid word that satisfies your constraints AND contains as many
-high-priority untested letters as possible.
+- Run the chant from the top and take the first letter that is still
+  untested and fits the frame. (The vowels ride near the front on their
+  own: E, A, O, I, U are all in the twelve.)
+- The on-screen keyboard shows which letters are still alive — use it
+  only as that liveness check, never as the scan order. Keyboard order
+  is geography, not usefulness: it gives Q and W the first auditions,
+  and they are among the rarest letters in answers.
+- If every chant letter is already known or dead, fall back to scanning
+  the keyboard for what's left. The next tier after the chant is
+  D, H, P, M; the rest are rare enough that their order hardly matters.
+- Prefer a word that smuggles in **two** high chant letters over one
+  that tests a single letter — e.g. after RAISE came back with R, I, E
+  yellow, LITER or TILER (new: L, T) over WIRER (new: only W).
 
 ### Rule 3: Beware the one-position trap.
 
