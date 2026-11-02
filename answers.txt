@@ -924,6 +924,7 @@ grime
 grimy
 grind
 gripe
+grist
 groan
 groin
 groom
@@ -1693,6 +1694,7 @@ scoff
 scold
 scone
 scoop
+scoot
 scope
 score
 scorn
@@ -2337,6 +2339,7 @@ wrote
 wrung
 wryly
 yacht
+yahoo
 yearn
 yeast
 yield
