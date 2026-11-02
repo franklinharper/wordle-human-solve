@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
-"""Generate an Anki deck for memorizing the Wordle guess-2 mnemonic text.
+"""Generate the Anki deck "Wordle – Mnemonic and Chant".
 
-Frank's mnemonic packs the 12 guess-2 lookup words into three sentences.
-The deck teaches the text itself as a ladder (daily play already drills
-applying the words, so there are deliberately no pattern->word cards):
+Two blocks:
 
-  1. Cloze cards scoped to one sentence -- one word blanked per card;
-     the back is that complete sentence with the word bolded.
-  2. Whole-sentence recall cards ("Sentence N of the mnemonic").
-  3. One full-text recall card.
-  4. Letter-chant cards for the frequency chant in strategy.md
-     (EAROT-LISN-CUY): one cloze per chunk, a full-chant recall card,
-     a purpose card, a next-tier card, and one application card.
+  1. The guess-2 mnemonic (Frank's three sentences packing the 12
+     lookup words): cloze cards scoped to one sentence, whole-sentence
+     recall cards, one full-text recall card. Daily play drills
+     applying the words, so there are deliberately no pattern->word
+     cards.
+  2. The after-RAISE chant (strategy.md Rule 2): a purpose card, a
+     cumulative ladder that builds the chant chunk by chunk (each
+     card asks only for the next chunk), a full-chant recall card, a
+     beyond-the-chant card, and one application card.
+
+History: this deck replaced "Wordle – Guess-2 Mnemonic" on 2026-11-02
+(Frank's call: delete the old deck and start fresh). The general
+frequency chant's cards were retired at the same time — the
+after-RAISE chant is the scan actually used in games. New deck ID and
+GUID namespace, so nothing collides with the old deck.
 """
 
 import genanki
@@ -26,6 +32,7 @@ TEXT = [
     ("Adorn it, deter it, lunge!",
      ["Adorn", "deter", "lunge"]),
 ]
+
 
 def assert_exactly_once(text, token):
     # Fail loudly if a token ever diverges from its text: str.replace
@@ -99,66 +106,88 @@ front = wrap(prompt_div("Wordle guess-2 mnemonic")
 back = wrap(body_div(full_text.replace(". ", ".<br>")))
 notes.append(("full-text", front, back))
 
-# 4. Letter-chant cards. The chant is the 12 most common letters across
-# all Wordle answers, in frequency order, grouped 5-4-3 so the chunks
-# themselves are easy to hold. CHANT_TEXT is an independent literal
-# (the same text strategy.md carries); the chunks are checked against
-# it with the shared guard, so a chunk edited away from the chant
-# fails loudly instead of blanking nothing.
-CHANT_CHUNKS = ["EAROT", "LISN", "CUY"]
-CHANT_TEXT = "EAROT – LISN – CUY"
-for chunk in CHANT_CHUNKS:
-    assert_exactly_once(CHANT_TEXT, chunk)
-
-for chunk in CHANT_CHUNKS:
-    front, back = cloze_pair(CHANT_TEXT, chunk,
-                             "Letter chant &mdash; fill in the blank")
-    notes.append((f"chant:cloze:{chunk}", front, back))
-
-# Full-chant recall.
-front = wrap(prompt_div("Wordle letter chant")
-             + body_div("Recite all 12 letters."))
-back = wrap(body_div(CHANT_TEXT)
-            + prompt_div("The 12 most common letters in Wordle answers, "
-                         "in order. Groups of 5, 4, 3."))
-notes.append(("chant:full", front, back))
+# 4. After-RAISE chant cards. The chant is the letters RAISE doesn't
+# test, ordered by how many answers contain them, grouped 4-3-3-3.
+# AFTER_TEXT is an independent literal (the same text strategy.md
+# carries); the chunks are checked against it with the shared guard,
+# so a chunk edited away from the chant fails loudly instead of
+# blanking nothing.
+AFTER_CHUNKS = ["OTLN", "UCY", "HDP", "MGB"]
+AFTER_TEXT = "OTLN – UCY – HDP – MGB"
+for chunk in AFTER_CHUNKS:
+    assert_exactly_once(AFTER_TEXT, chunk)
 
 # Purpose: what the chant is for, and what the keyboard is for.
-front = wrap(prompt_div("Wordle letter chant")
-             + body_div("What is the chant for &mdash; and what is the "
-                        "keyboard for?"))
-back = wrap(body_div("Chant: the order to try untested letters in.<br>"
+front = wrap(prompt_div("After-RAISE chant")
+             + body_div("What is the after-RAISE chant for &mdash; and "
+                        "what is the keyboard for?"))
+back = wrap(body_div("Chant: after RAISE, the order to try untested "
+                     "letters in.<br>"
                      "Keyboard: only to check which letters are still "
                      "alive &mdash; unless every chant letter is known "
-                     "or dead; then scan the keyboard. Next tier: "
-                     "D, H, P, M."))
-notes.append(("chant:purpose", front, back))
+                     "or dead; then scan the keyboard."))
+notes.append(("after:purpose", front, back))
 
-# Next tier: what to scan once every chant letter is known or dead.
-front = wrap(prompt_div("Letter chant &mdash; after the chant")
-             + body_div("The chant is exhausted. What is the next "
-                        "tier, and what follows it?"))
-back = wrap(body_div("D, H, P, M &mdash; then G, B, F, K, W, V")
-            + prompt_div("Rarest of all: Z, X, Q, J &mdash; each in "
-                         "under 2% of answers."))
-notes.append(("chant:next-tier", front, back))
+# The ladder. Card 1 asks for the first chunk from nothing; each later
+# card shows the chunks so far and blanks only the next one, so the
+# learner only ever recalls one new chunk at a time.
+front = wrap(prompt_div("After-RAISE chant")
+             + body_div("What's the first word of the after-RAISE "
+                        "chant?"))
+back = wrap(body_div(AFTER_CHUNKS[0]))
+notes.append(("after:ladder:1", front, back))
 
-# Application, from a real game (2026-11-01, VIPER): RAISE returned
-# R, I, E yellow with A and S dead.
-front = wrap(prompt_div("Letter chant &mdash; apply it")
-             + body_div("RAISE: R, I, E yellow; A, S dead. Running the "
-                        "chant, what are the first four NEW letters to "
-                        "try?"))
-back = wrap(body_div("O, T, L, N")
-            + prompt_div("As in OILER &mdash; two new letters "
-                         "per guess."))
-notes.append(("chant:apply", front, back))
 
-# Stable IDs (fixed literals) so re-running this generator and re-importing
-# updates the same model/deck in Anki instead of duplicating them. Notes
-# likewise get stable GUIDs derived from their role keys, so editing the
-# mnemonic text later updates the existing cards in place (genanki's
-# default GUID hashes the field text, which would orphan the old cards).
+def ladder_pair(chunks, k):
+    # Front: the chunks before chunk k, then a blank. Back: the chunks
+    # through k, with chunk k bolded. Later chunks stay hidden.
+    front = wrap(
+        prompt_div("After-RAISE chant &mdash; fill in the blank")
+        + body_div(" – ".join(chunks[:k] + ["________"])))
+    back = wrap(body_div(" – ".join(
+        chunks[:k] + [f"<b>{chunks[k]}</b>"])))
+    return front, back
+
+
+for k in range(1, len(AFTER_CHUNKS)):
+    front, back = ladder_pair(AFTER_CHUNKS, k)
+    notes.append((f"after:ladder:{k + 1}", front, back))
+
+# Full-chant recall, no scaffold.
+front = wrap(prompt_div("After-RAISE chant")
+             + body_div("Recite the whole chant."))
+back = wrap(body_div(AFTER_TEXT)
+            + prompt_div("The letters RAISE doesn't test, ordered by "
+                         "how many answers contain them. Groups of "
+                         "4, 3, 3, 3."))
+notes.append(("after:full", front, back))
+
+# Beyond the chant: what remains once every chant letter is used up.
+front = wrap(prompt_div("After-RAISE chant &mdash; beyond the chant")
+             + body_div("The chant is exhausted. What remains?"))
+back = wrap(body_div("F, K, W, V &mdash; then X, Z, Q, J")
+            + prompt_div("X, Z, Q, J are the rarest of all &mdash; "
+                         "each in under 2% of answers."))
+notes.append(("after:beyond", front, back))
+
+# Application: RAISE, then the guess-2 table's all-gray word CLOTH --
+# the chant's first letters die with it, so the drill is skipping
+# ahead to the first survivor.
+front = wrap(prompt_div("After-RAISE chant &mdash; apply it")
+             + body_div("RAISE, then CLOTH &mdash; all gray. Running "
+                        "the chant, what's the first letter still "
+                        "alive?"))
+back = wrap(body_div("N")
+            + prompt_div("CLOTH kills O, T, L, C, H &mdash; N is the "
+                         "chant's first survivor."))
+notes.append(("after:apply", front, back))
+
+# Stable IDs (fixed literals) so re-running this generator and
+# re-importing updates the same model/deck in Anki instead of
+# duplicating them. Notes likewise get stable GUIDs derived from their
+# role keys, so editing a card's text later updates the existing card
+# in place (genanki's default GUID hashes the field text, which would
+# orphan the old cards).
 model = genanki.Model(
     1473829056,
     "Wordle Mnemonic",
@@ -175,14 +204,14 @@ model = genanki.Model(
     ],
 )
 
-deck = genanki.Deck(1903847562, "Wordle – Guess-2 Mnemonic")
+deck = genanki.Deck(2047119305, "Wordle – Mnemonic and Chant")
 
 for key, front, back in notes:
     deck.add_note(genanki.Note(
         model=model,
         fields=[front, back],
-        guid=genanki.guid_for("wordle-guess2-mnemonic", key),
+        guid=genanki.guid_for("wordle-mnemonic-and-chant", key),
     ))
 
-genanki.Package(deck).write_to_file("wordle_guess2_mnemonic.apkg")
-print(f"Wrote wordle_guess2_mnemonic.apkg with {len(notes)} cards")
+genanki.Package(deck).write_to_file("wordle_mnemonic_chant.apkg")
+print(f"Wrote wordle_mnemonic_chant.apkg with {len(notes)} cards")

@@ -77,23 +77,29 @@ principles in order:
 
 ### Rule 2: Test untested common letters — scan by the chant, not the keyboard.
 
-**The chant: EAROT – LISN – CUY** — the 12 most common letters across all
-Wordle answers, in frequency order. Between them they fill ~74% of all
-letter slots in answers. When hunting for a letter to try:
+**The after-RAISE chant: OTLN – UCY – HDP – MGB** — the letters RAISE
+doesn't test, ordered by how many answers contain them (O and T each
+appear in 29% of answers, L in 28%, N in 24%). Since RAISE is always
+guess 1, this is the scan every letter hunt uses:
 
 - Run the chant from the top and take the first letter that is still
-  untested and fits the frame. (The vowels ride near the front on their
-  own: E, A, O, I, U are all in the twelve.)
+  untested and fits the frame.
 - The on-screen keyboard shows which letters are still alive — use it
   only as that liveness check, never as the scan order. Keyboard order
   is geography, not usefulness: it gives Q and W the first auditions,
   and they are among the rarest letters in answers.
-- If every chant letter is already known or dead, fall back to scanning
-  the keyboard for what's left. The next tier after the chant is
-  D, H, P, M; the rest are rare enough that their order hardly matters.
+- If every chant letter is already known or dead, what remains is
+  F, K, W, V, and then the rarest letters of all — X, Z, Q, J, each in
+  under 2% of answers.
 - Prefer a word that smuggles in **two** high chant letters over one
   that tests a single letter — e.g. after RAISE came back with R, I, E
   yellow, OILER (new: O, L) over WIRER (new: only W).
+
+Where the chant comes from: the 12 most common letters across all
+answers are E, A, R, O, T, L, I, S, N, C, U, Y (~74% of all letter
+slots). Strike out the five letters RAISE already tests, re-rank the
+rest by answers containing the letter (which swaps two near-ties:
+U before C, M before G), and extend past Y with D, H, P, M, G, B.
 
 ### Rule 3: Beware the one-position trap.
 
