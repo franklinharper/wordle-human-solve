@@ -93,7 +93,7 @@ letter slots in answers. When hunting for a letter to try:
   D, H, P, M; the rest are rare enough that their order hardly matters.
 - Prefer a word that smuggles in **two** high chant letters over one
   that tests a single letter — e.g. after RAISE came back with R, I, E
-  yellow, LITER or TILER (new: L, T) over WIRER (new: only W).
+  yellow, OILER (new: O, L) over WIRER (new: only W).
 
 ### Rule 3: Beware the one-position trap.
 

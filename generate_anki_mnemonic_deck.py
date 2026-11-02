@@ -11,7 +11,7 @@ applying the words, so there are deliberately no pattern->word cards):
   3. One full-text recall card.
   4. Letter-chant cards for the frequency chant in strategy.md
      (EAROT-LISN-CUY): one cloze per chunk, a full-chant recall card,
-     a purpose card, and one application card.
+     a purpose card, a next-tier card, and one application card.
 """
 
 import genanki
@@ -27,16 +27,20 @@ TEXT = [
      ["Adorn", "deter", "lunge"]),
 ]
 
-# Fail loudly if a token ever diverges from its sentence: str.replace
-# would otherwise no-op silently and produce an unblanked cloze card.
+def assert_exactly_once(text, token):
+    # Fail loudly if a token ever diverges from its text: str.replace
+    # would otherwise no-op silently and produce an unblanked cloze card.
+    occurrences = text.count(token)
+    if occurrences != 1:
+        raise SystemExit(
+            f"error: token {token!r} occurs {occurrences} times in "
+            f"{text!r}; expected exactly once"
+        )
+
+
 for sentence_text, tokens in TEXT:
     for token in tokens:
-        occurrences = sentence_text.count(token)
-        if occurrences != 1:
-            raise SystemExit(
-                f"error: token {token!r} occurs {occurrences} times in "
-                f"{sentence_text!r}; expected exactly once"
-            )
+        assert_exactly_once(sentence_text, token)
 
 
 def wrap(inner):
@@ -57,15 +61,11 @@ def body_div(text):
     return f'<div style="font-size:28px;line-height:1.5;">{text}</div>'
 
 
-def cloze_pair(sentence_text, token):
+def cloze_pair(text, token, prompt):
     # "________" is the blank that stands in for the missing word.
-    blanked = sentence_text.replace(token, "________", 1)
-    front = wrap(
-        prompt_div("Mnemonic &mdash; fill in the blank")
-        + body_div(blanked)
-    )
-    back = wrap(body_div(sentence_text.replace(
-        token, f"<b>{token}</b>", 1)))
+    blanked = text.replace(token, "________", 1)
+    front = wrap(prompt_div(prompt) + body_div(blanked))
+    back = wrap(body_div(text.replace(token, f"<b>{token}</b>", 1)))
     return front, back
 
 
@@ -81,7 +81,8 @@ for i in range(max(len(tokens) for _, tokens in TEXT)):
     for sentence_text, tokens in TEXT:
         if i < len(tokens):
             token = tokens[i]
-            front, back = cloze_pair(sentence_text, token)
+            front, back = cloze_pair(
+                sentence_text, token, "Mnemonic &mdash; fill in the blank")
             notes.append((f"cloze:{token}", front, back))
 
 # 2. Whole-sentence recall cards.
@@ -100,33 +101,18 @@ notes.append(("full-text", front, back))
 
 # 4. Letter-chant cards. The chant is the 12 most common letters across
 # all Wordle answers, in frequency order, grouped 5-4-3 so the chunks
-# themselves are easy to hold. Same guard as the mnemonic tokens: a
-# chunk that diverges from the chant text must fail loudly, not blank
-# nothing.
+# themselves are easy to hold. CHANT_TEXT is an independent literal
+# (the same text strategy.md carries); the chunks are checked against
+# it with the shared guard, so a chunk edited away from the chant
+# fails loudly instead of blanking nothing.
 CHANT_CHUNKS = ["EAROT", "LISN", "CUY"]
-CHANT_TEXT = " – ".join(CHANT_CHUNKS)
+CHANT_TEXT = "EAROT – LISN – CUY"
 for chunk in CHANT_CHUNKS:
-    occurrences = CHANT_TEXT.count(chunk)
-    if occurrences != 1:
-        raise SystemExit(
-            f"error: chunk {chunk!r} occurs {occurrences} times in "
-            f"{CHANT_TEXT!r}; expected exactly once"
-        )
-
-
-def chant_cloze_pair(chunk):
-    blanked = CHANT_TEXT.replace(chunk, "________", 1)
-    front = wrap(
-        prompt_div("Letter chant &mdash; fill in the blank")
-        + body_div(blanked)
-    )
-    back = wrap(body_div(CHANT_TEXT.replace(
-        chunk, f"<b>{chunk}</b>", 1)))
-    return front, back
-
+    assert_exactly_once(CHANT_TEXT, chunk)
 
 for chunk in CHANT_CHUNKS:
-    front, back = chant_cloze_pair(chunk)
+    front, back = cloze_pair(CHANT_TEXT, chunk,
+                             "Letter chant &mdash; fill in the blank")
     notes.append((f"chant:cloze:{chunk}", front, back))
 
 # Full-chant recall.
@@ -143,8 +129,19 @@ front = wrap(prompt_div("Wordle letter chant")
                         "keyboard for?"))
 back = wrap(body_div("Chant: the order to try untested letters in.<br>"
                      "Keyboard: only to check which letters are still "
-                     "alive."))
+                     "alive &mdash; unless every chant letter is known "
+                     "or dead; then scan the keyboard. Next tier: "
+                     "D, H, P, M."))
 notes.append(("chant:purpose", front, back))
+
+# Next tier: what to scan once every chant letter is known or dead.
+front = wrap(prompt_div("Letter chant &mdash; after the chant")
+             + body_div("The chant is exhausted. What is the next "
+                        "tier, and what follows it?"))
+back = wrap(body_div("D, H, P, M &mdash; then G, B, F, K, W, V")
+            + prompt_div("Rarest of all: Z, X, Q, J &mdash; each in "
+                         "under 2% of answers."))
+notes.append(("chant:next-tier", front, back))
 
 # Application, from a real game (2026-11-01, VIPER): RAISE returned
 # R, I, E yellow with A and S dead.
@@ -153,7 +150,7 @@ front = wrap(prompt_div("Letter chant &mdash; apply it")
                         "chant, what are the first four NEW letters to "
                         "try?"))
 back = wrap(body_div("O, T, L, N")
-            + prompt_div("As in LITER or TILER &mdash; two new letters "
+            + prompt_div("As in OILER &mdash; two new letters "
                          "per guess."))
 notes.append(("chant:apply", front, back))
 
