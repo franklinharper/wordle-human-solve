@@ -99,7 +99,7 @@ Where the chant comes from: the 12 most common letters across all
 answers are E, A, R, O, T, L, I, S, N, C, U, Y (~74% of all letter
 slots). Strike out the five letters RAISE already tests, re-rank the
 rest by answers containing the letter (which swaps two near-ties:
-U before C, M before G), and extend past Y with D, H, P, M, G, B.
+U before C, M before G), and extend past Y with H, D, P, M, G, B.
 
 ### Rule 3: Beware the one-position trap.
 

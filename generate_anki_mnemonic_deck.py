@@ -50,6 +50,15 @@ for sentence_text, tokens in TEXT:
         assert_exactly_once(sentence_text, token)
 
 
+# Shared by the card helpers below: the blank that stands in for a
+# missing word or chunk, and the separator between the chant's chunks.
+# Named constants because each is used in several places — a card's
+# front and back are built from them together, so the two sides can
+# never drift apart.
+BLANK = "________"
+SEPARATOR = " – "
+
+
 def wrap(inner):
     return (
         '<div style="text-align:center;padding:20px;'
@@ -69,8 +78,7 @@ def body_div(text):
 
 
 def cloze_pair(text, token, prompt):
-    # "________" is the blank that stands in for the missing word.
-    blanked = text.replace(token, "________", 1)
+    blanked = text.replace(token, BLANK, 1)
     front = wrap(prompt_div(prompt) + body_div(blanked))
     back = wrap(body_div(text.replace(token, f"<b>{token}</b>", 1)))
     return front, back
@@ -109,13 +117,16 @@ notes.append(("full-text", front, back))
 # 4. After-RAISE chant cards. The chant is the letters RAISE doesn't
 # test, ordered by how many answers contain them, grouped 4-3-3-3.
 # AFTER_TEXT is an independent literal (the same text strategy.md
-# carries); the chunks are checked against it with the shared guard,
-# so a chunk edited away from the chant fails loudly instead of
-# blanking nothing.
+# carries); the equality check below ties it to AFTER_CHUNKS, so
+# editing either one alone — a reordered chunk, a changed separator —
+# fails loudly instead of teaching two different chants.
 AFTER_CHUNKS = ["OTLN", "UCY", "HDP", "MGB"]
 AFTER_TEXT = "OTLN – UCY – HDP – MGB"
-for chunk in AFTER_CHUNKS:
-    assert_exactly_once(AFTER_TEXT, chunk)
+if AFTER_TEXT != SEPARATOR.join(AFTER_CHUNKS):
+    raise SystemExit(
+        f"error: chant text {AFTER_TEXT!r} does not match its chunks "
+        f"{AFTER_CHUNKS!r}"
+    )
 
 # Purpose: what the chant is for, and what the keyboard is for.
 front = wrap(prompt_div("After-RAISE chant")
@@ -124,8 +135,8 @@ front = wrap(prompt_div("After-RAISE chant")
 back = wrap(body_div("Chant: after RAISE, the order to try untested "
                      "letters in.<br>"
                      "Keyboard: only to check which letters are still "
-                     "alive &mdash; unless every chant letter is known "
-                     "or dead; then scan the keyboard."))
+                     "alive. Past the chant: F, K, W, V, then "
+                     "X, Z, Q, J."))
 notes.append(("after:purpose", front, back))
 
 # The ladder. Card 1 asks for the first chunk from nothing; each later
@@ -139,13 +150,14 @@ notes.append(("after:ladder:1", front, back))
 
 
 def ladder_pair(chunks, k):
-    # Front: the chunks before chunk k, then a blank. Back: the chunks
-    # through k, with chunk k bolded. Later chunks stay hidden.
+    # The front shows the chunks before chunk k, then the blank; the
+    # back shows the same prefix plus chunk k, bolded. Later chunks
+    # stay hidden — the ladder only ever asks for the next chunk.
+    prefix = SEPARATOR.join(chunks[:k])
     front = wrap(
         prompt_div("After-RAISE chant &mdash; fill in the blank")
-        + body_div(" – ".join(chunks[:k] + ["________"])))
-    back = wrap(body_div(" – ".join(
-        chunks[:k] + [f"<b>{chunks[k]}</b>"])))
+        + body_div(prefix + SEPARATOR + BLANK))
+    back = wrap(body_div(prefix + SEPARATOR + f"<b>{chunks[k]}</b>"))
     return front, back
 
 
