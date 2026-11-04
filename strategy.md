@@ -118,6 +118,12 @@ Pick the word where you'd expect the most *different* outcomes. A word that woul
 give you green-yellow-gray patterns against different candidates is better than
 one that gives the same result against all of them.
 
+Exception at two: when exactly two candidates remain, guess one of them. A probe
+that cannot itself be the answer extracts the same information as picking a
+candidate, but it can never end the game — on the clock it is strictly worse. A
+discriminator earns its slot only when it is itself one of the candidates
+(SHOOT, in the SCOOT game) or when the set is bigger than two.
+
 ---
 
 ## What to Expect
