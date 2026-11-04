@@ -128,6 +128,11 @@ if AFTER_TEXT != SEPARATOR.join(AFTER_CHUNKS):
         f"{AFTER_CHUNKS!r}"
     )
 
+# The past-the-chant sequence, stated once: the purpose card and the
+# beyond-the-chant card both build their text from this literal, so
+# the two cards can never teach different orders.
+PAST_THE_CHANT = "F, K, W, V, then X, Z, Q, J"
+
 # Purpose: what the chant is for, and what the keyboard is for.
 front = wrap(prompt_div("After-RAISE chant")
              + body_div("What is the after-RAISE chant for &mdash; and "
@@ -135,8 +140,7 @@ front = wrap(prompt_div("After-RAISE chant")
 back = wrap(body_div("Chant: after RAISE, the order to try untested "
                      "letters in.<br>"
                      "Keyboard: only to check which letters are still "
-                     "alive. Past the chant: F, K, W, V, then "
-                     "X, Z, Q, J."))
+                     "alive. Past the chant: " + PAST_THE_CHANT + "."))
 notes.append(("after:purpose", front, back))
 
 # The ladder. Card 1 asks for the first chunk from nothing; each later
@@ -151,13 +155,14 @@ notes.append(("after:ladder:1", front, back))
 
 def ladder_pair(chunks, k):
     # The front shows the chunks before chunk k, then the blank; the
-    # back shows the same prefix plus chunk k, bolded. Later chunks
-    # stay hidden — the ladder only ever asks for the next chunk.
-    prefix = SEPARATOR.join(chunks[:k])
+    # back shows the same chunks plus chunk k, bolded. Later chunks
+    # stay hidden — the ladder only ever asks for the next chunk. The
+    # join form keeps k=0 meaningful: just the blank, just the chunk.
     front = wrap(
         prompt_div("After-RAISE chant &mdash; fill in the blank")
-        + body_div(prefix + SEPARATOR + BLANK))
-    back = wrap(body_div(prefix + SEPARATOR + f"<b>{chunks[k]}</b>"))
+        + body_div(SEPARATOR.join(chunks[:k] + [BLANK])))
+    back = wrap(body_div(SEPARATOR.join(
+        chunks[:k] + [f"<b>{chunks[k]}</b>"])))
     return front, back
 
 
@@ -177,7 +182,7 @@ notes.append(("after:full", front, back))
 # Beyond the chant: what remains once every chant letter is used up.
 front = wrap(prompt_div("After-RAISE chant &mdash; beyond the chant")
              + body_div("The chant is exhausted. What remains?"))
-back = wrap(body_div("F, K, W, V &mdash; then X, Z, Q, J")
+back = wrap(body_div(PAST_THE_CHANT)
             + prompt_div("X, Z, Q, J are the rarest of all &mdash; "
                          "each in under 2% of answers."))
 notes.append(("after:beyond", front, back))
