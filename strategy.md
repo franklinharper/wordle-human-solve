@@ -124,6 +124,13 @@ candidate, but it can never end the game — on the clock it is strictly worse. 
 discriminator earns its slot only when it is itself one of the candidates
 (SHOOT, in the SCOOT game) or when the set is bigger than two.
 
+**Doubles are always in play.** Nothing on the board rules out a second copy
+of a letter unless a gray copy caps its count — a green or yellow letter can
+always appear again in another slot. 15% of answers contain a doubled letter,
+and 226 double a consonant (NUTTY's TT; SCOOT's and YAHOO's OO). When a frame
+feels exhausted, try doubling a letter already on the board before scanning
+further afield.
+
 ---
 
 ## What to Expect
