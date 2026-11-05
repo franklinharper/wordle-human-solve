@@ -196,6 +196,17 @@ for _, token, _ in SEGMENTS:
     assert_exactly_once(TEXT, token)
 
 for k, (pre, token, post) in enumerate(SEGMENTS):
+    if k == 0:
+        # Rung 1 cannot be a prefix blank: the whole "text so far"
+        # is the word "The", which cues nothing. Like the chant's
+        # first rung, it is a question card instead -- the question
+        # itself supplies the context (Frank's catch, 2026-11-04).
+        front = wrap(prompt_div("Mnemonic")
+                     + body_div("What's the first word of the "
+                                "mnemonic text?"))
+        back = wrap(body_div(f"The <b>{token}</b>"))
+        add(f"mnemonic:ladder:{k + 1}", front, back)
+        continue
     so_far = "".join(p + t for p, t, _ in SEGMENTS[:k])
     front = wrap(prompt_div("Mnemonic &mdash; fill in the blank")
                  + body_div(so_far + pre + BLANK))
