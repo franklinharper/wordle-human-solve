@@ -358,47 +358,38 @@ def chant_answer_divs(letter):
 
 SCAN_QUESTION = ("What's the first chant letter still alive "
                  "&mdash; and the rest of the chant from there?")
-INCLUDE_QUESTION = ("Your next guess must include which letters? "
-                    "And what's the first new chant letter, with "
-                    "the rest of the chant from there?")
 
-# (role, answer, guesses, target letter, must-include text or None)
+# (role, answer, guesses, target letter)
 APPLY_CARDS = [
-    ("apply:cloth-gray", "fuzzy", ["raise", "cloth"], "N", None),
-    ("apply:court", "dryly", ["raise", "court"], "L", None),
-    ("apply:adorn", "mural", ["raise", "adorn"], "T", None),
-    ("apply:tangy", "havoc", ["raise", "tangy"], "O", None),
-    ("apply:pilot", "civil", ["raise", "pilot"], "N",
-     "I at 2 (green), and L re-placed &mdash; L is in the word, "
-     "but not at 3."),
-    ("apply:cleat", "hyena", ["raise", "cleat"], "O",
-     "E at 3 (green), and A re-placed &mdash; A is in the word, "
-     "but not at 2 or 4."),
-    ("apply:deter", "error", ["raise", "deter"], "O",
-     "R at 5 (green), and one E re-placed &mdash; not at 2, 4, "
-     "or 5, and there is no second E."),
+    ("apply:cloth-gray", "fuzzy", ["raise", "cloth"], "N"),
+    ("apply:court", "dryly", ["raise", "court"], "L"),
+    ("apply:adorn", "mural", ["raise", "adorn"], "T"),
+    ("apply:tangy", "havoc", ["raise", "tangy"], "O"),
+    ("apply:pilot", "civil", ["raise", "pilot"], "N"),
+    ("apply:cleat", "hyena", ["raise", "cleat"], "O"),
+    ("apply:deter", "error", ["raise", "deter"], "O"),
     ("apply:fuzzy-p", "fuzzy", ["raise", "cloth", "bunny", "muddy"],
-     "P", None),
-    ("apply:beefy-u", "beefy", ["raise", "olden", "fetch"], "U", None),
+     "P"),
+    ("apply:beefy-u", "beefy", ["raise", "olden", "fetch"], "U"),
     ("apply:aloha-c", "aloha",
-     ["raise", "float", "along", "aloud"], "C", None),
+     ["raise", "float", "along", "aloud"], "C"),
     ("apply:aback-y", "aback",
-     ["raise", "float", "champ", "quack", "knack"], "Y", None),
+     ["raise", "float", "champ", "quack", "knack"], "Y"),
     ("apply:droll-h", "droll",
-     ["raise", "court", "brown", "proxy", "drool"], "H", None),
+     ["raise", "court", "brown", "proxy", "drool"], "H"),
     ("apply:buddy-d", "buddy",
-     ["raise", "cloth", "bumpy", "buggy", "bunny"], "D", None),
+     ["raise", "cloth", "bumpy", "buggy", "bunny"], "D"),
     ("apply:foggy-m", "foggy",
-     ["raise", "cloth", "bound", "poppy"], "M", None),
+     ["raise", "cloth", "bound", "poppy"], "M"),
     ("apply:buggy-g", "buggy",
-     ["raise", "cloth", "bumpy", "buddy", "bunny"], "G", None),
+     ["raise", "cloth", "bumpy", "buddy", "bunny"], "G"),
     ("apply:bobby-b", "bobby",
-     ["raise", "cloth", "mound", "foggy", "poppy"], "B", None),
+     ["raise", "cloth", "mound", "foggy", "poppy"], "B"),
     ("apply:fuzzy-f", "fuzzy",
-     ["raise", "cloth", "pudgy", "bunny", "mummy"], "F", None),
+     ["raise", "cloth", "pudgy", "bunny", "mummy"], "F"),
 ]
 
-for role, answer, guesses, target, must in APPLY_CARDS:
+for role, answer, guesses, target in APPLY_CARDS:
     if answer not in ANSWERS:
         raise SystemExit(f"error: {role}: {answer!r} is not an answer")
     if guesses[0] != "raise":
@@ -423,16 +414,9 @@ for role, answer, guesses, target, must in APPLY_CARDS:
         raise SystemExit(
             f"error: {role}: board leaves "
             f"{first_unguessed(guesses)} first, not {target}")
-    if must is None:
-        front = board_front("After-RAISE chant &mdash; apply it",
-                            answer, guesses, SCAN_QUESTION)
-        back = wrap(chant_answer_divs(target))
-    else:
-        front = board_front("After-RAISE chant &mdash; apply it",
-                            answer, guesses, INCLUDE_QUESTION)
-        back = wrap(body_div(f"Must include: {must}")
-                    + body_div("First new chant letter: ")
-                    + chant_answer_divs(target))
+    front = board_front("After-RAISE chant &mdash; apply it",
+                        answer, guesses, SCAN_QUESTION)
+    back = wrap(chant_answer_divs(target))
     add(role, front, back)
 
 # -------------------------------------------------------------------
