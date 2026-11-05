@@ -77,7 +77,7 @@ principles in order:
 
 ### Rule 2: Test untested common letters — scan by the chant, not the keyboard.
 
-**The after-RAISE chant: OTLN – UCY – HDP – MGB** — the letters RAISE
+**The after-RAISE chant: OTLN – UCY – HDPM – GBF** — the letters RAISE
 doesn't test, ordered by how many answers contain them (O and T each
 appear in 29% of answers, L in 28%, N in 24%). Since RAISE is always
 guess 1, this is the scan every letter hunt uses:
@@ -88,18 +88,25 @@ guess 1, this is the scan every letter hunt uses:
   only as that liveness check, never as the scan order. Keyboard order
   is geography, not usefulness: it gives Q and W the first auditions,
   and they are among the rarest letters in answers.
-- If every chant letter is already known or dead, what remains is
-  F, K, W, V, and then the rarest letters of all — X, Z, Q, J, each in
-  under 2% of answers.
+- If every chant letter is already known or dead, the chant is
+  exhausted — what remains is K, W, V, and then the rarest letters
+  of all — Z, X, Q, J, each in under 2% of answers. From there, work
+  from the candidates themselves.
 - Prefer a word that smuggles in **two** high chant letters over one
   that tests a single letter — e.g. after RAISE came back with R, I, E
   yellow, OILER (new: O, L) over WIRER (new: only W).
 
 Where the chant comes from: the 12 most common letters across all
 answers are E, A, R, O, T, L, I, S, N, C, U, Y (~74% of all letter
-slots). Strike out the five letters RAISE already tests, re-rank the
-rest by answers containing the letter (which swaps two near-ties:
-U before C, M before G), and extend past Y with H, D, P, M, G, B.
+slots). Strike out the five letters RAISE already tests and rank
+everything that remains by answers containing the letter (which
+swaps two near-ties: U before C, M before G): O, T, L, N, U, C, Y,
+H, D, P, M, G, B, F, K, W, V, Z, X, Q, J. The chant takes the first
+fourteen, through F. The cut is reachability, not frequency: each
+of the fourteen can be the first untested letter on a real board
+played by this system — RAISE, the table word, then answer words
+(the deck's drills are those boards) — and K, W, V and the rarest
+four have no such board, so they are not in the chant.
 
 ### Rule 3: Beware the one-position trap.
 
