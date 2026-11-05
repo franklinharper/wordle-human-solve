@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate Frank's "Wordle" Anki deck.
 
-The deck teaches his whole hard-mode system as five blocks:
+The deck teaches the memorized parts of his hard-mode system as five blocks:
 
 1. The guess-2 mnemonic, as a ladder over its twelve words.
 2. The after-RAISE chant (OTLN - UCY - HDPM - GBF), as a ladder.
@@ -12,7 +12,8 @@ The deck teaches his whole hard-mode system as five blocks:
    letter still untested -- and the rest of the chant from there.
    The chant holds exactly the fourteen letters such a board can
    leave first-untested; that is why it stops at F.
-5. The doubled-consonant-before-Y rule and four boards that drill it.
+5. Doubles: the general gray-cap rule, the doubled-consonant-
+   before-Y rule, and four boards that drill the Y rule.
 
 Boards are rendered as Wordle tiles. The feedback colours are always
 computed from the card's answer, never typed by hand, and every drill
@@ -26,11 +27,9 @@ this one fresh). New deck ID and GUID namespace.
 
 import genanki
 from collections import Counter
+from typing import NamedTuple
 
-DECK_ID = 2057711934
 DECK_NAME = "Wordle"
-MODEL_ID = 1473829057
-GUID_NAMESPACE = "wordle"
 
 # Shared by the card helpers below: the blank that stands in for a
 # missing word or chunk, and the separator between the chant's chunks.
@@ -41,47 +40,55 @@ BLANK = "________"
 SEPARATOR = " – "
 
 
-def fb(g, a):
-    """Wordle feedback for guess g against answer a, as a list of
+def feedback(guess, answer):
+    """Wordle feedback for a guess against the answer, as a list of
     0 (gray), 1 (yellow), 2 (green) -- the standard two-pass rule."""
-    r = [0] * 5
+    result = [0] * 5
     pool = {}
-    for i, (x, y) in enumerate(zip(g, a)):
-        if x == y:
-            r[i] = 2
+    for i, (guess_ch, answer_ch) in enumerate(zip(guess, answer)):
+        if guess_ch == answer_ch:
+            result[i] = 2
         else:
-            pool[y] = pool.get(y, 0) + 1
-    for i, x in enumerate(g):
-        if r[i] == 0 and pool.get(x, 0) > 0:
-            r[i] = 1
-            pool[x] -= 1
-    return r
+            pool[answer_ch] = pool.get(answer_ch, 0) + 1
+    for i, guess_ch in enumerate(guess):
+        if result[i] == 0 and pool.get(guess_ch, 0) > 0:
+            result[i] = 1
+            pool[guess_ch] -= 1
+    return result
+
+
+class KnowledgeState(NamedTuple):
+    greens: dict             # position -> letter pinned green there
+    min_counts: Counter      # letter -> at least this many copies
+    caps: dict               # letter -> exactly this many copies
+    absent: set              # letters known not to be in the word
+    yellow_forbidden: dict   # letter -> positions it cannot occupy
 
 
 def knowledge(answer, guesses):
-    """Hard-mode knowledge state after playing guesses at answer:
-    green positions, per-letter minimum counts, exact caps, absent
-    letters, and positions each yellow letter is known not to occupy."""
-    greens, minc, cap, yf = {}, Counter(), {}, {}
-    for g in guesses:
-        r = fb(g, answer)
-        gc = Counter(g)
-        colored = Counter()
-        for i, (ch, v) in enumerate(zip(g, r)):
+    """The hard-mode knowledge state after playing guesses at the
+    answer: what the board has established, in one named bundle."""
+    greens, min_counts, caps, yellow_forbidden = {}, Counter(), {}, {}
+    for guess in guesses:
+        result = feedback(guess, answer)
+        guess_counts = Counter(guess)
+        colored_counts = Counter()
+        for i, (ch, v) in enumerate(zip(guess, result)):
             if v == 2:
                 greens[i] = ch
-                colored[ch] += 1
+                colored_counts[ch] += 1
             elif v == 1:
-                colored[ch] += 1
-                yf.setdefault(ch, set()).add(i)
-        for ch in gc:
-            minc[ch] = max(minc[ch], colored[ch])
-            if colored[ch] < gc[ch]:
-                cap[ch] = colored[ch]
-    absent = {ch for ch, c in cap.items() if c == 0}
-    for ch in cap:
-        minc[ch] = cap[ch]
-    return greens, minc, cap, absent, yf
+                colored_counts[ch] += 1
+                yellow_forbidden.setdefault(ch, set()).add(i)
+        for ch in guess_counts:
+            min_counts[ch] = max(min_counts[ch], colored_counts[ch])
+            if colored_counts[ch] < guess_counts[ch]:
+                caps[ch] = colored_counts[ch]
+    absent = {ch for ch, c in caps.items() if c == 0}
+    for ch in caps:
+        min_counts[ch] = caps[ch]
+    return KnowledgeState(greens, min_counts, caps, absent,
+                          yellow_forbidden)
 
 
 def legal(word, state):
@@ -89,23 +96,22 @@ def legal(word, state):
     Greens pinned, known-present letters included (and never where
     they showed yellow), absent letters never replayed, exact counts
     respected."""
-    greens, minc, cap, absent, yf = state
-    wc = Counter(word)
-    for p, ch in greens.items():
-        if word[p] != ch:
+    word_counts = Counter(word)
+    for pos, ch in state.greens.items():
+        if word[pos] != ch:
             return False
-    for ch in absent:
-        if wc.get(ch, 0):
+    for ch in state.absent:
+        if word_counts.get(ch, 0):
             return False
-    for ch, mn in minc.items():
-        if wc.get(ch, 0) < mn:
+    for ch, minimum in state.min_counts.items():
+        if word_counts.get(ch, 0) < minimum:
             return False
-    for ch, cp in cap.items():
-        if wc.get(ch, 0) > cp:
+    for ch, cap in state.caps.items():
+        if word_counts.get(ch, 0) > cap:
             return False
-    for ch, positions in yf.items():
-        for p in positions:
-            if word[p] == ch and greens.get(p) != ch:
+    for ch, positions in state.yellow_forbidden.items():
+        for pos in positions:
+            if word[pos] == ch and state.greens.get(pos) != ch:
                 return False
     return True
 
@@ -142,7 +148,7 @@ def tile_row(word, pattern):
 def board(answer, guesses):
     """The board for a line of guesses against answer, as tile rows.
     Patterns are computed, never typed."""
-    rows = [tile_row(g, fb(g, answer)) for g in guesses]
+    rows = [tile_row(g, feedback(g, answer)) for g in guesses]
     return '<div style="margin: 6px 0;">' + "<br>".join(rows) + "</div>"
 
 
@@ -215,9 +221,7 @@ for k, (pre, token, post) in enumerate(SEGMENTS):
 
 front = wrap(prompt_div("Wordle guess-2 mnemonic")
              + body_div("Recite the whole text."))
-back = wrap(body_div("The tangy olden cloth stunk.<br>"
-                     "The court pilot's cleats glint and float.<br>"
-                     "Adorn it, deter it, lunge!"))
+back = wrap(body_div(TEXT.replace(". ", ".<br>")))
 add("mnemonic:full-text", front, back)
 
 # -------------------------------------------------------------------
@@ -275,15 +279,12 @@ add("chant:full", front, back)
 # table word; the back names the word and the new letters it tests
 # (strategy.md's table, verbatim). The patterns are the digits of
 # RAISE's feedback: 0 gray, 1 yellow, 2 green.
-ANSWERS = set()
-try:
-    with open("answers.txt") as fh:
-        ANSWERS = {w.strip() for w in fh if len(w.strip()) == 5}
-except FileNotFoundError:
-    pass
+with open("answers.txt") as fh:
+    ANSWERS = {w.strip() for w in fh if len(w.strip()) == 5}
 if not ANSWERS:
-    raise SystemExit("error: answers.txt not found -- run this "
-                     "script from the wordle-human-solve repo root")
+    raise SystemExit("error: answers.txt contains no five-letter "
+                     "words -- run this script from the "
+                     "wordle-human-solve repo root")
 
 TABLE_ROWS = [
     ("00000", "cloth", "C, L, O, T, H"),
@@ -304,7 +305,7 @@ TABLE = {pattern: word for pattern, word, _ in TABLE_ROWS}
 for pattern, word, letters in TABLE_ROWS:
     if word not in ANSWERS:
         raise SystemExit(f"error: table word {word!r} is not an answer")
-    if not any("".join(map(str, fb("raise", a))) == pattern
+    if not any("".join(map(str, feedback("raise", a))) == pattern
                for a in ANSWERS):
         raise SystemExit(f"error: no answer gives RAISE pattern "
                          f"{pattern}")
@@ -367,8 +368,23 @@ def chant_answer_divs(letter):
     return body_div(f"<b>{letter}</b> &mdash; then {rest}")
 
 
-SCAN_QUESTION = ("What's the first chant letter still alive "
+SCAN_QUESTION = ("What's the first chant letter still untested "
                  "&mdash; and the rest of the chant from there?")
+
+def validate_line(role, answer, guesses):
+    """The board checks every drill line shares: the answer and
+    every guess are answer-list words, and every guess after the
+    first is a legal hard-mode guess given the ones before it."""
+    if answer not in ANSWERS:
+        raise SystemExit(f"error: {role}: {answer!r} is not an answer")
+    for i, g in enumerate(guesses):
+        if g not in ANSWERS:
+            raise SystemExit(f"error: {role}: {g!r} is not an answer")
+        if i > 0 and not legal(g, knowledge(answer, guesses[:i])):
+            raise SystemExit(
+                f"error: {role}: guess {i + 1} ({g.upper()}) is not "
+                f"a legal hard-mode guess on this board")
+
 
 # (role, answer, guesses, target letter)
 APPLY_CARDS = [
@@ -401,26 +417,19 @@ APPLY_CARDS = [
 ]
 
 for role, answer, guesses, target in APPLY_CARDS:
-    if answer not in ANSWERS:
-        raise SystemExit(f"error: {role}: {answer!r} is not an answer")
+    validate_line(role, answer, guesses)
     if guesses[0] != "raise":
         raise SystemExit(f"error: {role}: first guess is not RAISE")
-    pattern = "".join(map(str, fb("raise", answer)))
+    pattern = "".join(map(str, feedback("raise", answer)))
     if pattern in TABLE and len(guesses) > 1 \
             and guesses[1] != TABLE[pattern]:
         raise SystemExit(
             f"error: {role}: guess 2 is {guesses[1]!r}, but the "
             f"table word for {pattern} is {TABLE[pattern]!r}")
     for i, g in enumerate(guesses):
-        if g not in ANSWERS:
-            raise SystemExit(f"error: {role}: {g!r} is not an answer")
         if g == answer:
             raise SystemExit(f"error: {role}: guess {i + 1} solves "
                              f"the board -- the drill would be over")
-        if i > 0 and not legal(g, knowledge(answer, guesses[:i])):
-            raise SystemExit(f"error: {role}: guess {i + 1} "
-                             f"({g.upper()}) is not a legal hard-mode "
-                             f"guess on this board")
     if first_unguessed(guesses) != target:
         raise SystemExit(
             f"error: {role}: board leaves "
@@ -431,12 +440,23 @@ for role, answer, guesses, target in APPLY_CARDS:
     add(role, front, back)
 
 # -------------------------------------------------------------------
-# 5. The doubled-consonant-before-Y rule.
+# 5. Doubles: the general rule, the before-Y rule, four boards.
 #
-# Frank's rule card text, verbatim, and four boards that drill it.
+# The general card states strategy.md's gray-cap rule; the CCY
+# card's text is Frank's, verbatim, and four boards drill it.
 # Each board's answer doubles its consonant at positions 3-4 before
 # the Y -- asserted below, so an example that stops exemplifying
 # fails the build.
+front = wrap(prompt_div("Doubles &mdash; the general rule")
+             + body_div("One copy of a letter is green or yellow. "
+                        "What rules out a second copy of it?"))
+back = wrap(body_div("Nothing but a gray copy of that letter. "
+                     "<b>Doubles are always in play</b> &mdash; a "
+                     "green or yellow letter can always appear "
+                     "again; a gray copy caps the letter at the "
+                     "copies already colored."))
+add("doubles:general", front, back)
+
 front = wrap(prompt_div("Doubled consonant before Y")
              + body_div("A word ends in Y. What's the most likely "
                         "shape?"))
@@ -458,19 +478,11 @@ DOUBLES_CARDS = [
 ]
 
 for role, answer, guesses, back_text in DOUBLES_CARDS:
-    if answer not in ANSWERS:
-        raise SystemExit(f"error: {role}: {answer!r} is not an answer")
+    validate_line(role, answer, guesses)
     if not (answer[2] == answer[3] and answer[4] == "y"
             and answer[2] not in "aeiou"):
         raise SystemExit(f"error: {role}: {answer.upper()} is not "
                          f"a _ _ CCY word")
-    for i, g in enumerate(guesses):
-        if g not in ANSWERS:
-            raise SystemExit(f"error: {role}: {g!r} is not an answer")
-        if i > 0 and not legal(g, knowledge(answer, guesses[:i])):
-            raise SystemExit(f"error: {role}: guess {i + 1} "
-                             f"({g.upper()}) is not a legal hard-mode "
-                             f"guess on this board")
     front = board_front("Doubled consonant &mdash; apply the rule",
                         answer, guesses,
                         f"What's guess {len(guesses) + 1}?")
@@ -480,12 +492,17 @@ for role, answer, guesses, back_text in DOUBLES_CARDS:
 # -------------------------------------------------------------------
 # Assemble the deck.
 
-if len(notes) != 52:
+# 53 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
+# (4 ladder rungs + full recall), 12 guess-2 table, 17 chant drills,
+# 6 doubles (2 rule cards + 4 boards).
+if len(notes) != 53:
     raise SystemExit(f"error: deck has {len(notes)} notes, "
-                     f"expected 52")
+                     f"expected 53")
 
+# The model ID is arbitrary but permanent: changing it would make
+# Anki treat these as a new note type on re-import.
 model = genanki.Model(
-    MODEL_ID,
+    1473829057,
     "Wordle Card",
     fields=[
         {"name": "Front"},
@@ -502,19 +519,23 @@ model = genanki.Model(
         "text-align: center; color: black; background-color: white; }",
 )
 
-deck = genanki.Deck(DECK_ID, DECK_NAME)
+# The deck ID is arbitrary but permanent: it is this deck's
+# identity across re-imports.
+deck = genanki.Deck(2057711934, DECK_NAME)
 deck.description = (
-    "Frank's hard-mode Wordle system: the guess-2 mnemonic ladder, "
-    "the after-RAISE chant (OTLN - UCY - HDPM - GBF), the guess-2 "
-    "table, chant drills on real boards, and the "
-    "doubled-consonant-before-Y rule."
+    "Memorized parts of Frank's hard-mode Wordle system: the "
+    "guess-2 mnemonic ladder, the after-RAISE chant "
+    "(OTLN - UCY - HDPM - GBF), the guess-2 table, chant drills on "
+    "real boards, and the doubles rules."
 )
 
 for role, front, back in notes:
     deck.add_note(genanki.Note(
         model=model,
         fields=[front, back],
-        guid=genanki.guid_for(f"{GUID_NAMESPACE}:{role}"),
+        # The "wordle" GUID namespace is permanent: it is what
+        # makes a re-import update these notes, not duplicate them.
+        guid=genanki.guid_for(f"wordle:{role}"),
     ))
 
 genanki.Package(deck).write_to_file("wordle.apkg")
