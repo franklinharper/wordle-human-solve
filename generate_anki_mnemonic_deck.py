@@ -73,11 +73,11 @@ def knowledge(answer, guesses):
         result = feedback(guess, answer)
         guess_counts = Counter(guess)
         colored_counts = Counter()
-        for i, (ch, v) in enumerate(zip(guess, result)):
-            if v == 2:
+        for i, (ch, value) in enumerate(zip(guess, result)):
+            if value == 2:
                 greens[i] = ch
                 colored_counts[ch] += 1
-            elif v == 1:
+            elif value == 1:
                 colored_counts[ch] += 1
                 yellow_forbidden.setdefault(ch, set()).add(i)
         for ch in guess_counts:
