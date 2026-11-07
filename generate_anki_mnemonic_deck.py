@@ -156,16 +156,12 @@ def board(answer, guesses):
     return '<div style="margin: 6px 0;">' + "<br>".join(rows) + "</div>"
 
 
-def board_front(label, answer, guesses, question):
-    # A drill card carries a header only when the header cannot
-    # give away what the board is testing. The doubles boards and
-    # the ending-pair drills carry none: naming the mechanism
-    # (a doubled consonant, the pair scan) hands over the insight
-    # the board exists to make the player see (Frank's rule,
-    # 2026-11-06).
-    head = prompt_div(label) if label else ""
-    return wrap(head
-                + board(answer, guesses)
+def board_front(answer, guesses, question):
+    # No front in the deck carries a header (Frank's rule,
+    # settled 2026-11-06/07): a header either gives away what
+    # the card tests or duplicates the question, and anything
+    # worth saying belongs in the question itself.
+    return wrap(board(answer, guesses)
                 + body_div(question))
 
 
@@ -218,20 +214,19 @@ for k, (pre, token, post) in enumerate(SEGMENTS):
         # is the word "The", which cues nothing. Like the chant's
         # first rung, it is a question card instead -- the question
         # itself supplies the context (Frank's catch, 2026-11-04).
-        front = wrap(prompt_div("Mnemonic")
-                     + body_div("What's the first word of the "
-                                "mnemonic text?"))
+        front = wrap(body_div("What's the first word of the "
+                              "mnemonic text?"))
         back = wrap(body_div(f"The <b>{token}</b>"))
         add(f"mnemonic:ladder:{k + 1}", front, back)
         continue
     so_far = "".join(p + t for p, t, _ in SEGMENTS[:k])
-    front = wrap(prompt_div("Mnemonic &mdash; fill in the blank")
-                 + body_div(so_far + pre + BLANK))
+    front = wrap(body_div(so_far + pre + BLANK)
+                 + body_div("What's the next word of the "
+                            "mnemonic text?"))
     back = wrap(body_div(so_far + pre + f"<b>{token}</b>" + post))
     add(f"mnemonic:ladder:{k + 1}", front, back)
 
-front = wrap(prompt_div("Wordle guess-2 mnemonic")
-             + body_div("Recite the whole text."))
+front = wrap(body_div("Recite the whole mnemonic text."))
 back = wrap(body_div(TEXT.replace(". ", ".<br>")))
 add("mnemonic:full-text", front, back)
 
@@ -254,30 +249,33 @@ if CHANT_TEXT != SEPARATOR.join(CHANT_CHUNKS):
 CHANT = "".join(CHANT_CHUNKS)
 
 
-def ladder_pair(chunks, k, title):
-    # The front shows the chunks before chunk k, then the blank; the
-    # back shows the same chunks plus chunk k, bolded. Later chunks
-    # stay hidden -- the ladder only ever asks for the next chunk. The
-    # join form keeps k=0 meaningful: just the blank, just the chunk.
+def ladder_pair(chunks, k, question):
+    # The front shows the chunks before chunk k, then the blank,
+    # then the question -- no header (Frank's rule, 2026-11-07:
+    # anything worth saying belongs in the question). The back
+    # shows the same chunks plus chunk k, bolded. Later chunks
+    # stay hidden -- the ladder only ever asks for the next chunk.
+    # The join form keeps k=0 meaningful: just the blank, just
+    # the chunk.
     front = wrap(
-        prompt_div(f"{title} &mdash; fill in the blank")
-        + body_div(SEPARATOR.join(chunks[:k] + [BLANK])))
+        body_div(SEPARATOR.join(chunks[:k] + [BLANK]))
+        + body_div(question))
     back = wrap(body_div(SEPARATOR.join(
         chunks[:k] + [f"<b>{chunks[k]}</b>"])))
     return front, back
 
 
-front = wrap(prompt_div("After-RAISE chant")
-             + body_div("What's the first word of the after-RAISE "
-                        "chant?"))
+front = wrap(body_div("What's the first word of the after-RAISE "
+                      "chant?"))
 back = wrap(body_div(f"<b>{CHANT_CHUNKS[0]}</b>"))
 add("chant:ladder:1", front, back)
 for k in range(1, len(CHANT_CHUNKS)):
-    front, back = ladder_pair(CHANT_CHUNKS, k, "After-RAISE chant")
+    front, back = ladder_pair(
+        CHANT_CHUNKS, k,
+        "What's the next word of the after-RAISE chant?")
     add(f"chant:ladder:{k + 1}", front, back)
 
-front = wrap(prompt_div("After-RAISE chant")
-             + body_div("Recite the whole chant."))
+front = wrap(body_div("Recite the whole chant."))
 back = wrap(body_div(CHANT_TEXT)
             + prompt_div("The letters RAISE doesn't test, in the "
                          "order answers use them. Groups of 4-3-4-3."))
@@ -320,8 +318,7 @@ for pattern, word, letters in TABLE_ROWS:
                for a in ANSWERS):
         raise SystemExit(f"error: no answer gives RAISE pattern "
                          f"{pattern}")
-    front = wrap(prompt_div("Guess 2")
-                 + '<div style="margin: 6px 0;">'
+    front = wrap('<div style="margin: 6px 0;">'
                  + tile_row("raise", [int(d) for d in pattern])
                  + "</div>"
                  + body_div("What's the next guess?"))
@@ -379,8 +376,9 @@ def chant_answer_divs(letter):
     return body_div(f"<b>{letter}</b> &mdash; then {rest}")
 
 
-SCAN_QUESTION = ("What's the first chant letter still untested "
-                 "&mdash; and the rest of the chant from there?")
+SCAN_QUESTION = ("What's the first letter of the after-RAISE "
+                 "chant still untested &mdash; and the rest of "
+                 "the chant from there?")
 
 def validate_line(role, answer, guesses):
     """The board checks every drill line shares: the answer and
@@ -445,8 +443,7 @@ for role, answer, guesses, target in APPLY_CARDS:
         raise SystemExit(
             f"error: {role}: board leaves "
             f"{first_unguessed(guesses)} first, not {target}")
-    front = board_front("After-RAISE chant &mdash; apply it",
-                        answer, guesses, SCAN_QUESTION)
+    front = board_front(answer, guesses, SCAN_QUESTION)
     back = wrap(chant_answer_divs(target))
     add(role, front, back)
 
@@ -486,8 +483,7 @@ for role, answer, guesses, back_text in DOUBLES_CARDS:
             and answer[2] not in "aeiou"):
         raise SystemExit(f"error: {role}: {answer.upper()} is not "
                          f"a _ _ CCY word")
-    front = board_front(None,
-                        answer, guesses,
+    front = board_front(answer, guesses,
                         "What's the next guess?")
     back = wrap(body_div(back_text))
     add(role, front, back)
@@ -509,17 +505,17 @@ if PAIR_TEXT != SEPARATOR.join(PAIR_CHUNKS):
         f"chunks {PAIR_CHUNKS!r}"
     )
 
-front = wrap(prompt_div("Ending-pair scan")
-             + body_div("What's the first group of the "
-                        "ending-pair scan?"))
+front = wrap(body_div("What's the first group of the "
+                      "ending-pair scan?"))
 back = wrap(body_div(f"<b>{PAIR_CHUNKS[0]}</b>"))
 add("pairs:ladder:1", front, back)
 for k in range(1, len(PAIR_CHUNKS)):
-    front, back = ladder_pair(PAIR_CHUNKS, k, "Ending-pair scan")
+    front, back = ladder_pair(
+        PAIR_CHUNKS, k,
+        "What's the next group of the ending-pair scan?")
     add(f"pairs:ladder:{k + 1}", front, back)
 
-front = wrap(prompt_div("Ending-pair scan")
-             + body_div("Recite the whole scan."))
+front = wrap(body_div("Recite the whole scan."))
 back = wrap(body_div(PAIR_TEXT)
             + prompt_div("The common two-consonant endings, "
                          "grouped by first letter &mdash; for "
@@ -623,8 +619,7 @@ for role, pair, answer, guesses in PAIR_CARDS:
                 raise SystemExit(
                     f"error: {role}: green at slot {pos + 1} "
                     f"hands over the ending")
-    front = board_front(None,
-                        answer, guesses, "What's the next guess?")
+    front = board_front(answer, guesses, "What's the next guess?")
     back = wrap(body_div(f"<b>{pair}</b> &mdash; "
                          f"{answer.upper()}"))
     add(role, front, back)
