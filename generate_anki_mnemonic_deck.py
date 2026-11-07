@@ -157,7 +157,14 @@ def board(answer, guesses):
 
 
 def board_front(label, answer, guesses, question):
-    return wrap(prompt_div(label)
+    # A drill card carries a header only when the header cannot
+    # give away what the board is testing. The doubles boards and
+    # the ending-pair drills carry none: naming the mechanism
+    # (a doubled consonant, the pair scan) hands over the insight
+    # the board exists to make the player see (Frank's rule,
+    # 2026-11-06).
+    head = prompt_div(label) if label else ""
+    return wrap(head
                 + board(answer, guesses)
                 + body_div(question))
 
@@ -448,15 +455,14 @@ for role, answer, guesses, target in APPLY_CARDS:
 #
 # The general card states strategy.md's gray-cap rule; the CCY
 # card's question is Frank's, verbatim, and four boards drill it.
-# The CCY card carries no header at all: the front asks for the
-# shape, and any header naming the doubles family would give the
-# answer away (Frank's catch, 2026-11-06).
+# No doubles card carries a header: any header naming the
+# doubles family would give away the very thing each card tests
+# (Frank's rule, 2026-11-06).
 # Each board's answer doubles its consonant at positions 3-4 before
 # the Y -- asserted below, so an example that stops exemplifying
 # fails the build.
-front = wrap(prompt_div("Doubles &mdash; the general rule")
-             + body_div("One copy of a letter is green or yellow. "
-                        "What rules out a second copy of it?"))
+front = wrap(body_div("One copy of a letter is green or yellow. "
+                      "What rules out a second copy of it?"))
 back = wrap(body_div("Nothing but a gray copy of that letter. "
                      "<b>Doubles are always in play</b> &mdash; a "
                      "green or yellow letter can always appear "
@@ -489,7 +495,7 @@ for role, answer, guesses, back_text in DOUBLES_CARDS:
             and answer[2] not in "aeiou"):
         raise SystemExit(f"error: {role}: {answer.upper()} is not "
                          f"a _ _ CCY word")
-    front = board_front("Doubled consonant &mdash; apply the rule",
+    front = board_front(None,
                         answer, guesses,
                         f"What's guess {len(guesses) + 1}?")
     back = wrap(body_div(back_text))
@@ -629,7 +635,7 @@ for role, pair, answer, guesses in PAIR_CARDS:
                 raise SystemExit(
                     f"error: {role}: green at slot {pos + 1} "
                     f"hands over the ending")
-    front = board_front("Ending-pair scan &mdash; apply it",
+    front = board_front(None,
                         answer, guesses, "Guess the word.")
     back = wrap(body_div(f"<b>{pair}</b> &mdash; "
                          f"{answer.upper()}"))
