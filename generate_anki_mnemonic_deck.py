@@ -448,9 +448,9 @@ for role, answer, guesses, target in APPLY_CARDS:
 #
 # The general card states strategy.md's gray-cap rule; the CCY
 # card's question is Frank's, verbatim, and four boards drill it.
-# Its header must not state the rule itself -- the front asks for
-# the shape, so a header naming the doubled consonant would give
-# the answer away (Frank's catch, 2026-11-06).
+# The CCY card carries no header at all: the front asks for the
+# shape, and any header naming the doubles family would give the
+# answer away (Frank's catch, 2026-11-06).
 # Each board's answer doubles its consonant at positions 3-4 before
 # the Y -- asserted below, so an example that stops exemplifying
 # fails the build.
@@ -464,9 +464,8 @@ back = wrap(body_div("Nothing but a gray copy of that letter. "
                      "copies already colored."))
 add("doubles:general", front, back)
 
-front = wrap(prompt_div("Doubles &mdash; the Y ending")
-             + body_div("When a word ends in Y, what's the most "
-                        "likely shape?"))
+front = wrap(body_div("When a word ends in Y, what's the most "
+                      "likely shape?"))
 back = wrap(body_div("The letter before the Y doubles &mdash; "
                      "_ _ CCY. 28% of Y-ending answers "
                      "(CANNY, TALLY, NUTTY)."))
