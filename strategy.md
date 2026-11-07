@@ -108,6 +108,20 @@ played by this system — RAISE, the table word, then answer words
 (the deck's drills are those boards) — and K, W, V and the rarest
 four have no such board, so they are not in the chant.
 
+**The ending-pair scan.** When slots 4–5 are both still open, don't
+scan letter by letter — scan the common two-consonant endings,
+grouped by first letter: **CH CK – LY LL – TY TH – DY – NG NT NK –
+ST SH – RY – KY**. Those 14 pairs cover over half of all
+consonant-ending answers. Work group by group, pair by pair,
+generating whole words and testing each for recognition; the pair
+is the unit — K is never tested alone, it rides in on CK and NK.
+Skip any pair containing a letter already known dead. If no pair
+produces a word, fall back to the chant, slot by slot. One
+structural exception: ST and SH endings pin S green at slot 4 from
+RAISE itself, and no table word carries S at slot 4, so those
+games have no mnemonic guess 2 — probe with an S-word instead
+(STASH, AMASS).
+
 ### Rule 3: Beware the one-position trap.
 
 If you know 4 of 5 letters (e.g., _OUND, _IGHT, _ATCH), **you're stuck** — hard

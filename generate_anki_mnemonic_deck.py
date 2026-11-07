@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate Frank's "Wordle" Anki deck.
 
-The deck teaches the memorized parts of his hard-mode system as five blocks:
+The deck teaches the memorized parts of his hard-mode system as seven blocks:
 
 1. The guess-2 mnemonic, as a ladder over its twelve words.
 2. The after-RAISE chant (OTLN - UCY - HDPM - GBF), as a ladder.
@@ -14,6 +14,10 @@ The deck teaches the memorized parts of his hard-mode system as five blocks:
    leave first-untested; that is why it stops at F.
 5. Doubles: the general gray-cap rule, the doubled-consonant-
    before-Y rule, and four boards that drill the Y rule.
+6. The ending-pair scan (CH CK - LY LL - TY TH - DY - NG NT NK -
+   ST SH - RY - KY), as a ladder over its eight groups.
+7. Ending-pair drills: boards whose only consistent completion
+   ends in the card's pair; the back names the pair and the word.
 
 Boards are rendered as Wordle tiles. The feedback colours are always
 computed from the card's answer, never typed by hand, and every drill
@@ -490,14 +494,155 @@ for role, answer, guesses, back_text in DOUBLES_CARDS:
     add(role, front, back)
 
 # -------------------------------------------------------------------
+# 6. The ending-pair scan, as a ladder.
+#
+# When slots 4-5 are both still open, the scan runs the common
+# two-consonant endings grouped by first letter (strategy.md,
+# Rule 2) instead of hunting letter by letter. PAIR_TEXT is an
+# independent literal, tied to PAIR_CHUNKS the same way the
+# chant's is, so the two can never drift apart.
+PAIR_CHUNKS = ["CH CK", "LY LL", "TY TH", "DY", "NG NT NK",
+               "ST SH", "RY", "KY"]
+PAIR_TEXT = "CH CK – LY LL – TY TH – DY – NG NT NK – ST SH – RY – KY"
+if PAIR_TEXT != SEPARATOR.join(PAIR_CHUNKS):
+    raise SystemExit(
+        f"error: pair-scan text {PAIR_TEXT!r} does not match its "
+        f"chunks {PAIR_CHUNKS!r}"
+    )
+
+front = wrap(prompt_div("Ending-pair scan")
+             + body_div("What's the first group of the "
+                        "ending-pair scan?"))
+back = wrap(body_div(f"<b>{PAIR_CHUNKS[0]}</b>"))
+add("pairs:ladder:1", front, back)
+for k in range(1, len(PAIR_CHUNKS)):
+    front = wrap(
+        prompt_div("Ending-pair scan &mdash; fill in the blank")
+        + body_div(SEPARATOR.join(PAIR_CHUNKS[:k] + [BLANK])))
+    back = wrap(body_div(SEPARATOR.join(
+        PAIR_CHUNKS[:k] + [f"<b>{PAIR_CHUNKS[k]}</b>"])))
+    add(f"pairs:ladder:{k + 1}", front, back)
+
+front = wrap(prompt_div("Ending-pair scan")
+             + body_div("Recite the whole scan."))
+back = wrap(body_div(PAIR_TEXT)
+            + prompt_div("The common two-consonant endings, "
+                         "grouped by first letter &mdash; for "
+                         "when slots 4&ndash;5 are both open."))
+add("pairs:full", front, back)
+
+# -------------------------------------------------------------------
+# 7. Ending-pair drills, one per pair.
+#
+# Each board's only consistent completion ends in the card's pair,
+# so the front asks simply "Guess the word." Construction rules
+# (Frank's grill, 2026-11-06), all asserted below: guess 2 is the
+# mnemonic's table word; no tile is green at slots 4-5 (a green
+# there hands over the ending); every board carries at least one
+# green and one yellow somewhere. Two exceptions and one longer
+# line: NK needs a third row (COURT, then GRUFF) before its pair
+# is forced without a 4-5 green; ST and SH have no table word at
+# all -- those endings pin S green at slot 4 from RAISE itself
+# (the one 4-5 green allowed, and it is the opener's, not the
+# drill's), and no table word carries S at slot 4, so their
+# guess 2 is an S-word probe instead.
+#
+# The candidate pool is the answer list plus the answers Frank
+# has actually met that the fetched list still lacks -- it
+# catalogues past answers and lags the newest (DRECK, #1966, was
+# deduced as its board's unique completion precisely because
+# the list did not contain it).
+OBSERVED_ANSWERS = {"dreck", "parch", "grist", "yahoo", "scoot"}
+POOL = ANSWERS | OBSERVED_ANSWERS
+
+PAIR_CARDS = [
+    ("pairs:ch", "CH", "torch", ["raise", "court"]),
+    ("pairs:ck", "CK", "dreck", ["raise", "deter"]),
+    ("pairs:ly", "LY", "sully", ["raise", "stunk"]),
+    ("pairs:ll", "LL", "atoll", ["raise", "float"]),
+    ("pairs:ty", "TY", "unity", ["raise", "glint"]),
+    ("pairs:th", "TH", "berth", ["raise", "deter"]),
+    ("pairs:dy", "DY", "nerdy", ["raise", "deter"]),
+    ("pairs:ng", "NG", "thong", ["raise", "cloth"]),
+    ("pairs:nt", "NT", "blunt", ["raise", "cloth"]),
+    ("pairs:nk", "NK", "drunk", ["raise", "court", "gruff"]),
+    ("pairs:st", "ST", "angst", ["raise", "stash"]),
+    ("pairs:sh", "SH", "awash", ["raise", "amass"]),
+    ("pairs:ry", "RY", "entry", ["raise", "deter"]),
+    ("pairs:ky", "KY", "sulky", ["raise", "stunk"]),
+]
+
+for role, pair, answer, guesses in PAIR_CARDS:
+    if not answer.endswith(pair.lower()):
+        raise SystemExit(f"error: {role}: {answer.upper()} does "
+                         f"not end in {pair}")
+    if answer not in POOL:
+        raise SystemExit(f"error: {role}: {answer!r} is not in "
+                         f"the candidate pool")
+    if guesses[0] != "raise":
+        raise SystemExit(f"error: {role}: first guess is not RAISE")
+    for i, g in enumerate(guesses):
+        if g not in POOL:
+            raise SystemExit(f"error: {role}: {g!r} is not in "
+                             f"the candidate pool")
+        if g == answer:
+            raise SystemExit(f"error: {role}: guess {i + 1} solves "
+                             f"the board -- the drill would be over")
+        if i > 0 and not legal(g, knowledge(answer, guesses[:i])):
+            raise SystemExit(
+                f"error: {role}: guess {i + 1} ({g.upper()}) is "
+                f"not a legal hard-mode guess on this board")
+    pattern = "".join(map(str, feedback("raise", answer)))
+    if pattern in TABLE:
+        if guesses[1] != TABLE[pattern]:
+            raise SystemExit(
+                f"error: {role}: guess 2 is {guesses[1]!r}, but "
+                f"the table word for {pattern} is "
+                f"{TABLE[pattern]!r}")
+    elif pair not in ("ST", "SH") \
+            or feedback("raise", answer)[3] != 2:
+        raise SystemExit(
+            f"error: {role}: RAISE pattern {pattern} is untabled "
+            f"but this is not an ST/SH board with S green at 4")
+    candidates = {w for w in POOL
+                  if all(feedback(g, w) == feedback(g, answer)
+                         for g in guesses)}
+    if candidates != {answer}:
+        raise SystemExit(
+            f"error: {role}: board leaves "
+            f"{sorted(w.upper() for w in candidates)}, "
+            f"not just {answer.upper()}")
+    rows = [feedback(g, answer) for g in guesses]
+    greens = sum(r.count(2) for r in rows)
+    yellows = sum(r.count(1) for r in rows)
+    if greens < 1 or yellows < 1:
+        raise SystemExit(
+            f"error: {role}: board has {greens} greens and "
+            f"{yellows} yellows -- every drill board needs at "
+            f"least one of each")
+    for g, r in zip(guesses, rows):
+        for pos in (3, 4):
+            if r[pos] == 2 and not (pair in ("ST", "SH")
+                                    and pos == 3 and g[pos] == "s"):
+                raise SystemExit(
+                    f"error: {role}: green at slot {pos + 1} "
+                    f"hands over the ending")
+    front = board_front("Ending-pair scan &mdash; apply it",
+                        answer, guesses, "Guess the word.")
+    back = wrap(body_div(f"<b>{pair}</b> &mdash; "
+                         f"{answer.upper()}"))
+    add(role, front, back)
+
+# -------------------------------------------------------------------
 # Assemble the deck.
 
-# 53 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
+# 76 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
 # (4 ladder rungs + full recall), 12 guess-2 table, 17 chant drills,
-# 6 doubles (2 rule cards + 4 boards).
-if len(notes) != 53:
+# 6 doubles (2 rule cards + 4 boards), 9 ending-pair ladder
+# (8 rungs + full recall), 14 ending-pair drills.
+if len(notes) != 76:
     raise SystemExit(f"error: deck has {len(notes)} notes, "
-                     f"expected 53")
+                     f"expected 76")
 
 # The model ID is arbitrary but permanent: changing it would make
 # Anki treat these as a new note type on re-import.
@@ -526,7 +671,8 @@ deck.description = (
     "Memorized parts of Frank's hard-mode Wordle system: the "
     "guess-2 mnemonic ladder, the after-RAISE chant "
     "(OTLN - UCY - HDPM - GBF), the guess-2 table, chant drills on "
-    "real boards, and the doubles rules."
+    "real boards, the doubles rules, and the ending-pair scan "
+    "(ladder and drills)."
 )
 
 for role, front, back in notes:
