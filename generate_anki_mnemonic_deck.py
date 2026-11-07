@@ -295,6 +295,14 @@ if not ANSWERS:
                      "words -- run this script from the "
                      "wordle-human-solve repo root")
 
+# The candidate pool for the drill assertions below: the answer
+# list plus the answers Frank has actually met that the fetched
+# list still lacks -- it catalogues past answers and lags the
+# newest (DRECK, #1966, was deduced as its board's unique
+# completion precisely because the list did not contain it).
+OBSERVED_ANSWERS = {"dreck", "parch"}
+POOL = ANSWERS | OBSERVED_ANSWERS
+
 TABLE_ROWS = [
     ("00000", "cloth", "C, L, O, T, H"),
     ("00001", "olden", "O, L, D, N"),
@@ -457,7 +465,10 @@ for role, answer, guesses, target in APPLY_CARDS:
 # thing each card tests (Frank's rule, 2026-11-06).
 # Each board's answer doubles its consonant at positions 3-4 before
 # the Y -- asserted below, so an example that stops exemplifying
-# fails the build.
+# fails the build. Each back names every word consistent with
+# its board (Frank's Q64, 2026-11-07): the doubling family first,
+# then the rest -- asserted against the board's computed
+# candidate set, so a back that stops being complete fails too.
 front = wrap(body_div("When a word ends in Y, what's the most "
                       "likely shape?"))
 back = wrap(body_div("The consonant before the Y doubles "
@@ -465,27 +476,69 @@ back = wrap(body_div("The consonant before the Y doubles "
                      "(CANNY, TALLY, NUTTY)."))
 add("doubles:rule", front, back)
 
+
+def is_ccy(word):
+    return (word[2] == word[3] and word[4] == "y"
+            and word[2] not in "aeiou")
+
+
+# (role, answer, guesses, headline, doubling family, other
+# consistent words) -- family and others together with the
+# answer must name the board's whole candidate set.
 DOUBLES_CARDS = [
     ("doubles:canny", "canny", ["raise", "tangy"],
-     "Extend the N into 4: <b>CANNY</b> &mdash; also FANNY, NANNY. "
-     "The consonant doubles before Y."),
+     "Extend the N into 4:",
+     ["fanny", "nanny"],
+     ["candy", "dandy", "fancy", "handy", "lanky", "manly"]),
     ("doubles:dizzy", "dizzy", ["raise", "pilot", "dingy"],
-     "Double the Z: <b>DIZZY</b>."),
+     "Double the Z:",
+     [],
+     []),
     ("doubles:tally", "tally", ["raise", "tangy", "tacky"],
-     "Double the L: <b>TALLY</b>."),
+     "Double the L:",
+     ["tabby", "taffy", "tatty"],
+     []),
     ("doubles:happy", "happy", ["raise", "tangy", "wacky"],
-     "Double the P: <b>HAPPY</b>."),
+     "Double the P:",
+     ["daddy", "dally", "jazzy", "mammy", "paddy"],
+     ["badly", "balmy", "madly"]),
 ]
 
-for role, answer, guesses, back_text in DOUBLES_CARDS:
+for role, answer, guesses, headline, family, others in DOUBLES_CARDS:
     validate_line(role, answer, guesses)
-    if not (answer[2] == answer[3] and answer[4] == "y"
-            and answer[2] not in "aeiou"):
+    if not is_ccy(answer):
         raise SystemExit(f"error: {role}: {answer.upper()} is not "
                          f"a _ _ CCY word")
+    for w in family:
+        if not is_ccy(w):
+            raise SystemExit(f"error: {role}: family word "
+                             f"{w.upper()} is not a _ _ CCY word")
+    for w in others:
+        if is_ccy(w):
+            raise SystemExit(f"error: {role}: {w.upper()} doubles "
+                             f"its consonant -- it belongs in the "
+                             f"family, not the others")
+    candidates = {w for w in POOL
+                  if all(feedback(g, w) == feedback(g, answer)
+                         for g in guesses)}
+    named = {answer} | set(family) | set(others)
+    if candidates != named:
+        raise SystemExit(
+            f"error: {role}: board's candidate set is "
+            f"{sorted(w.upper() for w in candidates)} but the "
+            f"back names {sorted(w.upper() for w in named)}")
+    text = f"{headline} <b>{answer.upper()}</b>"
+    if family:
+        text += (" &mdash; also "
+                 + ", ".join(w.upper() for w in family) + ".")
+    else:
+        text += "."
+    if others:
+        text += (" Also consistent: "
+                 + ", ".join(w.upper() for w in others) + ".")
     front = board_front(answer, guesses,
                         "What's the next guess?")
-    back = wrap(body_div(back_text))
+    back = wrap(body_div(text))
     add(role, front, back)
 
 # -------------------------------------------------------------------
@@ -536,15 +589,8 @@ add("pairs:full", front, back)
 # all -- those endings pin S green at slot 4 from RAISE itself
 # (the one 4-5 green allowed, and it is the opener's, not the
 # drill's), and no table word carries S at slot 4, so their
-# guess 2 is an S-word probe instead.
-#
-# The candidate pool is the answer list plus the answers Frank
-# has actually met that the fetched list still lacks -- it
-# catalogues past answers and lags the newest (DRECK, #1966, was
-# deduced as its board's unique completion precisely because
-# the list did not contain it).
-OBSERVED_ANSWERS = {"dreck", "parch"}
-POOL = ANSWERS | OBSERVED_ANSWERS
+# guess 2 is an S-word probe instead. Candidate sets are
+# computed against POOL (defined with the answer list, section 3).
 
 PAIR_CARDS = [
     ("pairs:ch", "CH", "torch", ["raise", "court"]),
