@@ -466,8 +466,8 @@ add("doubles:general", front, back)
 
 front = wrap(body_div("When a word ends in Y, what's the most "
                       "likely shape?"))
-back = wrap(body_div("The letter before the Y doubles &mdash; "
-                     "_ _ CCY. 28% of Y-ending answers "
+back = wrap(body_div("The consonant before the Y doubles "
+                     "&mdash; _ _ CCY. 28% of Y-ending answers "
                      "(CANNY, TALLY, NUTTY)."))
 add("doubles:rule", front, back)
 

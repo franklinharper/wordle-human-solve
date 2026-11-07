@@ -153,8 +153,8 @@ feels exhausted, try doubling a letter already on the board before scanning
 further afield.
 
 The sharpest case is a word ending in Y: 28% of Y-ending answers are
-_ _ CCY — the letter before the Y doubles (CANNY, TALLY, NUTTY). With
-Y pinned at 5, reach for that shape early.
+_ _ CCY — the consonant before the Y doubles (CANNY, TALLY, NUTTY).
+With Y pinned at 5, reach for that shape early.
 
 ---
 
