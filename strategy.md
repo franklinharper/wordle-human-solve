@@ -112,9 +112,9 @@ four have no such board, so they are not in the chant.
 scan letter by letter — scan the common two-consonant endings,
 grouped by first letter: **CH CK – LY LL – TY TH – DY – NG NT NK –
 ST SH – RY – KY**. Those 14 pairs cover over half of all
-consonant-ending answers. Work group by group, pair by pair,
+two-consonant-ending answers. Work group by group, pair by pair,
 generating whole words and testing each for recognition; the pair
-is the unit — K is never tested alone, it rides in on CK and NK.
+is the unit — K is never tested alone, it rides in on CK, NK and KY.
 Skip any pair containing a letter already known dead. If no pair
 produces a word, fall back to the chant, slot by slot. One
 structural exception: ST and SH endings pin S green at slot 4 from

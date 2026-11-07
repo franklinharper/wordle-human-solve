@@ -254,13 +254,13 @@ if CHANT_TEXT != SEPARATOR.join(CHANT_CHUNKS):
 CHANT = "".join(CHANT_CHUNKS)
 
 
-def ladder_pair(chunks, k):
+def ladder_pair(chunks, k, title):
     # The front shows the chunks before chunk k, then the blank; the
     # back shows the same chunks plus chunk k, bolded. Later chunks
     # stay hidden -- the ladder only ever asks for the next chunk. The
     # join form keeps k=0 meaningful: just the blank, just the chunk.
     front = wrap(
-        prompt_div("After-RAISE chant &mdash; fill in the blank")
+        prompt_div(f"{title} &mdash; fill in the blank")
         + body_div(SEPARATOR.join(chunks[:k] + [BLANK])))
     back = wrap(body_div(SEPARATOR.join(
         chunks[:k] + [f"<b>{chunks[k]}</b>"])))
@@ -273,7 +273,7 @@ front = wrap(prompt_div("After-RAISE chant")
 back = wrap(body_div(f"<b>{CHANT_CHUNKS[0]}</b>"))
 add("chant:ladder:1", front, back)
 for k in range(1, len(CHANT_CHUNKS)):
-    front, back = ladder_pair(CHANT_CHUNKS, k)
+    front, back = ladder_pair(CHANT_CHUNKS, k, "After-RAISE chant")
     add(f"chant:ladder:{k + 1}", front, back)
 
 front = wrap(prompt_div("After-RAISE chant")
@@ -515,11 +515,7 @@ front = wrap(prompt_div("Ending-pair scan")
 back = wrap(body_div(f"<b>{PAIR_CHUNKS[0]}</b>"))
 add("pairs:ladder:1", front, back)
 for k in range(1, len(PAIR_CHUNKS)):
-    front = wrap(
-        prompt_div("Ending-pair scan &mdash; fill in the blank")
-        + body_div(SEPARATOR.join(PAIR_CHUNKS[:k] + [BLANK])))
-    back = wrap(body_div(SEPARATOR.join(
-        PAIR_CHUNKS[:k] + [f"<b>{PAIR_CHUNKS[k]}</b>"])))
+    front, back = ladder_pair(PAIR_CHUNKS, k, "Ending-pair scan")
     add(f"pairs:ladder:{k + 1}", front, back)
 
 front = wrap(prompt_div("Ending-pair scan")
@@ -551,7 +547,7 @@ add("pairs:full", front, back)
 # catalogues past answers and lags the newest (DRECK, #1966, was
 # deduced as its board's unique completion precisely because
 # the list did not contain it).
-OBSERVED_ANSWERS = {"dreck", "parch", "grist", "yahoo", "scoot"}
+OBSERVED_ANSWERS = {"dreck", "parch"}
 POOL = ANSWERS | OBSERVED_ANSWERS
 
 PAIR_CARDS = [
@@ -572,6 +568,7 @@ PAIR_CARDS = [
 ]
 
 for role, pair, answer, guesses in PAIR_CARDS:
+    s_at_4_exception = pair in ("ST", "SH")
     if not answer.endswith(pair.lower()):
         raise SystemExit(f"error: {role}: {answer.upper()} does "
                          f"not end in {pair}")
@@ -598,7 +595,7 @@ for role, pair, answer, guesses in PAIR_CARDS:
                 f"error: {role}: guess 2 is {guesses[1]!r}, but "
                 f"the table word for {pattern} is "
                 f"{TABLE[pattern]!r}")
-    elif pair not in ("ST", "SH") \
+    elif not s_at_4_exception \
             or feedback("raise", answer)[3] != 2:
         raise SystemExit(
             f"error: {role}: RAISE pattern {pattern} is untabled "
@@ -621,7 +618,7 @@ for role, pair, answer, guesses in PAIR_CARDS:
             f"least one of each")
     for g, r in zip(guesses, rows):
         for pos in (3, 4):
-            if r[pos] == 2 and not (pair in ("ST", "SH")
+            if r[pos] == 2 and not (s_at_4_exception
                                     and pos == 3 and g[pos] == "s"):
                 raise SystemExit(
                     f"error: {role}: green at slot {pos + 1} "
@@ -670,8 +667,8 @@ deck.description = (
     "Memorized parts of Frank's hard-mode Wordle system: the "
     "guess-2 mnemonic ladder, the after-RAISE chant "
     "(OTLN - UCY - HDPM - GBF), the guess-2 table, chant drills on "
-    "real boards, the doubles rules, and the ending-pair scan "
-    "(ladder and drills)."
+    "real boards, the doubled-consonant-before-Y rule, and the "
+    "ending-pair scan (ladder and drills)."
 )
 
 for role, front, back in notes:
