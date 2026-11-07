@@ -12,8 +12,8 @@ The deck teaches the memorized parts of his hard-mode system as seven blocks:
    letter still untested -- and the rest of the chant from there.
    The chant holds exactly the fourteen letters such a board can
    leave first-untested; that is why it stops at F.
-5. Doubles: the general gray-cap rule, the doubled-consonant-
-   before-Y rule, and four boards that drill the Y rule.
+5. Doubles: the doubled-consonant-before-Y rule, and four
+   boards that drill it.
 6. The ending-pair scan (CH CK - LY LL - TY TH - DY - NG NT NK -
    ST SH - RY - KY), as a ladder over its eight groups.
 7. Ending-pair drills: boards whose only consistent completion
@@ -324,7 +324,7 @@ for pattern, word, letters in TABLE_ROWS:
                  + '<div style="margin: 6px 0;">'
                  + tile_row("raise", [int(d) for d in pattern])
                  + "</div>"
-                 + body_div("What's guess 2?"))
+                 + body_div("What's the next guess?"))
     back = wrap(body_div(f"<b>{word.upper()}</b>")
                 + prompt_div(f"Tests {letters}"))
     add(f"guess2:{pattern}", front, back)
@@ -451,25 +451,16 @@ for role, answer, guesses, target in APPLY_CARDS:
     add(role, front, back)
 
 # -------------------------------------------------------------------
-# 5. Doubles: the general rule, the before-Y rule, four boards.
+# 5. Doubles: the before-Y rule and four boards that drill it.
 #
-# The general card states strategy.md's gray-cap rule; the CCY
-# card's question is Frank's, verbatim, and four boards drill it.
-# No doubles card carries a header: any header naming the
-# doubles family would give away the very thing each card tests
-# (Frank's rule, 2026-11-06).
+# The CCY card's question is Frank's, verbatim. (The general
+# gray-cap rule has no card -- Frank removed it 2026-11-06; it
+# lives in strategy.md.) No doubles card carries a header: any
+# header naming the doubles family would give away the very
+# thing each card tests (Frank's rule, 2026-11-06).
 # Each board's answer doubles its consonant at positions 3-4 before
 # the Y -- asserted below, so an example that stops exemplifying
 # fails the build.
-front = wrap(body_div("One copy of a letter is green or yellow. "
-                      "What rules out a second copy of it?"))
-back = wrap(body_div("Nothing but a gray copy of that letter. "
-                     "<b>Doubles are always in play</b> &mdash; a "
-                     "green or yellow letter can always appear "
-                     "again; a gray copy caps the letter at the "
-                     "copies already colored."))
-add("doubles:general", front, back)
-
 front = wrap(body_div("When a word ends in Y, what's the most "
                       "likely shape?"))
 back = wrap(body_div("The consonant before the Y doubles "
@@ -497,7 +488,7 @@ for role, answer, guesses, back_text in DOUBLES_CARDS:
                          f"a _ _ CCY word")
     front = board_front(None,
                         answer, guesses,
-                        f"What's guess {len(guesses) + 1}?")
+                        "What's the next guess?")
     back = wrap(body_div(back_text))
     add(role, front, back)
 
@@ -543,7 +534,7 @@ add("pairs:full", front, back)
 # 7. Ending-pair drills, one per pair.
 #
 # Each board's only consistent completion ends in the card's pair,
-# so the front asks simply "Guess the word." Construction rules
+# so the front asks simply "What's the next guess?" Construction rules
 # (Frank's grill, 2026-11-06), all asserted below: guess 2 is the
 # mnemonic's table word; no tile is green at slots 4-5 (a green
 # there hands over the ending); every board carries at least one
@@ -636,7 +627,7 @@ for role, pair, answer, guesses in PAIR_CARDS:
                     f"error: {role}: green at slot {pos + 1} "
                     f"hands over the ending")
     front = board_front(None,
-                        answer, guesses, "Guess the word.")
+                        answer, guesses, "What's the next guess?")
     back = wrap(body_div(f"<b>{pair}</b> &mdash; "
                          f"{answer.upper()}"))
     add(role, front, back)
@@ -644,13 +635,13 @@ for role, pair, answer, guesses in PAIR_CARDS:
 # -------------------------------------------------------------------
 # Assemble the deck.
 
-# 76 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
+# 75 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
 # (4 ladder rungs + full recall), 12 guess-2 table, 17 chant drills,
-# 6 doubles (2 rule cards + 4 boards), 9 ending-pair ladder
-# (8 rungs + full recall), 14 ending-pair drills.
-if len(notes) != 76:
+# 5 doubles (the before-Y rule card + 4 boards), 9 ending-pair
+# ladder (8 rungs + full recall), 14 ending-pair drills.
+if len(notes) != 75:
     raise SystemExit(f"error: deck has {len(notes)} notes, "
-                     f"expected 76")
+                     f"expected 75")
 
 # The model ID is arbitrary but permanent: changing it would make
 # Anki treat these as a new note type on re-import.
