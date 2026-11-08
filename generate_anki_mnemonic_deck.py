@@ -14,12 +14,16 @@ The deck teaches the memorized parts of his hard-mode system as seven blocks:
    leave first-untested; that is why it stops at F.
 5. Doubles: the doubled-consonant-before-Y rule, and four
    boards that drill it.
-6. The ending-pair scan (CH CK - LY LL - TY TH - DY - NG NT NK -
-   ST SH - RY - KY), as a ladder over its eight groups.
+6. The ending-pair scan over the two-consonant endings with a
+   non-Y last letter (CH CK - NG NT NK ND - ST SH SS - TH -
+   LL LT LD - RT RD RN RK - MP - WN - FF FT - HT - PT - GH),
+   as a ladder over its twelve groups.
 7. Ending-pair drills: boards whose only consistent completion
    ends in the card's pair; the back names the pair and the word.
 
-Boards are rendered as Wordle tiles. The feedback colours are always
+Boards are rendered as Wordle tiles, and every board front also
+carries the QWERTY keyboard under the board, each letter key in
+the state the board gives it, as in the real game. The feedback colours are always
 computed from the card's answer, never typed by hand, and every drill
 card's answer is asserted against its board before the deck is
 written -- a card whose board does not yield its answer fails loudly.
@@ -156,12 +160,59 @@ def board(answer, guesses):
     return '<div style="margin: 6px 0;">' + "<br>".join(rows) + "</div>"
 
 
+# The keyboard under every board (Frank's ask, 2026-11-07): the
+# three QWERTY rows as the real game draws them, ENTER and
+# backspace included as inert keys. Each letter key takes the
+# best state the board gives it -- green beats yellow beats
+# dead -- and a letter the board never tested keeps the game's
+# light gray for unexplored keys.
+KEYBOARD_ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
+# Wordle's own unexplored-key gray.
+KEY_NEUTRAL = "#d3d6da"
+
+
+def key_span(label, background, color, width):
+    return (
+        f'<span style="display: inline-block; width: {width}px; '
+        f'height: 30px; line-height: 30px; text-align: center; '
+        f'background: {background}; color: {color}; '
+        f'font-weight: bold; font-size: 13px; margin: 1px; '
+        f'border-radius: 3px;">{label}</span>')
+
+
+def keyboard(answer, guesses):
+    best = {}
+    for g in guesses:
+        for ch, v in zip(g, feedback(g, answer)):
+            if v > best.get(ch, -1):
+                best[ch] = v
+    rows = []
+    for row_letters in KEYBOARD_ROWS:
+        keys = []
+        if row_letters == "zxcvbnm":
+            keys.append(key_span("ENTER", KEY_NEUTRAL, "#1a1a1b", 48))
+        for ch in row_letters:
+            v = best.get(ch)
+            if v is None:
+                keys.append(key_span(ch.upper(), KEY_NEUTRAL,
+                                     "#1a1a1b", 24))
+            else:
+                keys.append(key_span(ch.upper(), TILE_COLORS[v],
+                                     "#ffffff", 24))
+        if row_letters == "zxcvbnm":
+            keys.append(key_span("⌫", KEY_NEUTRAL, "#1a1a1b", 48))
+        rows.append("".join(keys))
+    return ('<div style="margin: 6px 0;">' + "<br>".join(rows)
+            + "</div>")
+
+
 def board_front(answer, guesses, question):
     # No front in the deck carries a header (Frank's rule,
     # settled 2026-11-06/07): a header either gives away what
     # the card tests or duplicates the question, and anything
     # worth saying belongs in the question itself.
     return wrap(board(answer, guesses)
+                + keyboard(answer, guesses)
                 + body_div(question))
 
 
@@ -549,9 +600,11 @@ for role, answer, guesses, headline, family, others in DOUBLES_CARDS:
 # Rule 2) instead of hunting letter by letter. PAIR_TEXT is an
 # independent literal, tied to PAIR_CHUNKS the same way the
 # chant's is, so the two can never drift apart.
-PAIR_CHUNKS = ["CH CK", "LY LL", "TY TH", "DY", "NG NT NK",
-               "ST SH", "RY", "KY"]
-PAIR_TEXT = "CH CK – LY LL – TY TH – DY – NG NT NK – ST SH – RY – KY"
+PAIR_CHUNKS = ["CH CK", "NG NT NK ND", "ST SH SS", "TH",
+               "LL LT LD", "RT RD RN RK", "MP", "WN", "FF FT",
+               "HT", "PT", "GH"]
+PAIR_TEXT = "CH CK – NG NT NK ND – ST SH SS – TH – LL LT LD – " \
+            "RT RD RN RK – MP – WN – FF FT – HT – PT – GH"
 if PAIR_TEXT != SEPARATOR.join(PAIR_CHUNKS):
     raise SystemExit(
         f"error: pair-scan text {PAIR_TEXT!r} does not match its "
@@ -570,47 +623,65 @@ for k in range(1, len(PAIR_CHUNKS)):
 
 front = wrap(body_div("Recite the whole scan."))
 back = wrap(body_div(PAIR_TEXT)
-            + prompt_div("The common two-consonant endings, "
-                         "grouped by first letter &mdash; for "
-                         "when slots 4&ndash;5 are both open."))
+            + prompt_div("The common two-consonant endings "
+                         "with a non-Y last letter, grouped by "
+                         "first letter &mdash; for when slots "
+                         "4&ndash;5 are both open."))
 add("pairs:full", front, back)
 
 # -------------------------------------------------------------------
 # 7. Ending-pair drills, one per pair.
 #
 # Each board's only consistent completion ends in the card's pair,
-# so the front asks simply "What's the next guess?" Construction rules
-# (Frank's grill, 2026-11-06), all asserted below: guess 2 is the
-# mnemonic's table word; no tile is green at slots 4-5 (a green
-# there hands over the ending); every board carries at least one
-# green and one yellow somewhere. Two exceptions and one longer
-# line: NK needs a third row (COURT, then GRUFF) before its pair
-# is forced without a 4-5 green; ST and SH have no table word at
-# all -- those endings pin S green at slot 4 from RAISE itself
-# (the one 4-5 green allowed, and it is the opener's, not the
-# drill's), and no table word carries S at slot 4, so their
-# guess 2 is an S-word probe instead. Candidate sets are
-# computed against POOL (defined with the answer list, section 3).
+# so the front asks simply "What's the next guess?" The scan's
+# scope (Frank's grill, 2026-11-07): the 24 most common
+# two-consonant endings with a non-Y last letter -- 551 of the
+# 633 such answers (87%); Y-endings are the doubles block's
+# problem, not this one's. Construction rules, all asserted
+# below: guess 2 is the mnemonic's table word; every board
+# carries at least one green and one yellow somewhere; and at
+# slots 4-5 at most one letter of the pair may be green, and
+# only where the system's own line pins it (Frank's Q76 rule:
+# where the system prevents a clean board, use the system and
+# accept one green). The pinned boards: ST, SH and SS pin S at
+# slot 4 from RAISE itself -- those patterns are untabled and
+# no table word carries S at slot 4, so their guess 2 is an
+# S-word probe; RT, RD, RN and RK pin R at slot 4 (ADORN's,
+# COURT's or QUERY's R, played by the system); PT pins T at
+# slot 5 (FLOAT's T). Seven boards need a third row before their
+# pair is forced: NK, MP, LT, WN, RK, FT, PT. Candidate sets
+# are computed against POOL (defined with the answer list,
+# section 3).
 
 PAIR_CARDS = [
     ("pairs:ch", "CH", "torch", ["raise", "court"]),
     ("pairs:ck", "CK", "dreck", ["raise", "deter"]),
-    ("pairs:ly", "LY", "sully", ["raise", "stunk"]),
-    ("pairs:ll", "LL", "atoll", ["raise", "float"]),
-    ("pairs:ty", "TY", "unity", ["raise", "glint"]),
-    ("pairs:th", "TH", "berth", ["raise", "deter"]),
-    ("pairs:dy", "DY", "nerdy", ["raise", "deter"]),
     ("pairs:ng", "NG", "thong", ["raise", "cloth"]),
     ("pairs:nt", "NT", "blunt", ["raise", "cloth"]),
     ("pairs:nk", "NK", "drunk", ["raise", "court", "gruff"]),
+    ("pairs:nd", "ND", "blend", ["raise", "olden"]),
     ("pairs:st", "ST", "angst", ["raise", "stash"]),
     ("pairs:sh", "SH", "awash", ["raise", "amass"]),
-    ("pairs:ry", "RY", "entry", ["raise", "deter"]),
-    ("pairs:ky", "KY", "sulky", ["raise", "stunk"]),
+    ("pairs:ss", "SS", "abyss", ["raise", "blast"]),
+    ("pairs:th", "TH", "berth", ["raise", "deter"]),
+    ("pairs:ll", "LL", "atoll", ["raise", "float"]),
+    ("pairs:lt", "LT", "fault", ["raise", "tangy", "fatal"]),
+    ("pairs:ld", "LD", "guild", ["raise", "glint"]),
+    ("pairs:rt", "RT", "abort", ["raise", "adorn"]),
+    ("pairs:rd", "RD", "award", ["raise", "adorn"]),
+    ("pairs:rn", "RN", "churn", ["raise", "court"]),
+    ("pairs:rk", "RK", "clerk", ["raise", "deter", "query"]),
+    ("pairs:mp", "MP", "champ", ["raise", "float", "aback"]),
+    ("pairs:wn", "WN", "blown", ["raise", "cloth", "blond"]),
+    ("pairs:ff", "FF", "snuff", ["raise", "stunk"]),
+    ("pairs:ft", "FT", "cleft", ["raise", "olden", "fleck"]),
+    ("pairs:ht", "HT", "yacht", ["raise", "tangy"]),
+    ("pairs:pt", "PT", "adapt", ["raise", "float", "chant"]),
+    ("pairs:gh", "GH", "thigh", ["raise", "glint"]),
 ]
 
 for role, pair, answer, guesses in PAIR_CARDS:
-    s_at_4_exception = pair in ("ST", "SH")
+    s_at_4_exception = pair in ("ST", "SH", "SS")
     if not answer.endswith(pair.lower()):
         raise SystemExit(f"error: {role}: {answer.upper()} does "
                          f"not end in {pair}")
@@ -658,13 +729,16 @@ for role, pair, answer, guesses in PAIR_CARDS:
             f"error: {role}: board has {greens} greens and "
             f"{yellows} yellows -- every drill board needs at "
             f"least one of each")
-    for g, r in zip(guesses, rows):
-        for pos in (3, 4):
-            if r[pos] == 2 and not (s_at_4_exception
-                                    and pos == 3 and g[pos] == "s"):
-                raise SystemExit(
-                    f"error: {role}: green at slot {pos + 1} "
-                    f"hands over the ending")
+    green45 = {g[pos] for g, r in zip(guesses, rows)
+               for pos in (3, 4) if r[pos] == 2}
+    if len(green45) > 1 or (green45
+                            and next(iter(green45))
+                            not in pair.lower()):
+        raise SystemExit(
+            f"error: {role}: greens at slots 4-5 are "
+            f"{sorted(green45)} -- at most one letter of the "
+            f"pair may be green there, and only where the "
+            f"system's own line pins it")
     front = board_front(answer, guesses, "What's the next guess?")
     back = wrap(body_div(f"<b>{pair}</b> &mdash; "
                          f"{answer.upper()}"))
@@ -673,13 +747,13 @@ for role, pair, answer, guesses in PAIR_CARDS:
 # -------------------------------------------------------------------
 # Assemble the deck.
 
-# 75 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
+# 89 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
 # (4 ladder rungs + full recall), 12 guess-2 table, 17 chant drills,
-# 5 doubles (the before-Y rule card + 4 boards), 9 ending-pair
-# ladder (8 rungs + full recall), 14 ending-pair drills.
-if len(notes) != 75:
+# 5 doubles (the before-Y rule card + 4 boards), 13 ending-pair
+# ladder (12 rungs + full recall), 24 ending-pair drills.
+if len(notes) != 89:
     raise SystemExit(f"error: deck has {len(notes)} notes, "
-                     f"expected 75")
+                     f"expected 89")
 
 # The model ID is arbitrary but permanent: changing it would make
 # Anki treat these as a new note type on re-import.
@@ -709,7 +783,8 @@ deck.description = (
     "guess-2 mnemonic ladder, the after-RAISE chant "
     "(OTLN - UCY - HDPM - GBF), the guess-2 table, chant drills on "
     "real boards, the doubled-consonant-before-Y rule, and the "
-    "ending-pair scan (ladder and drills)."
+    "ending-pair scan over two-consonant, non-Y endings (ladder "
+    "and drills)."
 )
 
 for role, front, back in notes:

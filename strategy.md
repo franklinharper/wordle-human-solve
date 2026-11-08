@@ -108,19 +108,24 @@ played by this system — RAISE, the table word, then answer words
 (the deck's drills are those boards) — and K, W, V and the rarest
 four have no such board, so they are not in the chant.
 
-**The ending-pair scan.** When slots 4–5 are both still open, don't
-scan letter by letter — scan the common two-consonant endings,
-grouped by first letter: **CH CK – LY LL – TY TH – DY – NG NT NK –
-ST SH – RY – KY**. Those 14 pairs cover over half of all
-two-consonant-ending answers. Work group by group, pair by pair,
-generating whole words and testing each for recognition; the pair
-is the unit — K is never tested alone, it rides in on CK, NK and KY.
-Skip any pair containing a letter already known dead. If no pair
-produces a word, fall back to the chant, slot by slot. One
-structural exception: ST and SH endings pin S green at slot 4 from
-RAISE itself, and no table word carries S at slot 4, so those
-games have no mnemonic guess 2 — probe with an S-word instead
-(STASH, AMASS).
+**The ending-pair scan.** When slots 4–5 are both still open and
+the word doesn't end in Y, don't scan letter by letter — scan the
+common two-consonant endings, grouped by first letter: **CH CK –
+NG NT NK ND – ST SH SS – TH – LL LT LD – RT RD RN RK – MP – WN –
+FF FT – HT – PT – GH**. Those 24 pairs cover 87% of answers that
+end in two consonants with a non-Y last letter. Work group by
+group, pair by pair, generating whole words and testing each for
+recognition; the pair is the unit — K is never tested alone, it
+rides in on CK, NK and RK. Skip any pair containing a letter
+already known dead. If the system's own guesses have already
+pinned one letter of a pair green at slot 4 or 5, the scan's job
+is just the other letter. If no pair produces a word, fall back
+to the chant, slot by slot. Endings in Y are a different problem —
+see the doubles paragraph below. One structural exception: ST,
+SH and SS endings pin S green at slot 4 from RAISE itself, and
+no table word carries S at slot 4, so those games have no
+mnemonic guess 2 — probe with an S-word instead (STASH, AMASS,
+BLAST).
 
 ### Rule 3: Beware the one-position trap.
 
