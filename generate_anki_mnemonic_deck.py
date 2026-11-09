@@ -17,8 +17,9 @@ The deck teaches the memorized parts of his hard-mode system as seven blocks:
 6. The ending-pair scan over the two-consonant endings with a
    non-Y last letter (CH CK - NG NT NK ND - ST SH SS - TH -
    LL LT LD - RT RD RN RK - MP - WN - FF FT - HT - PT - GH),
-   memorized in two stages: the twelve first letters as a
-   ladder, then each first letter's second letters.
+   memorized in two stages: the twelve first letters in
+   three chunks (CNST - LRMW - FHPG) as a ladder, then each
+   first letter's second letters.
 7. Ending-pair drills: boards whose only consistent completion
    ends in the card's pair; the back names the pair and the word.
 8. Placement drills: boards holding three floating yellows after
@@ -638,30 +639,38 @@ if rebuilt != PAIR_TEXT:
         f"scan {PAIR_TEXT!r}"
     )
 
-# Stage 1: the first letters, as a ladder.
-front = wrap(body_div("What's the first letter of the "
-                      "ending-pair scan?"))
-back = wrap(body_div(f"<b>{FIRST_LETTERS[0]}</b>"))
+# Stage 1: the first letters, chunked as a ladder (Frank,
+# 2026-11-09). The chunks cut the twelve letters 4-4-4 on the
+# scan's strength tiers: the four biggest groups, the middle
+# four, the tail. FIRST_CHUNKS_TEXT is an independent literal,
+# tied to the chunks the same way the chant's text is, and the
+# chunks must reassemble into FIRST_LETTERS exactly.
+FIRST_CHUNKS = ["CNST", "LRMW", "FHPG"]
+FIRST_CHUNKS_TEXT = "CNST – LRMW – FHPG"
+if FIRST_CHUNKS_TEXT != SEPARATOR.join(FIRST_CHUNKS):
+    raise SystemExit(
+        f"error: first-letters text {FIRST_CHUNKS_TEXT!r} does "
+        f"not match its chunks {FIRST_CHUNKS!r}"
+    )
+if "".join(FIRST_CHUNKS) != "".join(FIRST_LETTERS):
+    raise SystemExit(
+        f"error: first-letter chunks {FIRST_CHUNKS!r} do not "
+        f"reassemble into the first letters {FIRST_LETTERS!r}"
+    )
+
+front = wrap(body_div("What's the first of the ending-pair "
+                      "scan?"))
+back = wrap(body_div(f"<b>{FIRST_CHUNKS[0]}</b>"))
 add("pairs:ladder:1", front, back)
-for k in range(1, len(FIRST_LETTERS)):
+for k in range(1, len(FIRST_CHUNKS)):
     front, back = ladder_pair(
-        FIRST_LETTERS, k,
-        "What's the next first letter of the ending-pair scan?")
+        FIRST_CHUNKS, k,
+        "What's the next chunk of the ending-pair scan?")
     add(f"pairs:ladder:{k + 1}", front, back)
 
-front = wrap(body_div("Recite the first letters of the "
-                      "ending-pair scan."))
-back = wrap(body_div(SEPARATOR.join(FIRST_LETTERS)))
+front = wrap(body_div("Recite the ending-pair scan."))
+back = wrap(body_div(FIRST_CHUNKS_TEXT))
 add("pairs:first-full", front, back)
-
-# The whole scan, as one recall -- the two stages reassembled.
-front = wrap(body_div("Recite the whole scan."))
-back = wrap(body_div(PAIR_TEXT)
-            + prompt_div("The common two-consonant endings "
-                         "with a non-Y last letter, grouped by "
-                         "first letter &mdash; for when slots "
-                         "4&ndash;5 are both open."))
-add("pairs:full", front, back)
 
 # Stage 2: for each first letter, its second letters.
 for first in FIRST_LETTERS:
@@ -872,15 +881,15 @@ for role, answer, guesses, others in PLACEMENT_CARDS:
 # -------------------------------------------------------------------
 # Assemble the deck.
 
-# 110 cards: 13 mnemonic (12 ladder rungs + the full text),
+# 100 cards: 13 mnemonic (12 ladder rungs + the full text),
 # 5 chant (4 ladder rungs + full recall), 12 guess-2 table,
 # 17 chant drills, 5 doubles (the before-Y rule card + 4 boards),
-# 26 ending-pair scan (12 first-letter rungs + the first-letters
-# recall + the whole-scan recall + 12 seconds cards),
-# 24 ending-pair drills, 8 placement drills.
-if len(notes) != 110:
+# 16 ending-pair scan (3 first-letter chunk rungs + the
+# first-letters recall + 12 seconds cards), 24 ending-pair
+# drills, 8 placement drills.
+if len(notes) != 100:
     raise SystemExit(f"error: deck has {len(notes)} notes, "
-                     f"expected 110")
+                     f"expected 100")
 
 # The model ID is arbitrary but permanent: changing it would make
 # Anki treat these as a new note type on re-import.
