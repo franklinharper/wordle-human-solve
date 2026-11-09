@@ -17,7 +17,8 @@ The deck teaches the memorized parts of his hard-mode system as seven blocks:
 6. The ending-pair scan over the two-consonant endings with a
    non-Y last letter (CH CK - NG NT NK ND - ST SH SS - TH -
    LL LT LD - RT RD RN RK - MP - WN - FF FT - HT - PT - GH),
-   as a ladder over its twelve groups.
+   memorized in two stages: the twelve first letters as a
+   ladder, then each first letter's second letters.
 7. Ending-pair drills: boards whose only consistent completion
    ends in the card's pair; the back names the pair and the word.
 8. Placement drills: boards holding three floating yellows after
@@ -597,13 +598,22 @@ for role, answer, guesses, headline, family, others in DOUBLES_CARDS:
     add(role, front, back)
 
 # -------------------------------------------------------------------
-# 6. The ending-pair scan, as a ladder.
+# 6. The ending-pair scan, memorized in two stages.
 #
 # When slots 4-5 are both still open, the scan runs the common
 # two-consonant endings grouped by first letter (strategy.md,
 # Rule 2) instead of hunting letter by letter. PAIR_TEXT is an
 # independent literal, tied to PAIR_CHUNKS the same way the
 # chant's is, so the two can never drift apart.
+#
+# Frank's approach (2026-11-09): memorize the scan in two
+# stages -- first the twelve first letters in order, then, for
+# each first letter, its second letters. Both stages are
+# derived from PAIR_CHUNKS, and the reconstruction check below
+# ties them back to PAIR_TEXT, so the stages can never drift
+# from the scan or from each other. The ladder roles are the
+# ones the old group ladder used -- same ladder, same scan --
+# so a re-import updates those cards in place.
 PAIR_CHUNKS = ["CH CK", "NG NT NK ND", "ST SH SS", "TH",
                "LL LT LD", "RT RD RN RK", "MP", "WN", "FF FT",
                "HT", "PT", "GH"]
@@ -615,16 +625,36 @@ if PAIR_TEXT != SEPARATOR.join(PAIR_CHUNKS):
         f"chunks {PAIR_CHUNKS!r}"
     )
 
-front = wrap(body_div("What's the first group of the "
+PAIR_GROUPS = [chunk.split() for chunk in PAIR_CHUNKS]
+FIRST_LETTERS = [group[0][0] for group in PAIR_GROUPS]
+SECONDS = {group[0][0]: [pair[1] for pair in group]
+           for group in PAIR_GROUPS}
+rebuilt = SEPARATOR.join(
+    " ".join(first + second for second in SECONDS[first])
+    for first in FIRST_LETTERS)
+if rebuilt != PAIR_TEXT:
+    raise SystemExit(
+        f"error: the two stages rebuild {rebuilt!r}, not the "
+        f"scan {PAIR_TEXT!r}"
+    )
+
+# Stage 1: the first letters, as a ladder.
+front = wrap(body_div("What's the first letter of the "
                       "ending-pair scan?"))
-back = wrap(body_div(f"<b>{PAIR_CHUNKS[0]}</b>"))
+back = wrap(body_div(f"<b>{FIRST_LETTERS[0]}</b>"))
 add("pairs:ladder:1", front, back)
-for k in range(1, len(PAIR_CHUNKS)):
+for k in range(1, len(FIRST_LETTERS)):
     front, back = ladder_pair(
-        PAIR_CHUNKS, k,
-        "What's the next group of the ending-pair scan?")
+        FIRST_LETTERS, k,
+        "What's the next first letter of the ending-pair scan?")
     add(f"pairs:ladder:{k + 1}", front, back)
 
+front = wrap(body_div("Recite the first letters of the "
+                      "ending-pair scan."))
+back = wrap(body_div(SEPARATOR.join(FIRST_LETTERS)))
+add("pairs:first-full", front, back)
+
+# The whole scan, as one recall -- the two stages reassembled.
 front = wrap(body_div("Recite the whole scan."))
 back = wrap(body_div(PAIR_TEXT)
             + prompt_div("The common two-consonant endings "
@@ -632,6 +662,15 @@ back = wrap(body_div(PAIR_TEXT)
                          "first letter &mdash; for when slots "
                          "4&ndash;5 are both open."))
 add("pairs:full", front, back)
+
+# Stage 2: for each first letter, its second letters.
+for first in FIRST_LETTERS:
+    front = wrap(body_div(f"<b>{first}</b>")
+                 + body_div("Which second letters follow it in "
+                            "the ending-pair scan?"))
+    back = wrap(body_div(
+        "<b>" + " ".join(SECONDS[first]) + "</b>"))
+    add(f"pairs:seconds:{first.lower()}", front, back)
 
 # -------------------------------------------------------------------
 # 7. Ending-pair drills, one per pair.
@@ -833,14 +872,15 @@ for role, answer, guesses, others in PLACEMENT_CARDS:
 # -------------------------------------------------------------------
 # Assemble the deck.
 
-# 97 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
-# (4 ladder rungs + full recall), 12 guess-2 table, 17 chant drills,
-# 5 doubles (the before-Y rule card + 4 boards), 13 ending-pair
-# ladder (12 rungs + full recall), 24 ending-pair drills,
-# 8 placement drills.
-if len(notes) != 97:
+# 110 cards: 13 mnemonic (12 ladder rungs + the full text),
+# 5 chant (4 ladder rungs + full recall), 12 guess-2 table,
+# 17 chant drills, 5 doubles (the before-Y rule card + 4 boards),
+# 26 ending-pair scan (12 first-letter rungs + the first-letters
+# recall + the whole-scan recall + 12 seconds cards),
+# 24 ending-pair drills, 8 placement drills.
+if len(notes) != 110:
     raise SystemExit(f"error: deck has {len(notes)} notes, "
-                     f"expected 97")
+                     f"expected 110")
 
 # The model ID is arbitrary but permanent: changing it would make
 # Anki treat these as a new note type on re-import.
