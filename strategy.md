@@ -127,6 +127,18 @@ no table word carries S at slot 4, so those games have no
 mnemonic guess 2 — probe with an S-word instead (STASH, AMASS,
 BLAST).
 
+**Floating yellows.** When three letters are yellow and none is
+placed, don't hunt for a word that merely contains them — a
+familiar word will happily park one in a slot the board already
+ruled out (ALOHA after FLOAT, in the LOAMY game). Place them by
+slots instead: anchor the most constrained yellow first (the one
+with the fewest legal slots), fit the others around it, and
+pronounce each skeleton — words surface by sound (_ _ A _ _ with
+O at 2 sounds out LOA—, and LOAMY is there). Fill the remaining
+slots from the chant, in order. Before playing, check: every
+yellow present, and no yellow sitting in a slot where it already
+showed yellow.
+
 ### Rule 3: Beware the one-position trap.
 
 If you know 4 of 5 letters (e.g., _OUND, _IGHT, _ATCH), **you're stuck** — hard

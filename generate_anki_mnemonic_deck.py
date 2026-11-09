@@ -20,6 +20,9 @@ The deck teaches the memorized parts of his hard-mode system as seven blocks:
    as a ladder over its twelve groups.
 7. Ending-pair drills: boards whose only consistent completion
    ends in the card's pair; the back names the pair and the word.
+8. Placement drills: boards holding three floating yellows after
+   RAISE and the table word, with no green tile; the back names
+   a next guess and every other consistent candidate.
 
 Boards are rendered as Wordle tiles, and every board front also
 carries the QWERTY keyboard under the board, each letter key in
@@ -746,15 +749,98 @@ for role, pair, answer, guesses in PAIR_CARDS:
     add(role, front, back)
 
 # -------------------------------------------------------------------
+# 8. Placement drills: three floating yellows.
+#
+# Frank's bottleneck (his LOAMY game, 2026-11-09): after RAISE and
+# the table word, three letters are yellow, none is placed, and
+# generating the next guess means permuting them into legal slots
+# -- the failure mode is grabbing a familiar word that parks a
+# yellow in a banned slot. Each board below is frozen at that
+# moment: three distinct yellow letters, no green tile anywhere,
+# and a candidate set of two to five words over POOL, all named
+# on the back so any of them grades as right. Construction rules,
+# all asserted below: guess 2 is the mnemonic's table word; the
+# board's candidate set is exactly the back's named set.
+
+PLACEMENT_CARDS = [
+    ("placement:loamy", "loamy", ["raise", "float"],
+     ["aglow", "koala", "polka"]),
+    ("placement:dwell", "dwell", ["raise", "olden"],
+     ["dwelt"]),
+    ("placement:erect", "erect", ["raise", "deter"],
+     ["exert"]),
+    ("placement:knelt", "knelt", ["raise", "olden"],
+     ["newly"]),
+    ("placement:logic", "logic", ["raise", "pilot"],
+     ["login"]),
+    ("placement:beach", "beach", ["raise", "cleat"],
+     ["mecca", "peach"]),
+    ("placement:dusky", "dusky", ["raise", "stunk"],
+     ["husky", "musky"]),
+    ("placement:draft", "draft", ["raise", "adorn"],
+     ["drama", "drawl", "fraud"]),
+]
+
+for role, answer, guesses, others in PLACEMENT_CARDS:
+    if answer not in POOL:
+        raise SystemExit(f"error: {role}: {answer!r} is not in "
+                         f"the candidate pool")
+    if guesses[0] != "raise":
+        raise SystemExit(f"error: {role}: first guess is not RAISE")
+    pattern = "".join(map(str, feedback("raise", answer)))
+    if pattern not in TABLE or guesses[1] != TABLE[pattern]:
+        raise SystemExit(
+            f"error: {role}: guess 2 is {guesses[1]!r}, but the "
+            f"table word for {pattern} is "
+            f"{TABLE.get(pattern)!r}")
+    for i, g in enumerate(guesses):
+        if g not in POOL:
+            raise SystemExit(f"error: {role}: {g!r} is not in "
+                             f"the candidate pool")
+        if g == answer:
+            raise SystemExit(f"error: {role}: guess {i + 1} solves "
+                             f"the board -- the drill would be over")
+        if i > 0 and not legal(g, knowledge(answer, guesses[:i])):
+            raise SystemExit(
+                f"error: {role}: guess {i + 1} ({g.upper()}) is "
+                f"not a legal hard-mode guess on this board")
+    rows = [feedback(g, answer) for g in guesses]
+    if any(v == 2 for row in rows for v in row):
+        raise SystemExit(
+            f"error: {role}: board has a green tile -- placement "
+            f"drills hold floating yellows only")
+    yellow_letters = {ch for g, row in zip(guesses, rows)
+                      for ch, v in zip(g, row) if v == 1}
+    if len(yellow_letters) != 3:
+        raise SystemExit(
+            f"error: {role}: board floats "
+            f"{sorted(yellow_letters)}, not three letters")
+    candidates = {w for w in POOL
+                  if all(feedback(g, w) == feedback(g, answer)
+                         for g in guesses)}
+    named = {answer} | set(others)
+    if candidates != named:
+        raise SystemExit(
+            f"error: {role}: board's candidate set is "
+            f"{sorted(w.upper() for w in candidates)} but the "
+            f"back names {sorted(w.upper() for w in named)}")
+    front = board_front(answer, guesses, "What's the next guess?")
+    back = wrap(body_div(
+        f"<b>{answer.upper()}</b> &mdash; also consistent: "
+        + ", ".join(w.upper() for w in others) + "."))
+    add(role, front, back)
+
+# -------------------------------------------------------------------
 # Assemble the deck.
 
-# 89 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
+# 97 cards: 13 mnemonic (12 ladder rungs + the full text), 5 chant
 # (4 ladder rungs + full recall), 12 guess-2 table, 17 chant drills,
 # 5 doubles (the before-Y rule card + 4 boards), 13 ending-pair
-# ladder (12 rungs + full recall), 24 ending-pair drills.
-if len(notes) != 89:
+# ladder (12 rungs + full recall), 24 ending-pair drills,
+# 8 placement drills.
+if len(notes) != 97:
     raise SystemExit(f"error: deck has {len(notes)} notes, "
-                     f"expected 89")
+                     f"expected 97")
 
 # The model ID is arbitrary but permanent: changing it would make
 # Anki treat these as a new note type on re-import.
@@ -785,7 +871,8 @@ deck.description = (
     "(OTLN - UCY - HDPM - GBF), the guess-2 table, chant drills on "
     "real boards, the doubled-consonant-before-Y rule, and the "
     "ending-pair scan over two-consonant, non-Y endings (ladder "
-    "and drills)."
+    "and drills), and placement drills for boards with three "
+    "floating yellows."
 )
 
 for role, front, back in notes:
