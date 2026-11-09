@@ -8,7 +8,7 @@ import com.github.ajalt.clikt.core.Context
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Locale
-import kotlin.system.exitProcess
+import com.github.ajalt.clikt.core.ProgramResult
 
 /** Refresh the word lists from the NYT (fetch_wordle_words.py's CLI). */
 class FetchCommand : SuspendingCliktCommand(name = "fetch") {
@@ -70,6 +70,6 @@ class FetchCommand : SuspendingCliktCommand(name = "fetch") {
     private fun fail(msg: String): Nothing {
         System.err.println("  ERROR: $msg")
         System.err.println("  Keeping existing word lists unchanged.")
-        exitProcess(1)
+        throw ProgramResult(1)
     }
 }

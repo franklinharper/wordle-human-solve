@@ -10,7 +10,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
 import java.time.OffsetDateTime
-import kotlin.system.exitProcess
+import com.github.ajalt.clikt.core.ProgramResult
 
 /**
  * The word-list freshness gate (port of analysis.py's
@@ -34,7 +34,7 @@ object Freshness {
         err("ERROR: Wordle word-list refresh failed ($label): $detail")
         err("  The local word lists may be stale; refusing to run analysis on them.")
         err("  Hint: $hint")
-        exitProcess(1)
+        throw ProgramResult(1)
     }
 
     suspend fun ensureFresh(repoRoot: Path) {
