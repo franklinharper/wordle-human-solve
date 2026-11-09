@@ -22,6 +22,6 @@ suspend fun main(args: Array<String>) {
         java.io.FileOutputStream(java.io.FileDescriptor.out), true,
         Charsets.UTF_8))
     return WordleCommand()
-        .subcommands(PatternsCommand(), AnalysisCommand(), FetchCommand())
+        .subcommands(PatternsCommand(), AnalysisCommand(), FetchCommand(), DeckCommand())
         .main(args)
 }
