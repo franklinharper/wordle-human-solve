@@ -237,9 +237,11 @@ def add(role, front, back):
 #
 # The text: three sentences whose content words are the twelve table
 # words, in table order. Each ladder rung shows the text so far and a
-# blank for the next word; the back reveals that word, bolded. The
-# segments below carry each word's surrounding glue (articles, "and",
-# "it,") and the punctuation that closes its sentence.
+# blank for the next word; the back shows only the word to add,
+# bolded (Frank's rule, 2026-11-09: a ladder back never repeats
+# what the front already gave). The segments below carry each
+# word's surrounding glue (articles, "and", "it,") and the
+# punctuation that closes its sentence.
 TEXT = "The tangy olden cloth stunk. The court pilot's cleats glint " \
        "and float. Adorn it, deter it, lunge!"
 SEGMENTS = [
@@ -267,14 +269,14 @@ for k, (pre, token, post) in enumerate(SEGMENTS):
         # itself supplies the context (Frank's catch, 2026-11-04).
         front = wrap(body_div("What's the first word of the "
                               "mnemonic text?"))
-        back = wrap(body_div(f"The <b>{token}</b>"))
+        back = wrap(body_div(f"<b>{token}</b>"))
         add(f"mnemonic:ladder:{k + 1}", front, back)
         continue
     so_far = "".join(p + t for p, t, _ in SEGMENTS[:k])
     front = wrap(body_div(so_far + pre + BLANK)
                  + body_div("What's the next word of the "
                             "mnemonic text?"))
-    back = wrap(body_div(so_far + pre + f"<b>{token}</b>" + post))
+    back = wrap(body_div(f"<b>{token}</b>"))
     add(f"mnemonic:ladder:{k + 1}", front, back)
 
 front = wrap(body_div("Recite the whole mnemonic text."))
@@ -304,15 +306,14 @@ def ladder_pair(chunks, k, question):
     # The front shows the chunks before chunk k, then the blank,
     # then the question -- no header (Frank's rule, 2026-11-07:
     # anything worth saying belongs in the question). The back
-    # shows the same chunks plus chunk k, bolded. Later chunks
-    # stay hidden -- the ladder only ever asks for the next chunk.
-    # The join form keeps k=0 meaningful: just the blank, just
-    # the chunk.
+    # shows only chunk k, bolded -- the one thing to add
+    # (Frank's rule, 2026-11-09: a ladder back never repeats
+    # what the front already gave). The join form keeps k=0
+    # meaningful on the front: just the blank.
     front = wrap(
         body_div(SEPARATOR.join(chunks[:k] + [BLANK]))
         + body_div(question))
-    back = wrap(body_div(SEPARATOR.join(
-        chunks[:k] + [f"<b>{chunks[k]}</b>"])))
+    back = wrap(body_div(f"<b>{chunks[k]}</b>"))
     return front, back
 
 
