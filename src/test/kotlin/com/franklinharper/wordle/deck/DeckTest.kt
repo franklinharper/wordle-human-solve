@@ -61,11 +61,12 @@ class KnowledgeTest {
 
 class DeckGeneratorTest {
     @Test
-    fun buildsTheHundredNotes() {
+    fun buildsAllNotes() {
         val notes = DeckGenerator.build(RepoRoot.resolve())
-        assertEquals(100, notes.size)
-        assertEquals(100, notes.map { it.role }.toSet().size)
+        assertEquals(101, notes.size)
+        assertEquals(101, notes.map { it.role }.toSet().size)
         val byRole = notes.associateBy { it.role }
+        assertTrue(byRole.getValue("frame:truce").back.contains("TROPE"))
         assertTrue(byRole.getValue("placement:loamy").back.contains("LOAMY"))
         assertTrue(byRole.getValue("pairs:seconds:n").back.contains("G T K D"))
         assertTrue(notes.all { it.front.startsWith("<div") })
