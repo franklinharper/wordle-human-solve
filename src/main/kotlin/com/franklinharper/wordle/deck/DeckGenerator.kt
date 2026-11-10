@@ -686,7 +686,7 @@ object DeckGenerator {
             ) {
                 fail(
                     "error: $role: RAISE pattern $pattern is " +
-                        "untabled but this is not an ST/SH board " +
+                        "untabled but this is not an ST/SH/SS board " +
                         "with S green at 4"
                 )
             }

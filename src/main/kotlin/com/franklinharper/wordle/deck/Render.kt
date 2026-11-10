@@ -54,6 +54,15 @@ private val KEYBOARD_ROWS = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
 // Wordle's own unexplored-key gray.
 private const val KEY_NEUTRAL = "#d3d6da"
 
+// The near-black text on unexplored (light) keys; tested keys
+// take white text on their tile colour instead.
+private const val KEY_TEXT_DARK = "#1a1a1b"
+
+// Key widths in px: a letter key is one unit wide, and the
+// ENTER and ⌫ keys are double that.
+private const val KEY_WIDTH = 24
+private const val KEY_WIDE_WIDTH = 48
+
 private fun keySpan(label: String, background: String, color: String, width: Int): String =
     """<span style="display: inline-block; width: ${width}px; height: 30px; line-height: 30px; text-align: center; background: $background; color: $color; font-weight: bold; font-size: 13px; margin: 1px; border-radius: 3px;">$label</span>"""
 
@@ -70,18 +79,16 @@ fun keyboard(answer: String, guesses: List<String>): String {
     val rows = KEYBOARD_ROWS.map { rowLetters ->
         val keys = StringBuilder()
         if (rowLetters == "zxcvbnm") {
-            keys.append(keySpan("ENTER", KEY_NEUTRAL, "#1a1a1b", 48))
+            keys.append(keySpan("ENTER", KEY_NEUTRAL, KEY_TEXT_DARK, KEY_WIDE_WIDTH))
         }
         for (ch in rowLetters) {
             val v = best[ch]
-            if (v == null) {
-                keys.append(keySpan(ch.uppercase(), KEY_NEUTRAL, "#1a1a1b", 24))
-            } else {
-                keys.append(keySpan(ch.uppercase(), TILE_COLORS.getValue(v), "#ffffff", 24))
-            }
+            val bg = if (v == null) KEY_NEUTRAL else TILE_COLORS.getValue(v)
+            val color = if (v == null) KEY_TEXT_DARK else "#ffffff"
+            keys.append(keySpan(ch.uppercase(), bg, color, KEY_WIDTH))
         }
         if (rowLetters == "zxcvbnm") {
-            keys.append(keySpan("⌫", KEY_NEUTRAL, "#1a1a1b", 48))
+            keys.append(keySpan("⌫", KEY_NEUTRAL, KEY_TEXT_DARK, KEY_WIDE_WIDTH))
         }
         keys.toString()
     }
