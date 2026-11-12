@@ -1,5 +1,6 @@
 package com.franklinharper.wordle.deck
 
+import com.franklinharper.wordle.core.loadAllGuesses
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -25,6 +26,9 @@ import java.nio.file.Path
  * 9. Frame drills: an untabled RAISE board whose lesson is a
  *    frame to try first, not a unique completion — the back
  *    names the recommended next guess in that frame.
+ * 10. Principle drills: a board whose lesson is a general
+ *    decision principle — the back names the play the
+ *    principle picks, not a unique completion.
  *
  * Every drill card's answer is asserted against its board before
  * the deck is written — a card whose board does not yield its
@@ -430,11 +434,6 @@ object DeckGenerator {
                 "Extend the N into 4:",
                 listOf("fanny", "nanny"),
                 listOf("candy", "dandy", "fancy", "handy", "lanky", "manly"),
-            ),
-            DoublesCard(
-                "doubles:dizzy", "dizzy",
-                listOf("raise", "pilot", "dingy"),
-                "Double the Z:", emptyList(), emptyList(),
             ),
             DoublesCard(
                 "doubles:tally", "tally",
@@ -919,15 +918,101 @@ object DeckGenerator {
         }
 
         // -------------------------------------------------------
+        // 10. Principle drills: buy information with fresh
+        // letters.
+        //
+        // The RAISE / PILOT / DINGY board used to be a doubles
+        // card whose back named DIZZY — but that lesson rested
+        // on knowing DIZZY is the board's unique answer, which
+        // the player cannot know from the seat: he is searching,
+        // not counting candidates, and the answer list itself
+        // keeps growing (GRIST was an answer before it was on
+        // the list). Frank's ruling (2026-11-12): cards drill
+        // general principles, not special cases. The principle
+        // here: a guess that tests two fresh letters beats one
+        // that spends the guess doubling a single unconfirmed
+        // letter. DICKY is that play — it fits this exact board
+        // (asserted below: it scores the shown feedback against
+        // every guess played) and tests C and K, both fresh;
+        // DIZZY tests only Z, twice.
+        run {
+            val role = "principle:dicky"
+            val boardAnswer = "dizzy"
+            val guesses = listOf("raise", "pilot", "dingy")
+            val recommended = "dicky"
+            val validGuesses =
+                loadAllGuesses(repoRoot).map { it.value }.toSet()
+            if (recommended !in validGuesses) {
+                fail(
+                    "error: $role: '$recommended' is not a " +
+                        "valid guess"
+                )
+            }
+            for (guess in guesses) {
+                if (feedbackString(guess, recommended) !=
+                    feedbackString(guess, boardAnswer)
+                ) {
+                    fail(
+                        "error: $role: ${guess.uppercase()} " +
+                            "against ${recommended.uppercase()} " +
+                            "gives " +
+                            feedbackString(guess, recommended) +
+                            ", not the board's " +
+                            feedbackString(guess, boardAnswer)
+                    )
+                }
+            }
+            if (!legal(recommended, knowledge(boardAnswer, guesses))) {
+                fail(
+                    "error: $role: ${recommended.uppercase()} is " +
+                        "not a legal hard-mode guess on this board"
+                )
+            }
+            val tested = guesses.joinToString("").toSet()
+            val fresh: (String) -> Set<Char> =
+                { w -> w.toSet() - tested }
+            if (fresh(recommended) != setOf('c', 'k')) {
+                fail(
+                    "error: $role: ${recommended.uppercase()} " +
+                        "tests fresh letters " +
+                        fresh(recommended).sorted() +
+                        ", not C and K"
+                )
+            }
+            if (fresh(boardAnswer) != setOf('z')) {
+                fail(
+                    "error: $role: ${boardAnswer.uppercase()} " +
+                        "tests fresh letters " +
+                        fresh(boardAnswer).sorted() + ", not only Z"
+                )
+            }
+            add(
+                role,
+                boardFront(
+                    boardAnswer, guesses, "What's the next guess?"
+                ),
+                wrap(
+                    bodyDiv("<b>${recommended.uppercase()}</b>") +
+                        promptDiv(
+                            "Tests two fresh letters, C and K. " +
+                                "Don't spend the guess doubling " +
+                                "one letter (Z) you haven't " +
+                                "confirmed."
+                        )
+                ),
+            )
+        }
+
+        // -------------------------------------------------------
         // Assemble.
         //
         // 101 cards: 13 mnemonic (12 ladder rungs + the full
         // text), 5 chant (4 ladder rungs + full recall), 12
-        // guess-2 table, 17 chant drills, 5 doubles (the before-Y
-        // rule card + 4 boards), 16 ending-pair scan (3
+        // guess-2 table, 17 chant drills, 4 doubles (the before-Y
+        // rule card + 3 boards), 16 ending-pair scan (3
         // first-letter chunk rungs + the first-letters recall +
         // 12 seconds cards), 24 ending-pair drills, 8 placement
-        // drills, 1 frame drill.
+        // drills, 1 frame drill, 1 principle drill.
         if (notes.size != 101) {
             fail("error: deck has ${notes.size} notes, expected 101")
         }

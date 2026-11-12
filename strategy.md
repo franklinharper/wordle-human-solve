@@ -170,6 +170,12 @@ candidate, but it can never end the game — on the clock it is strictly worse. 
 discriminator earns its slot only when it is itself one of the candidates
 (SHOOT, in the SCOOT game) or when the set is bigger than two.
 
+**Buy information with fresh letters.** From the seat you never know how many
+candidates remain — you are searching, not counting. A guess that tests two
+fresh letters rules on more of the unsearched space than one that spends the
+guess doubling a single unconfirmed letter. (After RAISE / PILOT / DINGY:
+DICKY tests C and K; DIZZY spends the whole guess on Z, twice.)
+
 **Doubles are always in play.** Nothing on the board rules out a second copy
 of a letter unless a gray copy caps its count — a green or yellow letter can
 always appear again in another slot. 15% of answers contain a doubled letter,

@@ -67,6 +67,8 @@ class DeckGeneratorTest {
         assertEquals(101, notes.map { it.role }.toSet().size)
         val byRole = notes.associateBy { it.role }
         assertTrue(byRole.getValue("frame:truce").back.contains("TROPE"))
+        assertTrue(byRole.getValue("principle:dicky").back.contains("DICKY"))
+        assertFalse(byRole.containsKey("doubles:dizzy"))
         assertTrue(byRole.getValue("placement:loamy").back.contains("LOAMY"))
         assertTrue(byRole.getValue("pairs:seconds:n").back.contains("G T K D"))
         assertTrue(notes.all { it.front.startsWith("<div") })
