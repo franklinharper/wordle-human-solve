@@ -54,14 +54,6 @@ After RAISE, look at the feedback and use this table:
 **If your pattern isn't in the table** (52% of games — you got multiple hits):
 skip to the Guess 3+ heuristic below.
 
-One untabled pattern has its own frame: R yellow + E green
-(🟨⬛⬛⬛🟩). Think **?RO?E** first — R at 2 and O at 3 are their
-likeliest slots, and a word in that frame (TROPE — tests T, P, and
-can itself win) splits the ?RO?E family by its first and fourth
-letters (T and P). Don't park R at 4, its least likely slot on this
-board (CHORE in the TRUCE game, 2026-11-10 — it solved in 3, but
-its largest feedback bucket lumps 13 of the 40 candidates together).
-
 ### How to memorize this
 
 The table has a simple structure. After RAISE, look at your hits:
