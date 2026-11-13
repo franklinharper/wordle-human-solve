@@ -1,8 +1,8 @@
 package com.franklinharper.wordle
 
 import com.franklinharper.wordle.core.RepoRoot
-import com.franklinharper.wordle.fetch.WordleRefreshError
-import com.franklinharper.wordle.fetch.refreshAll
+import com.franklinharper.wordle.fetch.RefreshOutcome
+import com.franklinharper.wordle.fetch.attemptRefresh
 import com.github.ajalt.clikt.command.SuspendingCliktCommand
 import com.github.ajalt.clikt.core.Context
 import java.time.LocalDate
@@ -20,14 +20,11 @@ class FetchCommand : SuspendingCliktCommand(name = "fetch") {
         val today = LocalDate.now(ZoneId.of("America/Los_Angeles"))
         println("Wordle word lists, refreshed $today (America/Los_Angeles):\n")
 
-        val summary = try {
-            refreshAll(repoRoot)
-        } catch (e: WordleRefreshError) {
-            fail("${e.label()}: ${e.message}\n  Hint: ${e.hint}")
-        } catch (e: Exception) {
-            fail(
-                "unexpected error: ${e.message}\n  Hint: " +
-                    "set WORDLE_STALE_OK=1 to proceed on stale data anyway."
+        val summary = when (val outcome = attemptRefresh(repoRoot)) {
+            is RefreshOutcome.Ok -> outcome.summary
+            is RefreshOutcome.Failed -> fail(
+                "${outcome.label}: ${outcome.detail}\n" +
+                    "  Hint: ${outcome.hint}"
             )
         }
 

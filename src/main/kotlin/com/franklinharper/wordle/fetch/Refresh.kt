@@ -7,11 +7,13 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
@@ -124,6 +126,8 @@ private fun newClient(): HttpClient = HttpClient(CIO) {
 private suspend fun fetchResponse(client: HttpClient, url: String): HttpResponse =
     try {
         client.get(url) { header("User-Agent", USER_AGENT) }
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
         throw NetworkError("could not fetch $url: ${e.message}")
     }
@@ -138,6 +142,8 @@ private suspend fun fetchSolution(
     val url = solutionUrlTemplate.replace("{date}", dateIso)
     val resp = try {
         client.get(url) { header("User-Agent", USER_AGENT) }
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
         throw NetworkError("could not fetch solution for $dateIso: ${e.message}")
     }
@@ -254,19 +260,28 @@ suspend fun refreshGuesses(repoRoot: Path): GuessesSummary {
         }
         val candidates = mutableListOf<List<String>>()
         for (url in scriptUrls) {
-            try {
-                val resp = fetchResponse(client, url)
-                if (resp.status.value != 200) {
-                    throw NetworkError(
-                        "script returned HTTP ${resp.status.value}")
-                }
-                candidates.addAll(findWordArrays(resp.bodyAsText()))
-            } catch (e: Exception) {
-                // One bad script URL must not kill the refresh; the
-                // page itself already fetched fine, so this is just
-                // a stale link.
-                println("  (skipping script, fetch failed: ${e.message})")
+            val resp = fetchResponse(client, url)
+            if (resp.status.value != 200) {
+                throw NetworkError(
+                    "script returned HTTP ${resp.status.value}")
             }
+            // A script whose body cannot be read is an expected
+            // I/O failure: log it with its cause and skip just
+            // that script. Anything else — the non-200 above,
+            // cancellation, a format surprise — fails the whole
+            // refresh loudly rather than silently degrading to a
+            // partial candidate set.
+            val arrays = try {
+                findWordArrays(resp.bodyAsText())
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IOException) {
+                System.err.println(
+                    "  (skipping script $url, read failed: " +
+                        "${e::class.simpleName}: ${e.message})")
+                continue
+            }
+            candidates.addAll(arrays)
         }
         if (candidates.isEmpty()) {
             throw BundleFormatError(
@@ -401,3 +416,40 @@ suspend fun refreshAll(repoRoot: Path): RefreshSummary {
     writeMeta(repoRoot)
     return RefreshSummary(guesses, answers, guesses.changed || answers.changed)
 }
+
+/** A refresh attempt's outcome, classified for loud reporting. */
+sealed interface RefreshOutcome {
+    data class Ok(val summary: RefreshSummary) : RefreshOutcome
+    data class Failed(
+        val label: String,
+        val detail: String?,
+        val hint: String,
+    ) : RefreshOutcome
+}
+
+/**
+ * Run the refresh and classify any failure for the caller to
+ * report: a [WordleRefreshError] keeps its label and hint,
+ * anything else is an unexpected error. Either way the
+ * exception's type and message are logged to stderr here,
+ * before the caller fails. Cancellation is never classified —
+ * it propagates.
+ */
+suspend fun attemptRefresh(repoRoot: Path): RefreshOutcome =
+    try {
+        RefreshOutcome.Ok(refreshAll(repoRoot))
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: WordleRefreshError) {
+        System.err.println(
+            "refresh failed: ${e::class.simpleName}: ${e.message}")
+        RefreshOutcome.Failed(e.label(), e.message, e.hint)
+    } catch (e: Exception) {
+        System.err.println(
+            "refresh failed: ${e::class.simpleName}: ${e.message}")
+        RefreshOutcome.Failed(
+            "unexpected error",
+            "${e::class.simpleName}: ${e.message}",
+            "set WORDLE_STALE_OK=1 to proceed on stale data anyway.",
+        )
+    }
