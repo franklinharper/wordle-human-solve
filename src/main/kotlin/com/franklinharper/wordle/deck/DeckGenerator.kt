@@ -22,8 +22,9 @@ import java.nio.file.Path
  * 8. Placement drills: boards holding three floating yellows
  *    after RAISE and the table word, with no green tile.
  * 9. Frame drills: an untabled RAISE board whose lesson is a
- *    frame to try first, not a unique completion — the back
- *    names the recommended next guess in that frame.
+ *    derivation, not a unique completion — float the yellow,
+ *    take the chant's head, build round the green; the back
+ *    walks that derivation to the recommended guess.
  * 10. Principle drills: a board whose lesson is a general
  *    decision principle — the back names the play the
  *    principle picks, not a unique completion.

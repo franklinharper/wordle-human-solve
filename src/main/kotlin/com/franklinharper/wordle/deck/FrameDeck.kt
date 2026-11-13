@@ -2,21 +2,21 @@ package com.franklinharper.wordle.deck
 
 internal fun DeckBuild.buildFrame() {
     // -------------------------------------------------------
-    // 9. Frame drills: the ?RO?E frame.
+    // 9. Frame drills: the chant applied to a floating yellow.
     //
     // The TRUCE board (2026-11-10, #1970): RAISE came back
     // R yellow, E green — pattern 10002, untabled (the table
     // holds R+E both yellow and E green alone, not this mix).
-    // Frank played CHORE, parking R at slot 4, its least
-    // likely home on this board (5 of the 40 candidates);
-    // it paid off — TRUCE was left alone — but its largest
-    // feedback bucket lumps 13 candidates together. The
-    // frame lesson: think ?RO?E first, R at 2 and O at 3,
-    // their likeliest slots. The recommended guess, TROPE,
-    // is asserted legal on the board and an answer itself,
-    // and its feedback on this board leaves TRUCE as the
-    // pool's only candidate — the same solve in 3, earned
-    // by the frame instead of by luck.
+    // The play is derived, not memorized (Frank, 2026-11-13):
+    // the yellow R must move; the chant's first chunk is
+    // OTLN, so its first two letters, O and T, are the fresh
+    // letters to reach for; building them with the R around
+    // the green E gives TRO?E, and P completes TROPE. Frank
+    // actually played CHORE and still solved in 3 — the card
+    // teaches the derivation he can run from the seat. The
+    // recommended guess is asserted legal on the board, an
+    // answer itself, built by exactly that derivation, and
+    // its feedback leaves TRUCE as the pool's only candidate.
     run {
         val role = "frame:truce"
         val answer = "truce"
@@ -40,6 +40,21 @@ internal fun DeckBuild.buildFrame() {
                     "legal hard-mode guess on this board"
             )
         }
+        // The derivation the back teaches, asserted: the
+        // recommended guess moves the yellow R off slot 1,
+        // keeps the green E at slot 5, and spends its fresh
+        // letters on the chant's first two, O and T.
+        if (recommended[0] == 'r' || 'r' !in recommended ||
+            recommended[4] != 'e' ||
+            chant[0].lowercaseChar() !in recommended ||
+            chant[1].lowercaseChar() !in recommended
+        ) {
+            fail(
+                "error: $role: ${recommended.uppercase()} is not " +
+                    "the chant derivation (moved R, chant head " +
+                    "${chant[0]} and ${chant[1]}, green E at 5)"
+            )
+        }
         val line = guesses + recommended
         val candidates = pool.filter { w ->
             line.all {
@@ -60,8 +75,9 @@ internal fun DeckBuild.buildFrame() {
             wrap(
                 bodyDiv("<b>${recommended.uppercase()}</b>") +
                     promptDiv(
-                        "The ?RO?E frame &mdash; R at 2, O at 3. " +
-                            "Tests T, P."
+                        "R must move &mdash; take the chant's head, " +
+                            "O and T, and build round the green E: " +
+                            "TRO?E. P completes it."
                     )
             ),
         )
