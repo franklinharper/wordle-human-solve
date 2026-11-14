@@ -64,7 +64,7 @@ internal fun DeckBuild.buildPairScan() {
 
     add(
         "pairs:ladder:1",
-        wrap(bodyDiv("What's the first of the ending-pair scan?")),
+        wrap(bodyDiv("What's the first pair of the ending-pair scan?")),
         wrap(bodyDiv("<b>${firstChunks[0]}</b>")),
     )
     for (k in 1 until firstChunks.size) {
