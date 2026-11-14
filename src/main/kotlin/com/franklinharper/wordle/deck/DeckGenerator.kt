@@ -28,6 +28,10 @@ import java.nio.file.Path
  * 10. Principle drills: a board whose lesson is a general
  *    decision principle — the back names the play the
  *    principle picks, not a unique completion.
+ * 11. The triple scans: the three-consonant runs that stall
+ *    generation, as two ladders (endings, openings) whose
+ *    backs name one triple with two example answers, plus a
+ *    recite and a trigger card per scan.
  *
  * Each family is built by a builder function on [DeckBuild] in
  * its own file, adding notes to the shared sink; this object
@@ -61,19 +65,23 @@ object DeckGenerator {
         b.buildPlacement()
         b.buildFrame()
         b.buildPrinciple()
+        b.buildTripleScan()
 
         // -------------------------------------------------------
         // Assemble.
         //
-        // 103 cards: 13 mnemonic (12 ladder rungs + the full
+        // 123 cards: 13 mnemonic (12 ladder rungs + the full
         // text), 5 chant (4 ladder rungs + full recall), 12
         // guess-2 table, 17 chant drills, 6 doubles (the before-Y
         // rule card + 5 boards), 16 ending-pair scan (3
         // first-letter chunk rungs + the first-letters recall +
         // 12 seconds cards), 24 ending-pair drills, 8 placement
-        // drills, 1 frame drill, 1 principle drill.
-        if (b.notes.size != 103) {
-            fail("error: deck has ${b.notes.size} notes, expected 103")
+        // drills, 1 frame drill, 1 principle drill, 20 triple
+        // scans (10 ending ladder rungs + ending recite +
+        // ending trigger, 6 opening ladder rungs + opening
+        // recite + opening trigger).
+        if (b.notes.size != 123) {
+            fail("error: deck has ${b.notes.size} notes, expected 123")
         }
         return b.notes
     }

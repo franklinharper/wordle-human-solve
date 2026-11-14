@@ -127,6 +127,20 @@ no table word carries S at slot 4, so those games have no
 mnemonic guess 2 — probe with an S-word instead (STASH, AMASS,
 BLAST).
 
+**The triple scans.** When three slots in a row are all
+consonants — the shape that stalls generation — don't
+free-associate; run the triple scan for that end of the word.
+Endings (slots 3–5): **TCH · NCH · RCH · LCH · GHT · RTH ·
+NTH · RST · MPH · RSH** — ten triples covering about
+four-fifths of answers that end in three consonants. Most
+are the pair scan's pairs with one letter in front: CH takes
+T, N, R, L; HT takes G; TH takes R, N. Openings (slots 1–3):
+**STR · SCR · THR · SHR · SPR · SPL**. Skip any triple
+containing a letter already known dead; if no triple
+produces a word, fall back to the chant, slot by slot.
+Triples in the middle (slots 2–4) are a long tail — search
+them, don't scan them.
+
 **Floating yellows.** When three letters are yellow and none is
 placed, don't hunt for a word that merely contains them — a
 familiar word will happily park one in a slot the board already
