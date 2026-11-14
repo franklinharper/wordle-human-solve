@@ -5,19 +5,23 @@ internal data class DoublesCard(
     val answer: String,
     val guesses: List<String>,
     val headline: String,
-    val family: List<String>,
-    val others: List<String>,
 )
 
 internal fun DeckBuild.buildDoubles() {
     // -------------------------------------------------------
-    // 5. Doubles: the before-Y rule and four boards.
+    // 5. Doubles: the before-Y rule and five boards.
     //
-    // Each board's answer doubles its consonant at positions
-    // 3-4 before the Y — asserted below. Each back names every
-    // word consistent with its board: the doubling family
-    // first, then the rest — asserted against the board's
-    // computed candidate set.
+    // Two board rules, both asserted below (Frank's grill,
+    // 2026-11-13): a CCY drill board's consistent set is
+    // entirely CCY — the board itself forces the shape, so
+    // the drill never argues against the fresh-letters
+    // principle the way the old mixed boards did — and no
+    // guess in the line lands a green at position 3 or 4,
+    // so the doubled consonant is the player's own move,
+    // never half-given by the board (the old CANNY board's
+    // TANGY pinned its first N green). The back's family is
+    // derived, not listed: the board's computed candidate
+    // set minus the answer, alphabetically.
     add(
         "doubles:rule",
         wrap(bodyDiv("When a word ends in Y, what's the most likely shape?")),
@@ -35,29 +39,33 @@ internal fun DeckBuild.buildDoubles() {
 
     val doublesCards = listOf(
         DoublesCard(
-            "doubles:canny", "canny", listOf("raise", "tangy"),
-            "Extend the N into 4:",
-            listOf("fanny", "nanny"),
-            listOf("candy", "dandy", "fancy", "handy", "lanky", "manly"),
-        ),
-        DoublesCard(
             "doubles:tally", "tally",
             listOf("raise", "tangy", "tacky"),
             "Double the L:",
-            listOf("tabby", "taffy", "tatty"),
-            emptyList(),
         ),
         DoublesCard(
             "doubles:happy", "happy",
-            listOf("raise", "tangy", "wacky"),
+            listOf("raise", "tangy", "bawdy"),
             "Double the P:",
-            listOf("daddy", "dally", "jazzy", "mammy", "paddy"),
-            listOf("badly", "balmy", "madly"),
+        ),
+        DoublesCard(
+            "doubles:bunny", "bunny",
+            listOf("raise", "cloth", "bumpy"),
+            "Double the N:",
+        ),
+        DoublesCard(
+            "doubles:batty", "batty",
+            listOf("raise", "tangy"),
+            "Double the T:",
+        ),
+        DoublesCard(
+            "doubles:giddy", "giddy",
+            listOf("raise", "pilot", "kinky"),
+            "Double the D:",
         ),
     )
 
-    for ((role, answer, guesses, headline, family, others)
-        in doublesCards) {
+    for ((role, answer, guesses, headline) in doublesCards) {
         validateLine(role, answer, guesses)
         if (!isCcy(answer)) {
             fail(
@@ -65,20 +73,14 @@ internal fun DeckBuild.buildDoubles() {
                     "_ _ CCY word"
             )
         }
-        for (w in family) {
-            if (!isCcy(w)) {
+        for (g in guesses) {
+            val pattern = feedbackString(g, answer)
+            if (pattern[2] == '2' || pattern[3] == '2') {
                 fail(
-                    "error: $role: family word ${w.uppercase()} " +
-                        "is not a _ _ CCY word"
-                )
-            }
-        }
-        for (w in others) {
-            if (isCcy(w)) {
-                fail(
-                    "error: $role: ${w.uppercase()} doubles its " +
-                        "consonant -- it belongs in the family, " +
-                        "not the others"
+                    "error: $role: ${g.uppercase()} lands a green " +
+                        "at position 3 or 4 on this board " +
+                        "(pattern $pattern) -- a CCY drill board " +
+                        "leaves the doubled consonant to the player"
                 )
             }
         }
@@ -87,26 +89,25 @@ internal fun DeckBuild.buildDoubles() {
                 feedbackString(it, w) == feedbackString(it, answer)
             }
         }.toSet()
-        val named = setOf(answer) + family + others
-        if (candidates != named) {
+        val impure = candidates.filter { !isCcy(it) }
+        if (impure.isNotEmpty()) {
             fail(
-                "error: $role: board's candidate set is " +
-                    pyList(candidates.sorted().map { it.uppercase() }) +
-                    " but the back names " +
-                    pyList(named.sorted().map { it.uppercase() })
+                "error: $role: board's candidate set is not " +
+                    "pure CCY -- non-CCY candidates: " +
+                    pyList(impure.sorted().map { it.uppercase() })
             )
         }
-        var cardText = "$headline <b>${answer.uppercase()}</b>"
-        cardText += if (family.isNotEmpty()) {
+        val family = (candidates - answer).sorted()
+        if (family.isEmpty()) {
+            fail(
+                "error: $role: board's candidate set is just " +
+                    "${answer.uppercase()} -- a doubles board " +
+                    "needs a family"
+            )
+        }
+        val cardText = "$headline <b>${answer.uppercase()}</b>" +
             " &mdash; also " +
-                family.joinToString(", ") { it.uppercase() } + "."
-        } else {
-            "."
-        }
-        if (others.isNotEmpty()) {
-            cardText += " Also consistent: " +
-                others.joinToString(", ") { it.uppercase() } + "."
-        }
+            family.joinToString(", ") { it.uppercase() } + "."
         add(
             role,
             boardFront(answer, guesses, "What's the next guess?"),

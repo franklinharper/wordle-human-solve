@@ -65,15 +65,15 @@ object DeckGenerator {
         // -------------------------------------------------------
         // Assemble.
         //
-        // 101 cards: 13 mnemonic (12 ladder rungs + the full
+        // 103 cards: 13 mnemonic (12 ladder rungs + the full
         // text), 5 chant (4 ladder rungs + full recall), 12
-        // guess-2 table, 17 chant drills, 4 doubles (the before-Y
-        // rule card + 3 boards), 16 ending-pair scan (3
+        // guess-2 table, 17 chant drills, 6 doubles (the before-Y
+        // rule card + 5 boards), 16 ending-pair scan (3
         // first-letter chunk rungs + the first-letters recall +
         // 12 seconds cards), 24 ending-pair drills, 8 placement
         // drills, 1 frame drill, 1 principle drill.
-        if (b.notes.size != 101) {
-            fail("error: deck has ${b.notes.size} notes, expected 101")
+        if (b.notes.size != 103) {
+            fail("error: deck has ${b.notes.size} notes, expected 103")
         }
         return b.notes
     }
