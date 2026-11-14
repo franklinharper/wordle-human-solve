@@ -64,13 +64,13 @@ internal fun DeckBuild.buildPairScan() {
 
     add(
         "pairs:ladder:1",
-        wrap(bodyDiv("What's the first pair of the ending-pair scan?")),
+        wrap(bodyDiv("What's the first group of the ending-pair scan?")),
         wrap(bodyDiv("<b>${firstChunks[0]}</b>")),
     )
     for (k in 1 until firstChunks.size) {
         val (front, back) = ladderPair(
             firstChunks, k,
-            "What's the next chunk of the ending-pair scan?",
+            "What's the next group of the ending-pair scan?",
         )
         add("pairs:ladder:${k + 1}", front, back)
     }
