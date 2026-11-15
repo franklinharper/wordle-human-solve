@@ -15,8 +15,13 @@ internal fun DeckBuild.buildFrame() {
     // actually played CHORE and still solved in 3 — the card
     // teaches the derivation he can run from the seat. The
     // recommended guess is asserted legal on the board, an
-    // answer itself, built by exactly that derivation, and
-    // its feedback leaves TRUCE as the pool's only candidate.
+    // answer itself, and built by exactly that derivation:
+    // R moved, the chant's head O and T around the green E,
+    // and slot 4 filled by running the chant down to the
+    // first letter that completes a recognisable word. The
+    // card is NOT gated on what the board leaves behind —
+    // from the seat you never know how many candidates
+    // remain (Frank's rule; review F2, 2026-11-14).
     run {
         val role = "frame:truce"
         val answer = "truce"
@@ -55,18 +60,23 @@ internal fun DeckBuild.buildFrame() {
                     "${chant[0]} and ${chant[1]}, green E at 5)"
             )
         }
-        val line = guesses + recommended
-        val candidates = pool.filter { w ->
-            line.all {
-                feedbackString(it, w) == feedbackString(it, answer)
-            }
-        }.toSet()
-        if (candidates != setOf(answer)) {
+        // Slot 4, asserted (review F3, 2026-11-14): running
+        // the chant down from the top — past O and T, which
+        // the frame already spends — the letters before P
+        // complete no answer at TRO?E; P is the first that
+        // does. (N and D complete valid guesses, TRONE and
+        // TRODE, but no word you'd know — the back says
+        // exactly that.)
+        val slot4Skips = chant
+            .substring(0, chant.indexOf('P'))
+            .filter { it != chant[0] && it != chant[1] }
+        if (recommended[3] != 'p' ||
+            slot4Skips.any { "tro${it.lowercaseChar()}e" in pool }
+        ) {
             fail(
-                "error: $role: RAISE + ${recommended.uppercase()} " +
-                    "leaves " +
-                    pyList(candidates.sorted().map { it.uppercase() }) +
-                    ", not just ${answer.uppercase()}"
+                "error: $role: slot 4 is not derived — the " +
+                    "chant scan past ${chant[0]} and ${chant[1]} " +
+                    "must reach P first, skipping $slot4Skips"
             )
         }
         add(
@@ -77,7 +87,9 @@ internal fun DeckBuild.buildFrame() {
                     promptDiv(
                         "R must move &mdash; take the chant's head, " +
                             "O and T, and build round the green E: " +
-                            "TRO?E. P completes it."
+                            "TRO?E. Fill the last slot down the " +
+                            "chant: L, N, U, C, Y, H, D make no word " +
+                            "you'd know &mdash; P does."
                     )
             ),
         )

@@ -128,7 +128,10 @@ private suspend fun fetchResponse(client: HttpClient, url: String): HttpResponse
         client.get(url) { header("User-Agent", USER_AGENT) }
     } catch (e: CancellationException) {
         throw e
-    } catch (e: Exception) {
+    } catch (e: IOException) {
+        System.err.println(
+            "  (fetch of $url failed: " +
+                "${e::class.simpleName}: ${e.message})")
         throw NetworkError("could not fetch $url: ${e.message}")
     }
 
@@ -144,7 +147,10 @@ private suspend fun fetchSolution(
         client.get(url) { header("User-Agent", USER_AGENT) }
     } catch (e: CancellationException) {
         throw e
-    } catch (e: Exception) {
+    } catch (e: IOException) {
+        System.err.println(
+            "  (fetch of solution for $dateIso failed: " +
+                "${e::class.simpleName}: ${e.message})")
         throw NetworkError("could not fetch solution for $dateIso: ${e.message}")
     }
     if (resp.status.value == 404) return null

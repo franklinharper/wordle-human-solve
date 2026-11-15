@@ -76,7 +76,7 @@ internal fun DeckBuild.buildPairScan() {
     }
     add(
         "pairs:first-full",
-        wrap(bodyDiv("Recite the ending-pair scan.")),
+        wrap(bodyDiv("Recite the first-letter groups of the ending-pair scan.")),
         wrap(bodyDiv(firstChunksText)),
     )
 
