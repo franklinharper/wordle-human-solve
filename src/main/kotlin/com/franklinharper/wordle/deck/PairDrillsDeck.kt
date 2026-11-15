@@ -21,7 +21,7 @@ internal fun DeckBuild.buildPairDrills() {
     // R at slot 4; PT pins T at slot 5.
     val pairCards = listOf(
         PairCard("pairs:ch", "CH", "torch", listOf("raise", "court")),
-        PairCard("pairs:ck", "CK", "dreck", listOf("raise", "deter")),
+        PairCard("pairs:ck", "CK", "truck", listOf("raise", "court")),
         PairCard("pairs:ng", "NG", "thong", listOf("raise", "cloth")),
         PairCard("pairs:nt", "NT", "blunt", listOf("raise", "cloth")),
         PairCard("pairs:nk", "NK", "drunk", listOf("raise", "court", "gruff")),
