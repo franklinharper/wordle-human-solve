@@ -81,18 +81,86 @@ internal fun DeckBuild.buildPairScan() {
     )
 
     // Stage 2: for each first letter, its second letters.
-    for (first in firstLetters) {
+    // The back also carries examples (Frank, 2026-11-14):
+    // an "E.g" line, then one line per pair with four
+    // example answers — the same format as the triple
+    // scans' backs, so bare letters never sit without
+    // words behind them. The assertions tie the examples
+    // to the answer list: every scanned pair has exactly
+    // four distinct examples, each an answer ending in
+    // that pair, and no pair outside the scan has any.
+    val pairExamples: Map<String, List<String>> = mapOf(
+        "CH" to listOf("batch", "catch", "lunch", "march"),
+        "CK" to listOf("black", "check", "quick", "truck"),
+        "NG" to listOf("along", "bring", "sting", "young"),
+        "NT" to listOf("agent", "count", "front", "plant"),
+        "NK" to listOf("blank", "chunk", "drink", "think"),
+        "ND" to listOf("blind", "found", "grand", "sound"),
+        "ST" to listOf("blast", "first", "ghost", "trust"),
+        "SH" to listOf("brush", "clash", "fresh", "trash"),
+        "SS" to listOf("bless", "class", "dress", "glass"),
+        "TH" to listOf("birth", "cloth", "earth", "month"),
+        "LL" to listOf("chill", "drill", "skill", "still"),
+        "LT" to listOf("adult", "built", "fault", "vault"),
+        "LD" to listOf("build", "child", "field", "world"),
+        "RT" to listOf("alert", "chart", "heart", "sport"),
+        "RD" to listOf("award", "board", "guard", "sword"),
+        "RN" to listOf("acorn", "learn", "mourn", "thorn"),
+        "RK" to listOf("clerk", "quark", "shark", "stork"),
+        "MP" to listOf("blimp", "champ", "stamp", "trump"),
+        "WN" to listOf("brown", "clown", "drown", "grown"),
+        "FF" to listOf("bluff", "cliff", "fluff", "stuff"),
+        "FT" to listOf("craft", "drift", "shift", "swift"),
+        "HT" to listOf("eight", "light", "night", "right"),
+        "PT" to listOf("adept", "crept", "erupt", "slept"),
+        "GH" to listOf("cough", "dough", "laugh", "tough"),
+    )
+    val scannedPairs = pairGroups.flatten().toSet()
+    if (pairExamples.keys != scannedPairs) {
+        fail(
+            "error: pair examples cover ${pairExamples.keys}, " +
+                "but the scan's pairs are $scannedPairs"
+        )
+    }
+    for ((pair, examples) in pairExamples) {
+        if (examples.size != 4 ||
+            examples.toSet().size != 4
+        ) {
+            fail(
+                "error: pairs:seconds: $pair must carry " +
+                    "exactly four distinct examples"
+            )
+        }
+        for (example in examples) {
+            if (example !in answers ||
+                !example.endsWith(pair.lowercase())
+            ) {
+                fail(
+                    "error: pairs:seconds: '$example' is not " +
+                        "an answer ending in $pair"
+                )
+            }
+        }
+    }
+    for ((index, first) in firstLetters.withIndex()) {
         val front = wrap(
             bodyDiv("<b>$first</b>") + bodyDiv(
                 "Which second letters follow it in the " +
                     "ending-pair scan?"
             )
         )
+        val exampleLines = pairGroups[index].joinToString("") {
+            pair ->
+            bodyDiv(
+                "$pair: " + pairExamples.getValue(pair)
+                    .joinToString(", ") { it.uppercase() }
+            )
+        }
         val back = wrap(
             bodyDiv(
                 "<b>" + seconds.getValue(first)
                     .joinToString(" ") + "</b>"
-            )
+            ) + bodyDiv("E.g") + exampleLines
         )
         add("pairs:seconds:${first.lowercaseChar()}", front, back)
     }

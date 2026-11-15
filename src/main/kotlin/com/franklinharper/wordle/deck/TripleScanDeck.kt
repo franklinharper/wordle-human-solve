@@ -20,32 +20,34 @@ internal fun DeckBuild.buildTripleScan() {
     // no scanned pair) — and the assertions tie them to the
     // answer list: every listed triple must close at least
     // two answers at its slot, and every answer-list triple
-    // that does must be listed. Each card's two examples
-    // must be answers carrying the triple at the slot.
+    // that does must be listed. Each card's examples are
+    // answers carrying the triple at the slot: four where
+    // four exist, otherwise the triple's full set (NTH, RST
+    // and MPH close three answers each; RSH and SPL two).
     data class TripleCard(
         val triple: String,
         val examples: List<String>,
     )
 
     val endingTriples = listOf(
-        TripleCard("TCH", listOf("batch", "catch")),
-        TripleCard("NCH", listOf("bench", "lunch")),
-        TripleCard("RCH", listOf("march", "torch")),
-        TripleCard("LCH", listOf("belch", "mulch")),
-        TripleCard("GHT", listOf("light", "ought")),
-        TripleCard("RTH", listOf("earth", "north")),
-        TripleCard("NTH", listOf("month", "ninth")),
-        TripleCard("RST", listOf("first", "worst")),
-        TripleCard("MPH", listOf("lymph", "nymph")),
+        TripleCard("TCH", listOf("batch", "catch", "ditch", "watch")),
+        TripleCard("NCH", listOf("bench", "lunch", "pinch", "ranch")),
+        TripleCard("RCH", listOf("birch", "march", "porch", "torch")),
+        TripleCard("LCH", listOf("belch", "gulch", "mulch", "welch")),
+        TripleCard("GHT", listOf("eight", "light", "night", "ought")),
+        TripleCard("RTH", listOf("birth", "earth", "north", "worth")),
+        TripleCard("NTH", listOf("month", "ninth", "tenth")),
+        TripleCard("RST", listOf("burst", "first", "worst")),
+        TripleCard("MPH", listOf("humph", "lymph", "nymph")),
         TripleCard("RSH", listOf("harsh", "marsh")),
     )
     val openingTriples = listOf(
-        TripleCard("STR", listOf("strip", "strap")),
-        TripleCard("SCR", listOf("scrap", "scrub")),
-        TripleCard("THR", listOf("three", "throw")),
-        TripleCard("SHR", listOf("shred", "shrug")),
-        TripleCard("SPR", listOf("spray", "spree")),
-        TripleCard("SPL", listOf("split", "splat")),
+        TripleCard("STR", listOf("strap", "straw", "strip", "strut")),
+        TripleCard("SCR", listOf("scrap", "screw", "scrub", "scrum")),
+        TripleCard("THR", listOf("three", "threw", "throw", "thrum")),
+        TripleCard("SHR", listOf("shred", "shrew", "shrub", "shrug")),
+        TripleCard("SPR", listOf("spray", "spree", "sprig")),
+        TripleCard("SPL", listOf("splat", "split")),
     )
 
     fun checkScan(
@@ -77,10 +79,22 @@ internal fun DeckBuild.buildTripleScan() {
                         "closes fewer than two answers"
                 )
             }
-            if (card.examples.size != 2) {
+            val expected = minOf(4, words.size)
+            if (card.examples.size != expected ||
+                card.examples.toSet().size != expected
+            ) {
                 fail(
                     "error: triples:$name: ${card.triple} " +
-                        "must carry exactly two examples"
+                        "must carry $expected distinct examples"
+                )
+            }
+            if (words.size < 4 &&
+                card.examples.toSet() != words.toSet()
+            ) {
+                fail(
+                    "error: triples:$name: ${card.triple} " +
+                        "closes fewer than four answers, so " +
+                        "its examples must be the full set"
                 )
             }
             for (example in card.examples) {
@@ -106,12 +120,13 @@ internal fun DeckBuild.buildTripleScan() {
         cards: List<TripleCard>,
     ) {
         fun back(card: TripleCard) = wrap(
-            bodyDiv(
-                "<b>${card.triple}</b>. E.g " +
+            bodyDiv("<b>${card.triple}</b>") +
+                bodyDiv("E.g") +
+                bodyDiv(
                     card.examples.joinToString(", ") {
                         it.uppercase()
                     }
-            )
+                )
         )
         add(
             "$rolePrefix:ladder:1",
