@@ -21,9 +21,10 @@ internal fun DeckBuild.buildTripleScan() {
     // answer list: every listed triple must close at least
     // two answers at its slot, and every answer-list triple
     // that does must be listed. Each card's examples are
-    // answers carrying the triple at the slot: four where
-    // four exist, otherwise the triple's full set (NTH, RST
-    // and MPH close three answers each; RSH and SPL two).
+    // answers carrying the triple at the slot: up to four
+    // examples, the full set where fewer than four exist
+    // (NTH, RST, MPH and SPR close three answers each;
+    // RSH and SPL two).
     data class TripleCard(
         val triple: String,
         val examples: List<String>,
@@ -79,36 +80,16 @@ internal fun DeckBuild.buildTripleScan() {
                         "closes fewer than two answers"
                 )
             }
-            val expected = minOf(4, words.size)
-            if (card.examples.size != expected ||
-                card.examples.toSet().size != expected
-            ) {
-                fail(
-                    "error: triples:$name: ${card.triple} " +
-                        "must carry $expected distinct examples"
-                )
-            }
-            if (words.size < 4 &&
-                card.examples.toSet() != words.toSet()
-            ) {
-                fail(
-                    "error: triples:$name: ${card.triple} " +
-                        "closes fewer than four answers, so " +
-                        "its examples must be the full set"
-                )
-            }
-            for (example in card.examples) {
-                if (example !in answers ||
-                    example.substring(start, start + 3) !=
-                    card.triple.lowercase()
-                ) {
-                    fail(
-                        "error: triples:$name: '$example' is " +
-                            "not an answer carrying ${card.triple} " +
-                            "at that slot"
-                    )
-                }
-            }
+            checkExamples(
+                "triples:$name: ${card.triple}",
+                card.examples,
+                words,
+                {
+                    it.substring(start, start + 3) ==
+                        card.triple.lowercase()
+                },
+                "an answer carrying ${card.triple} at that slot",
+            )
         }
     }
     checkScan("end", endingTriples, 2)
@@ -119,14 +100,13 @@ internal fun DeckBuild.buildTripleScan() {
         scanName: String,
         cards: List<TripleCard>,
     ) {
-        fun back(card: TripleCard) = wrap(
-            bodyDiv("<b>${card.triple}</b>") +
-                bodyDiv("E.g") +
-                bodyDiv(
-                    card.examples.joinToString(", ") {
-                        it.uppercase()
-                    }
-                )
+        fun back(card: TripleCard) = examplesBack(
+            "<b>${card.triple}</b>",
+            listOf(
+                card.examples.joinToString(", ") {
+                    it.uppercase()
+                }
+            ),
         )
         add(
             "$rolePrefix:ladder:1",
@@ -160,6 +140,15 @@ internal fun DeckBuild.buildTripleScan() {
     ladder("triples:end", "ending-triple", endingTriples)
     ladder("triples:open", "opening-triple", openingTriples)
 
+    // The procedure both trigger backs teach, in
+    // strategy.md's words: skip the triples a dead letter
+    // kills, and when no triple produces a word, fall back
+    // to the chant (review F3, 2026-11-15 — the ending
+    // trigger had only the skip, the opening neither).
+    val tripleProcedure =
+        "Skip any triple containing a letter already " +
+            "known dead; if no triple produces a word, " +
+            "fall back to the chant, slot by slot."
     add(
         "triples:end:trigger",
         wrap(
@@ -172,7 +161,7 @@ internal fun DeckBuild.buildTripleScan() {
             bodyDiv(
                 "The ending-triple scan — " +
                     endingTriples.joinToString(", ") { it.triple } +
-                    ". Skip any triple holding a dead letter."
+                    ". " + tripleProcedure
             )
         ),
     )
@@ -188,7 +177,7 @@ internal fun DeckBuild.buildTripleScan() {
             bodyDiv(
                 "The opening-triple scan — " +
                     openingTriples.joinToString(", ") { it.triple } +
-                    "."
+                    ". " + tripleProcedure
             )
         ),
     )

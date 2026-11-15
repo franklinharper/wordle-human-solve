@@ -101,6 +101,67 @@ internal class DeckBuild(val repoRoot: Path) {
     }
 
     /**
+     * The example check both scan decks share (Frank's
+     * format, 2026-11-14; hoisted 2026-11-15, review F2):
+     * a card's examples are distinct answers carrying its
+     * pattern — exactly min(4, how many answers carry it)
+     * of them, and the full set when fewer than four
+     * answers carry it. [candidates] is every answer
+     * carrying the pattern; [carries] tests one word;
+     * [notCarrying] phrases the failure ("an answer ending
+     * in CH", "an answer carrying TCH at that slot").
+     */
+    fun checkExamples(
+        label: String,
+        examples: List<String>,
+        candidates: Collection<String>,
+        carries: (String) -> Boolean,
+        notCarrying: String,
+    ) {
+        val expected = minOf(4, candidates.size)
+        if (examples.size != expected ||
+            examples.toSet().size != expected
+        ) {
+            fail(
+                "error: $label must carry $expected " +
+                    "distinct examples"
+            )
+        }
+        if (candidates.size < 4 &&
+            examples.toSet() != candidates.toSet()
+        ) {
+            fail(
+                "error: $label closes fewer than four " +
+                    "answers, so its examples must be the " +
+                    "full set"
+            )
+        }
+        for (example in examples) {
+            if (example !in answers || !carries(example)) {
+                fail(
+                    "error: $label: '$example' is not " +
+                        notCarrying
+                )
+            }
+        }
+    }
+
+    /**
+     * A scan back in the agreed shape (Frank, 2026-11-14):
+     * the recalled item, an "E.g" line, then one line per
+     * example group. Shared by the pair scan's stage 2 and
+     * the triple ladders, so the two cannot drift apart
+     * (review F2, 2026-11-15).
+     */
+    fun examplesBack(
+        headerHtml: String,
+        exampleLines: List<String>,
+    ): String = wrap(
+        bodyDiv(headerHtml) + bodyDiv("E.g") +
+            exampleLines.joinToString("") { bodyDiv(it) }
+    )
+
+    /**
      * The board checks every drill line shares: the answer
      * and every guess are answer-list words, and every
      * guess after the first is a legal hard-mode guess

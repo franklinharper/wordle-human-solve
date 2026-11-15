@@ -66,7 +66,9 @@ internal fun DeckBuild.buildFrame() {
         // complete no answer at TRO?E; P is the first that
         // does. (N and D complete valid guesses, TRONE and
         // TRODE, but no word you'd know — the back says
-        // exactly that.)
+        // exactly that.) The back's skip list is built from
+        // slot4Skips itself, so the text cannot drift from
+        // this assertion (review F2, 2026-11-15).
         val slot4Skips = chant
             .substring(0, chant.indexOf('P'))
             .filter { it != chant[0] && it != chant[1] }
@@ -88,8 +90,13 @@ internal fun DeckBuild.buildFrame() {
                         "R must move &mdash; take the chant's head, " +
                             "O and T, and build round the green E: " +
                             "TRO?E. Fill the last slot down the " +
-                            "chant: L, N, U, C, Y, H, D make no word " +
-                            "you'd know &mdash; P does."
+                            "chant: " +
+                            slot4Skips.toList()
+                                .joinToString(", ") {
+                                    it.uppercase()
+                                } +
+                            " make no word you'd know " +
+                            "&mdash; P does."
                     )
             ),
         )

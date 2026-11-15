@@ -30,7 +30,8 @@ import java.nio.file.Path
  *    principle picks, not a unique completion.
  * 11. The triple scans: the three-consonant runs that stall
  *    generation, as two ladders (endings, openings) whose
- *    backs name one triple with two example answers, plus a
+ *    backs name one triple with up to four example answers
+ *    — the full set where fewer than four exist — plus a
  *    recite and a trigger card per scan.
  *
  * Each family is built by a builder function on [DeckBuild] in

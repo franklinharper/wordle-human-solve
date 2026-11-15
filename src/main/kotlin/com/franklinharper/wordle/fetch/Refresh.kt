@@ -122,18 +122,32 @@ private fun newClient(): HttpClient = HttpClient(CIO) {
     }
 }
 
-/** Fetch a URL's response. Transport problems -> [NetworkError]. */
-private suspend fun fetchResponse(client: HttpClient, url: String): HttpResponse =
+/**
+ * GET [url] for [what]. Transport problems are logged with
+ * their type and message, then wrapped in [NetworkError];
+ * anything unexpected propagates. The one fetch wrapper —
+ * every GET in this file goes through it, so the log format
+ * cannot drift between call sites (review F1, 2026-11-15).
+ */
+private suspend fun fetchOrThrow(
+    client: HttpClient,
+    url: String,
+    what: String,
+): HttpResponse =
     try {
         client.get(url) { header("User-Agent", USER_AGENT) }
     } catch (e: CancellationException) {
         throw e
     } catch (e: IOException) {
         System.err.println(
-            "  (fetch of $url failed: " +
+            "  (fetch of $what failed: " +
                 "${e::class.simpleName}: ${e.message})")
-        throw NetworkError("could not fetch $url: ${e.message}")
+        throw NetworkError("could not fetch $what: ${e.message}")
     }
+
+/** Fetch a URL's response. Transport problems -> [NetworkError]. */
+private suspend fun fetchResponse(client: HttpClient, url: String): HttpResponse =
+    fetchOrThrow(client, url, url)
 
 private data class Solution(val word: String?, val daysSinceLaunch: Int?)
 
@@ -143,16 +157,7 @@ private suspend fun fetchSolution(
     dateIso: String,
 ): Solution? {
     val url = solutionUrlTemplate.replace("{date}", dateIso)
-    val resp = try {
-        client.get(url) { header("User-Agent", USER_AGENT) }
-    } catch (e: CancellationException) {
-        throw e
-    } catch (e: IOException) {
-        System.err.println(
-            "  (fetch of solution for $dateIso failed: " +
-                "${e::class.simpleName}: ${e.message})")
-        throw NetworkError("could not fetch solution for $dateIso: ${e.message}")
-    }
+    val resp = fetchOrThrow(client, url, "solution for $dateIso")
     if (resp.status.value == 404) return null
     if (resp.status.value != 200) {
         throw NetworkError(

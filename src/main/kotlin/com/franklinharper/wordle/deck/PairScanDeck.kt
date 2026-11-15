@@ -123,24 +123,13 @@ internal fun DeckBuild.buildPairScan() {
         )
     }
     for ((pair, examples) in pairExamples) {
-        if (examples.size != 4 ||
-            examples.toSet().size != 4
-        ) {
-            fail(
-                "error: pairs:seconds: $pair must carry " +
-                    "exactly four distinct examples"
-            )
-        }
-        for (example in examples) {
-            if (example !in answers ||
-                !example.endsWith(pair.lowercase())
-            ) {
-                fail(
-                    "error: pairs:seconds: '$example' is not " +
-                        "an answer ending in $pair"
-                )
-            }
-        }
+        checkExamples(
+            "pairs:seconds: $pair",
+            examples,
+            answers.filter { it.endsWith(pair.lowercase()) },
+            { it.endsWith(pair.lowercase()) },
+            "an answer ending in $pair",
+        )
     }
     for ((index, first) in firstLetters.withIndex()) {
         val front = wrap(
@@ -149,18 +138,13 @@ internal fun DeckBuild.buildPairScan() {
                     "ending-pair scan?"
             )
         )
-        val exampleLines = pairGroups[index].joinToString("") {
-            pair ->
-            bodyDiv(
+        val back = examplesBack(
+            "<b>" + seconds.getValue(first)
+                .joinToString(" ") + "</b>",
+            pairGroups[index].map { pair ->
                 "$pair: " + pairExamples.getValue(pair)
                     .joinToString(", ") { it.uppercase() }
-            )
-        }
-        val back = wrap(
-            bodyDiv(
-                "<b>" + seconds.getValue(first)
-                    .joinToString(" ") + "</b>"
-            ) + bodyDiv("E.g") + exampleLines
+            },
         )
         add("pairs:seconds:${first.lowercaseChar()}", front, back)
     }
