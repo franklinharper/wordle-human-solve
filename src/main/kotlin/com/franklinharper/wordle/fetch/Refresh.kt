@@ -145,10 +145,6 @@ private suspend fun fetchOrThrow(
         throw NetworkError("could not fetch $what: ${e.message}")
     }
 
-/** Fetch a URL's response. Transport problems -> [NetworkError]. */
-private suspend fun fetchResponse(client: HttpClient, url: String): HttpResponse =
-    fetchOrThrow(client, url, url)
-
 private data class Solution(val word: String?, val daysSinceLaunch: Int?)
 
 /** One day's solution, or null when not published yet (HTTP 404). */
@@ -248,7 +244,7 @@ private fun loadCurrent(repoRoot: Path): CurrentLists {
 suspend fun refreshGuesses(repoRoot: Path): GuessesSummary {
     val client = newClient()
     try {
-        val pageResp = fetchResponse(client, wordleUrl)
+        val pageResp = fetchOrThrow(client, wordleUrl, wordleUrl)
         if (pageResp.status.value != 200) {
             throw NetworkError(
                 "NYT Wordle page returned HTTP ${pageResp.status.value}")
@@ -271,7 +267,7 @@ suspend fun refreshGuesses(repoRoot: Path): GuessesSummary {
         }
         val candidates = mutableListOf<List<String>>()
         for (url in scriptUrls) {
-            val resp = fetchResponse(client, url)
+            val resp = fetchOrThrow(client, url, url)
             if (resp.status.value != 200) {
                 throw NetworkError(
                     "script returned HTTP ${resp.status.value}")

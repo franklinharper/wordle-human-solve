@@ -82,13 +82,15 @@ internal fun DeckBuild.buildPairScan() {
 
     // Stage 2: for each first letter, its second letters.
     // The back also carries examples (Frank, 2026-11-14):
-    // an "E.g" line, then one line per pair with four
-    // example answers — the same format as the triple
-    // scans' backs, so bare letters never sit without
-    // words behind them. The assertions tie the examples
-    // to the answer list: every scanned pair has exactly
-    // four distinct examples, each an answer ending in
-    // that pair, and no pair outside the scan has any.
+    // an "E.g" line, then one line per pair with up to
+    // four example answers — the full set where fewer
+    // than four answers end in the pair, the same rule
+    // as the triple scans (the shared checkExamples
+    // enforces it for both; today every scanned pair
+    // closes at least nine answers, so all carry four).
+    // The same format as the triple scans' backs, so
+    // bare letters never sit without words behind them,
+    // and no pair outside the scan has examples.
     val pairExamples: Map<String, List<String>> = mapOf(
         "CH" to listOf("batch", "catch", "lunch", "march"),
         "CK" to listOf("black", "check", "quick", "truck"),
