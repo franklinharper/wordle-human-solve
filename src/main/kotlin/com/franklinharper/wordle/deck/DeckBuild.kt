@@ -1,5 +1,6 @@
 package com.franklinharper.wordle.deck
 
+import com.franklinharper.wordle.core.loadAllGuesses
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -39,6 +40,15 @@ internal class DeckBuild(val repoRoot: Path) {
     // its board's unique completion precisely because the
     // list did not contain it).
     val pool: Set<String> by lazy { answers + setOf("dreck", "parch") }
+
+    // Every word the game accepts as a guess, from the
+    // fetched guess list: the list the game itself enforces
+    // at entry, so it — unlike the answer list — is
+    // authoritative for what can be played (Frank,
+    // 2026-11-16).
+    val allGuesses: Set<String> by lazy {
+        loadAllGuesses(repoRoot).map { it.value }.toSet()
+    }
 
     val tableRows = listOf(
         Triple("00000", "cloth", "C, L, O, T, H"),

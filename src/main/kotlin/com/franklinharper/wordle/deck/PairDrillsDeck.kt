@@ -19,6 +19,15 @@ internal fun DeckBuild.buildPairDrills() {
     // from RAISE itself — those patterns are untabled, so
     // their guess 2 is an S-word probe; RT, RD, RN and RK pin
     // R at slot 4; PT pins T at slot 5.
+    //
+    // The uniqueness above holds over the pool. The back
+    // also names every other word on the guess list the
+    // board admits ("— also …"), derived from the guess
+    // list: possible solutions from the player's seat
+    // (Frank, 2026-11-16) — the guess list is what the
+    // game enforces, and the answer list is not
+    // authoritative, so a board can admit playable words
+    // beyond its pool answer.
     val pairCards = listOf(
         PairCard("pairs:ch", "CH", "torch", listOf("raise", "court")),
         PairCard("pairs:ck", "CK", "truck", listOf("raise", "court")),
@@ -133,10 +142,23 @@ internal fun DeckBuild.buildPairDrills() {
                     "own line pins it"
             )
         }
+        val alsoFits = allGuesses.filter { w ->
+            w != answer && guesses.all {
+                feedbackString(it, w) == feedbackString(it, answer)
+            }
+        }.sorted()
+        val backText = "<b>$pair</b> &mdash; ${answer.uppercase()}" +
+            if (alsoFits.isEmpty()) {
+                ""
+            } else {
+                " &mdash; also " +
+                    alsoFits.joinToString(", ") { it.uppercase() } +
+                    "."
+            }
         add(
             role,
             boardFront(answer, guesses, "What's the next guess?"),
-            wrap(bodyDiv("<b>$pair</b> &mdash; ${answer.uppercase()}")),
+            wrap(bodyDiv(backText)),
         )
     }
 }

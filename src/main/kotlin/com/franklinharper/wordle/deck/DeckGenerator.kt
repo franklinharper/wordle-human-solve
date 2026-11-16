@@ -18,7 +18,8 @@ import java.nio.file.Path
  *    first letters in three chunks (CNST - LRMW - FHPG) as a
  *    ladder, then each first letter's second letters.
  * 7. Ending-pair drills: boards whose only consistent completion
- *    ends in the card's pair.
+ *    over the candidate pool ends in the card's pair; the back
+ *    also names any other guess-list words the board admits.
  * 8. Placement drills: boards holding three floating yellows
  *    after RAISE and the table word, with no green tile.
  * 9. Frame drills: an untabled RAISE board whose lesson is a
