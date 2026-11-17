@@ -5,6 +5,7 @@ internal data class DoublesCard(
     val answer: String,
     val guesses: List<String>,
     val headline: String,
+    val bystander: String? = null,
 )
 
 internal fun DeckBuild.buildDoubles() {
@@ -25,6 +26,15 @@ internal fun DeckBuild.buildDoubles() {
     // first N green). The back's family is derived, not
     // listed: the board's computed candidate set minus the
     // answer, alphabetically.
+    //
+    // A card may also name a bystander (Frank, 2026-11-16):
+    // a playable word that fits the board and retires
+    // several fresh letters, yet is a poor guess because
+    // none of its fresh letters can be the double — it
+    // scores the same against every candidate, so it
+    // splits nothing and cannot solve. Every clause of
+    // that claim is asserted below, so the note cannot
+    // drift from the board it sits on.
     add(
         "doubles:rule",
         wrap(bodyDiv("When a word ends in Y, what's the most likely shape?")),
@@ -50,6 +60,7 @@ internal fun DeckBuild.buildDoubles() {
             "doubles:happy", "happy",
             listOf("raise", "tangy", "bawdy"),
             "Double the P:",
+            bystander = "lacky",
         ),
         DoublesCard(
             "doubles:bunny", "bunny",
@@ -68,7 +79,8 @@ internal fun DeckBuild.buildDoubles() {
         ),
     )
 
-    for ((role, answer, guesses, headline) in doublesCards) {
+    for ((role, answer, guesses, headline, bystander)
+        in doublesCards) {
         validateLine(role, answer, guesses)
         val tableWord = table[feedbackString("raise", answer)]
         if (guesses.size < 2 || guesses[1] != tableWord) {
@@ -121,10 +133,78 @@ internal fun DeckBuild.buildDoubles() {
         val cardText = "$headline <b>${answer.uppercase()}</b>" +
             " &mdash; also " +
             family.joinToString(", ") { it.uppercase() } + "."
+        var back = bodyDiv(cardText)
+        if (bystander != null) {
+            if (bystander !in allGuesses) {
+                fail(
+                    "error: $role: bystander " +
+                        "${bystander.uppercase()} is not a " +
+                        "valid guess"
+                )
+            }
+            if (!guesses.all {
+                    feedbackString(it, bystander) ==
+                        feedbackString(it, answer)
+                }
+            ) {
+                fail(
+                    "error: $role: bystander " +
+                        "${bystander.uppercase()} does not " +
+                        "fit the board"
+                )
+            }
+            if (bystander in candidates) {
+                fail(
+                    "error: $role: bystander " +
+                        "${bystander.uppercase()} is in the " +
+                        "board's candidate set -- it could " +
+                        "be the answer"
+                )
+            }
+            if (candidates.map {
+                    feedbackString(bystander, it)
+                }.distinct().size != 1
+            ) {
+                fail(
+                    "error: $role: bystander " +
+                        "${bystander.uppercase()} does not " +
+                        "score the same against every " +
+                        "candidate -- it does split the family"
+                )
+            }
+            val boardLetters = guesses.flatMap { it.toList() }
+                .toSet()
+            val fresh = bystander.toList().distinct()
+                .filter { it !in boardLetters }
+            val doubles = candidates.map { it[2] }.toSet()
+            if (fresh.size < 2 || fresh.any { it in doubles }) {
+                fail(
+                    "error: $role: bystander " +
+                        "${bystander.uppercase()}: fresh " +
+                        "letters ${fresh} -- the note needs " +
+                        "several fresh letters, none of them " +
+                        "a candidate double $doubles"
+                )
+            }
+            val freshText = fresh.dropLast(1)
+                .joinToString(", ") { it.uppercase().toString() } +
+                " and " + fresh.last().uppercase()
+            val candidateText = candidates.sorted().dropLast(1)
+                .joinToString(", ") { it.uppercase() } +
+                " and " + candidates.sorted().last().uppercase()
+            back += bodyDiv(
+                "${bystander.uppercase()} fits &mdash; " +
+                    "$freshText are all fresh &mdash; but " +
+                    "none can be the double. It scores the " +
+                    "same against $candidateText, so it " +
+                    "splits nothing and cannot solve. " +
+                    "Guess a double."
+            )
+        }
         add(
             role,
             boardFront(answer, guesses, "What's the next guess?"),
-            wrap(bodyDiv(cardText)),
+            wrap(back),
         )
     }
 }
