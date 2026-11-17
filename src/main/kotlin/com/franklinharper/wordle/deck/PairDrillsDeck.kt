@@ -13,9 +13,13 @@ internal fun DeckBuild.buildPairDrills() {
     //
     // Construction rules, all asserted: guess 2 is the
     // mnemonic's table word; every board carries at least one
-    // green and one yellow somewhere; and at slots 4-5 at most
+    // green and one yellow somewhere; at slots 4-5 at most
     // one letter of the pair may be green, and only where the
-    // system's own line pins it. ST, SH and SS pin S at slot 4
+    // system's own line pins it; and the board must cue the
+    // pair it trains — at least one letter of the pair shows
+    // yellow or green somewhere on the board (Frank's cue
+    // criterion, 2026-11-15; asserted since review F5,
+    // 2026-11-16). ST, SH and SS pin S at slot 4
     // from RAISE itself — those patterns are untabled, so
     // their guess 2 is an S-word probe; RT, RD, RN and RK pin
     // R at slot 4; PT pins T at slot 5.
@@ -124,6 +128,21 @@ internal fun DeckBuild.buildPairDrills() {
                 "error: $role: board has $greens greens and " +
                     "$yellows yellows -- every drill board needs " +
                     "at least one of each"
+            )
+        }
+        val pairLetters = pair.lowercase().toSet()
+        val cued = guesses.indices.any { gi ->
+            guesses[gi].indices.any { pos ->
+                guesses[gi][pos] in pairLetters &&
+                    rows[gi][pos] != 0
+            }
+        }
+        if (!cued) {
+            fail(
+                "error: $role: no letter of $pair shows " +
+                    "yellow or green on this board -- a " +
+                    "pair drill's board must cue the pair " +
+                    "it trains"
             )
         }
         val green45 = guesses.indices.flatMap { gi ->

@@ -1,7 +1,5 @@
 package com.franklinharper.wordle.deck
 
-import com.franklinharper.wordle.core.loadAllGuesses
-
 internal fun DeckBuild.buildPrinciple() {
     // -------------------------------------------------------
     // 11. Principle drills: buy information with fresh
@@ -26,9 +24,7 @@ internal fun DeckBuild.buildPrinciple() {
         val boardAnswer = "dizzy"
         val guesses = listOf("raise", "pilot", "dingy")
         val recommended = "dicky"
-        val validGuesses =
-            loadAllGuesses(repoRoot).map { it.value }.toSet()
-        if (recommended !in validGuesses) {
+        if (recommended !in allGuesses) {
             fail(
                 "error: $role: '$recommended' is not a " +
                     "valid guess"

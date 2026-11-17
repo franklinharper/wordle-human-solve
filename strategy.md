@@ -127,6 +127,16 @@ no table word carries S at slot 4, so those games have no
 mnemonic guess 2 — probe with an S-word instead (STASH, AMASS,
 BLAST).
 
+The deck's pair drills add two rules of their own. A drill board
+must cue the pair it trains: at least one letter of the pair
+shows yellow or green on the board — an ending reachable only by
+exhaustive elimination trains nothing. And while a drill's
+answer is the board's only completion over the candidate pool,
+the board can admit other words from the guess list; the drill
+names them on its back ("— also …"), because from the seat they
+are possible solutions too — the guess list is what the game
+enforces, and the answer list is a snapshot, not a boundary.
+
 **The triple scans.** When three slots in a row are all
 consonants — the shape that stalls generation — don't
 free-associate; run the triple scan for that end of the word.
@@ -192,6 +202,21 @@ further afield.
 The sharpest case is a word ending in Y: 28% of Y-ending answers are
 _ _ CCY — the consonant before the Y doubles (CANNY, TALLY, NUTTY).
 With Y pinned at 5, reach for that shape early.
+
+But the two slots before the Y are a pair in their own right,
+scanned the way the ending-pair scan scans slots 4–5 — and the
+pair is usually mixed: 72% of Y-ending answers carry two
+different consonants there, not a double. On an open Y-frame,
+default to two different consonants in those slots: the play
+tests two letters instead of one and can solve just as well.
+Play the double when it is a live candidate, not by default.
+The limiting case is the old HAPPY board (RAISE / TANGY /
+BAWDY): its completions over the answer list are all doubles —
+HAPPY, JAZZY, MAMMY — yet its best play is CAMPY, a mixed pair
+that can itself be the answer and whose feedback names every
+double. And a board that drills the CCY shape must admit no
+plausible mixed-pair word: purity is judged over the guess
+list, not the answer list alone.
 
 ---
 

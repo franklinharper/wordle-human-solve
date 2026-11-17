@@ -26,12 +26,14 @@ internal fun DeckBuild.buildPairFrame() {
     // (the three doubles and CAMPY), CAMPY is the only
     // one whose feedback splits the whole set — every
     // double merges two of the others. LACKY is the foil,
-    // carried over from the old
-    // card: it fits and tests three fresh letters, none of
-    // them a candidate double, but it is not in the pool
-    // (a nonstandard spelling of LACKEY) and scores the
-    // same against all three doubles — it splits nothing
-    // and cannot solve.
+    // carried over from the old card: it fits and tests
+    // three fresh letters, none of them a candidate
+    // double, but it is no plausible answer — LACKEY is
+    // the standard spelling, so the five-letter form is
+    // not a word the game would set; the pool's silence
+    // is evidence of that, not the criterion (review F3,
+    // 2026-11-16) — and it scores the same against all
+    // three doubles, so it splits nothing.
     run {
         val role = "pairframe:campy"
         val boardAnswer = "happy"
@@ -77,13 +79,6 @@ internal fun DeckBuild.buildPairFrame() {
             fail(
                 "error: $role: ${play.uppercase()} is not " +
                     "a valid guess"
-            )
-        }
-        if (play in pool) {
-            fail(
-                "error: $role: ${play.uppercase()} is in " +
-                    "the candidate pool -- the pair-frame " +
-                    "play is the live word the pool misses"
             )
         }
         if (!guesses.all {
@@ -137,101 +132,12 @@ internal fun DeckBuild.buildPairFrame() {
         }
 
         // The decode on the back is derived from the play's
-        // actual feedback: each double but one shows a
-        // green in exactly one pair slot, naming the play's
-        // letter there; the remaining double is the
-        // "neither" case.
-        val decode = mutableListOf<String>()
-        var neither: String? = null
-        for (w in candidates.sorted()) {
-            val pattern = feedbackString(play, w)
-            val greenSlots = (2..3).filter { pattern[it] == '2' }
-            if (greenSlots.isEmpty()) {
-                if (neither != null) {
-                    fail(
-                        "error: $role: two candidates " +
-                            "show no pair-slot green against " +
-                            "${play.uppercase()} -- the " +
-                            "decode has no single 'neither' " +
-                            "case"
-                    )
-                }
-                neither = w
-            } else {
-                if (greenSlots.size != 1) {
-                    fail(
-                        "error: $role: ${w.uppercase()} " +
-                            "shows pair-slot greens at " +
-                            "$greenSlots against " +
-                            "${play.uppercase()} -- the " +
-                            "decode names one slot per word"
-                    )
-                }
-                val slot = greenSlots.single()
-                decode += "${play[slot].uppercase()} green " +
-                    "at ${slot + 1} means ${w.uppercase()}"
-            }
-        }
-        if (neither == null) {
-            fail(
-                "error: $role: every candidate shows a " +
-                    "pair-slot green against " +
-                    "${play.uppercase()} -- the decode " +
-                    "needs a 'neither' case"
-            )
-        }
-        val decodeText = decode.joinToString("; ") +
-            "; neither means ${neither.uppercase()}"
-
-        // The foil: playable, fits the board, outside the
-        // pool, and scores the same against every candidate.
-        if (foil !in allGuesses) {
-            fail(
-                "error: $role: foil ${foil.uppercase()} " +
-                    "is not a valid guess"
-            )
-        }
-        if (!guesses.all {
-                feedbackString(it, foil) ==
-                    feedbackString(it, boardAnswer)
-            }
-        ) {
-            fail(
-                "error: $role: foil ${foil.uppercase()} " +
-                    "does not fit the board"
-            )
-        }
-        if (foil in pool) {
-            fail(
-                "error: $role: foil ${foil.uppercase()} " +
-                    "is in the candidate pool -- it could " +
-                    "be the answer"
-            )
-        }
-        if (candidates.map {
-                feedbackString(foil, it)
-            }.distinct().size != 1
-        ) {
-            fail(
-                "error: $role: foil ${foil.uppercase()} " +
-                    "does not score the same against " +
-                    "every candidate -- it does split " +
-                    "the family"
-            )
-        }
-        val boardLetters = guesses.flatMap { it.toList() }
-            .toSet()
-        val fresh = foil.toList().distinct()
-            .filter { it !in boardLetters }
-        val doubles = candidates.map { it[2] }.toSet()
-        if (fresh.size < 2 || fresh.any { it in doubles }) {
-            fail(
-                "error: $role: foil ${foil.uppercase()}: " +
-                    "fresh letters $fresh -- the note needs " +
-                    "several fresh letters, none of them " +
-                    "a candidate double $doubles"
-            )
-        }
+        // actual feedback (DeckBuild.pairFrameDecode), and
+        // the foil is checked by DeckBuild.checkPairFrameFoil.
+        val decodeText = pairFrameDecode(role, play, candidates)
+        checkPairFrameFoil(
+            role, foil, guesses, boardAnswer, candidates
+        )
 
         val doublesPairs = candidates
             .map { it.substring(2, 4).uppercase() }
@@ -245,8 +151,9 @@ internal fun DeckBuild.buildPairFrame() {
                 "be the answer, and it is the only one of " +
                 "the four that splits them all. " +
                 "${foil.uppercase()} " +
-                "fits too, but it can never be the answer " +
-                "and splits nothing."
+                "fits too, but it is not a plausible " +
+                "answer — outside the candidate pool — " +
+                "and it splits nothing."
         )
         add(
             role,

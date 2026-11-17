@@ -197,4 +197,127 @@ internal class DeckBuild(val repoRoot: Path) {
             }
         }
     }
+
+    /**
+     * The pair-frame decode (PairFrameDeck): the sentence
+     * naming what each of the play's outcomes means, derived
+     * from its actual feedback against the candidates —
+     * every candidate but one shows a green in exactly one
+     * pair slot (slots 3-4), naming the play's letter there;
+     * the remaining candidate is the "neither" case. Fails
+     * loudly when the feedback does not have that shape.
+     */
+    fun pairFrameDecode(
+        role: String,
+        play: String,
+        candidates: Set<String>,
+    ): String {
+        val decode = mutableListOf<String>()
+        var neither: String? = null
+        for (w in candidates.sorted()) {
+            val pattern = feedbackString(play, w)
+            val greenSlots = (2..3).filter { pattern[it] == '2' }
+            if (greenSlots.isEmpty()) {
+                if (neither != null) {
+                    fail(
+                        "error: $role: two candidates " +
+                            "show no pair-slot green against " +
+                            "${play.uppercase()} -- the " +
+                            "decode has no single 'neither' " +
+                            "case"
+                    )
+                }
+                neither = w
+            } else {
+                if (greenSlots.size != 1) {
+                    fail(
+                        "error: $role: ${w.uppercase()} " +
+                            "shows pair-slot greens at " +
+                            "$greenSlots against " +
+                            "${play.uppercase()} -- the " +
+                            "decode names one slot per word"
+                    )
+                }
+                val slot = greenSlots.single()
+                decode += "${play[slot].uppercase()} green " +
+                    "at ${slot + 1} means ${w.uppercase()}"
+            }
+        }
+        if (neither == null) {
+            fail(
+                "error: $role: every candidate shows a " +
+                    "pair-slot green against " +
+                    "${play.uppercase()} -- the decode " +
+                    "needs a 'neither' case"
+            )
+        }
+        return decode.joinToString("; ") +
+            "; neither means ${neither.uppercase()}"
+    }
+
+    /**
+     * The pair-frame foil checks (PairFrameDeck): the foil
+     * is a playable word that fits the board and tests
+     * several fresh letters, none of them a candidate
+     * double, yet is no plausible answer — the pool check
+     * below is the mechanical guard; the plausibility
+     * itself is a property of the word, recorded on the
+     * card — and it scores the same against every
+     * candidate, so it splits nothing.
+     */
+    fun checkPairFrameFoil(
+        role: String,
+        foil: String,
+        guesses: List<String>,
+        boardAnswer: String,
+        candidates: Set<String>,
+    ) {
+        if (foil !in allGuesses) {
+            fail(
+                "error: $role: foil ${foil.uppercase()} " +
+                    "is not a valid guess"
+            )
+        }
+        if (!guesses.all {
+                feedbackString(it, foil) ==
+                    feedbackString(it, boardAnswer)
+            }
+        ) {
+            fail(
+                "error: $role: foil ${foil.uppercase()} " +
+                    "does not fit the board"
+            )
+        }
+        if (foil in pool) {
+            fail(
+                "error: $role: foil ${foil.uppercase()} " +
+                    "is in the candidate pool -- it could " +
+                    "be the answer"
+            )
+        }
+        if (candidates.map {
+                feedbackString(foil, it)
+            }.distinct().size != 1
+        ) {
+            fail(
+                "error: $role: foil ${foil.uppercase()} " +
+                    "does not score the same against " +
+                    "every candidate -- it does split " +
+                    "the family"
+            )
+        }
+        val boardLetters = guesses.flatMap { it.toList() }
+            .toSet()
+        val fresh = foil.toList().distinct()
+            .filter { it !in boardLetters }
+        val doubles = candidates.map { it[2] }.toSet()
+        if (fresh.size < 2 || fresh.any { it in doubles }) {
+            fail(
+                "error: $role: foil ${foil.uppercase()}: " +
+                    "fresh letters $fresh -- the note needs " +
+                    "several fresh letters, none of them " +
+                    "a candidate double $doubles"
+            )
+        }
+    }
 }
