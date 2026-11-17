@@ -2,7 +2,7 @@ package com.franklinharper.wordle.deck
 
 internal fun DeckBuild.buildTripleScan() {
     // -------------------------------------------------------
-    // 11. The triple scans (Frank's grill, 2026-11-14).
+    // 12. The triple scans (Frank's grill, 2026-11-14).
     //
     // Three consonants in a row are where Frank's generation
     // stalls, so the scan turns that shape into a procedure,

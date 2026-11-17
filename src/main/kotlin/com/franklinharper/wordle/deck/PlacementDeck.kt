@@ -9,7 +9,7 @@ internal data class PlacementCard(
 
 internal fun DeckBuild.buildPlacement() {
     // -------------------------------------------------------
-    // 8. Placement drills: three floating yellows.
+    // 9. Placement drills: three floating yellows.
     //
     // Each board is frozen at the LOAMY moment: three distinct
     // yellow letters, no green tile anywhere, and a candidate

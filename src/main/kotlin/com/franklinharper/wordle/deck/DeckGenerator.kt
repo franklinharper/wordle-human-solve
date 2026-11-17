@@ -14,22 +14,28 @@ import java.nio.file.Path
  *    word, then answer-list words) asking for the first chant
  *    letter still untested, and the rest of the chant from there.
  * 5. Doubles: the doubled-consonant-before-Y rule and its boards.
- * 6. The ending-pair scan, memorized in two stages: the twelve
+ * 6. Pair-frame drills: a Y-ending board whose pool
+ *    completions are all doubles, where the best play is
+ *    the mixed-pair word that can itself be the answer and
+ *    cross-examines every double — the pair before the Y
+ *    is scanned like an ending pair, and it is usually
+ *    mixed.
+ * 7. The ending-pair scan, memorized in two stages: the twelve
  *    first letters in three chunks (CNST - LRMW - FHPG) as a
  *    ladder, then each first letter's second letters.
- * 7. Ending-pair drills: boards whose only consistent completion
+ * 8. Ending-pair drills: boards whose only consistent completion
  *    over the candidate pool ends in the card's pair; the back
  *    also names any other guess-list words the board admits.
- * 8. Placement drills: boards holding three floating yellows
+ * 9. Placement drills: boards holding three floating yellows
  *    after RAISE and the table word, with no green tile.
- * 9. Frame drills: an untabled RAISE board whose lesson is a
+ * 10. Frame drills: an untabled RAISE board whose lesson is a
  *    derivation, not a unique completion — float the yellow,
  *    take the chant's head, build round the green; the back
  *    walks that derivation to the recommended guess.
- * 10. Principle drills: a board whose lesson is a general
+ * 11. Principle drills: a board whose lesson is a general
  *    decision principle — the back names the play the
  *    principle picks, not a unique completion.
- * 11. The triple scans: the three-consonant runs that stall
+ * 12. The triple scans: the three-consonant runs that stall
  *    generation, as two ladders (endings, openings) whose
  *    backs name one triple with up to four example answers
  *    — the full set where fewer than four exist — plus a
@@ -62,6 +68,7 @@ object DeckGenerator {
         b.buildTable()
         b.buildApply()
         b.buildDoubles()
+        b.buildPairFrame()
         b.buildPairScan()
         b.buildPairDrills()
         b.buildPlacement()
@@ -74,8 +81,9 @@ object DeckGenerator {
         //
         // 123 cards: 13 mnemonic (12 ladder rungs + the full
         // text), 5 chant (4 ladder rungs + full recall), 12
-        // guess-2 table, 17 chant drills, 6 doubles (the before-Y
-        // rule card + 5 boards), 16 ending-pair scan (3
+        // guess-2 table, 17 chant drills, 5 doubles (the before-Y
+        // rule card + 4 boards), 1 pair-frame drill, 16
+        // ending-pair scan (3
         // first-letter chunk rungs + the first-letters recall +
         // 12 seconds cards), 24 ending-pair drills, 8 placement
         // drills, 1 frame drill, 1 principle drill, 20 triple

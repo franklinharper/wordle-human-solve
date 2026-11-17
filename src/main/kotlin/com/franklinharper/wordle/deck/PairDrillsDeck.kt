@@ -9,7 +9,7 @@ internal data class PairCard(
 
 internal fun DeckBuild.buildPairDrills() {
     // -------------------------------------------------------
-    // 7. Ending-pair drills, one per pair.
+    // 8. Ending-pair drills, one per pair.
     //
     // Construction rules, all asserted: guess 2 is the
     // mnemonic's table word; every board carries at least one

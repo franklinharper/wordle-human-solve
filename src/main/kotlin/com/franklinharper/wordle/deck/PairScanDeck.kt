@@ -2,7 +2,7 @@ package com.franklinharper.wordle.deck
 
 internal fun DeckBuild.buildPairScan() {
     // -------------------------------------------------------
-    // 6. The ending-pair scan, memorized in two stages.
+    // 7. The ending-pair scan, memorized in two stages.
     //
     // PAIR_TEXT is an independent literal, tied to PAIR_CHUNKS
     // the same way the chant's is. Frank's approach

@@ -5,12 +5,11 @@ internal data class DoublesCard(
     val answer: String,
     val guesses: List<String>,
     val headline: String,
-    val bystander: String? = null,
 )
 
 internal fun DeckBuild.buildDoubles() {
     // -------------------------------------------------------
-    // 5. Doubles: the before-Y rule and five boards.
+    // 5. Doubles: the before-Y rule and four boards.
     //
     // Board rules, all asserted below (Frank's grill,
     // 2026-11-13): the line is on the rails — guess 1 is
@@ -27,14 +26,11 @@ internal fun DeckBuild.buildDoubles() {
     // listed: the board's computed candidate set minus the
     // answer, alphabetically.
     //
-    // A card may also name a bystander (Frank, 2026-11-16):
-    // a playable word that fits the board and retires
-    // several fresh letters, yet is a poor guess because
-    // none of its fresh letters can be the double — it
-    // scores the same against every candidate, so it
-    // splits nothing and cannot solve. Every clause of
-    // that claim is asserted below, so the note cannot
-    // drift from the board it sits on.
+    // The fifth board (HAPPY) left the family on
+    // 2026-11-16: over the pool its completions are all
+    // doubles, but its best play is CAMPY, a mixed pair
+    // that can itself be the answer — so the board now
+    // teaches the pair-frame play instead (PairFrameDeck).
     add(
         "doubles:rule",
         wrap(bodyDiv("When a word ends in Y, what's the most likely shape?")),
@@ -57,12 +53,6 @@ internal fun DeckBuild.buildDoubles() {
             "Double the L:",
         ),
         DoublesCard(
-            "doubles:happy", "happy",
-            listOf("raise", "tangy", "bawdy"),
-            "Double the P:",
-            bystander = "lacky",
-        ),
-        DoublesCard(
             "doubles:bunny", "bunny",
             listOf("raise", "cloth", "bumpy"),
             "Double the N:",
@@ -79,7 +69,7 @@ internal fun DeckBuild.buildDoubles() {
         ),
     )
 
-    for ((role, answer, guesses, headline, bystander)
+    for ((role, answer, guesses, headline)
         in doublesCards) {
         validateLine(role, answer, guesses)
         val tableWord = table[feedbackString("raise", answer)]
@@ -133,78 +123,10 @@ internal fun DeckBuild.buildDoubles() {
         val cardText = "$headline <b>${answer.uppercase()}</b>" +
             " &mdash; also " +
             family.joinToString(", ") { it.uppercase() } + "."
-        var back = bodyDiv(cardText)
-        if (bystander != null) {
-            if (bystander !in allGuesses) {
-                fail(
-                    "error: $role: bystander " +
-                        "${bystander.uppercase()} is not a " +
-                        "valid guess"
-                )
-            }
-            if (!guesses.all {
-                    feedbackString(it, bystander) ==
-                        feedbackString(it, answer)
-                }
-            ) {
-                fail(
-                    "error: $role: bystander " +
-                        "${bystander.uppercase()} does not " +
-                        "fit the board"
-                )
-            }
-            if (bystander in candidates) {
-                fail(
-                    "error: $role: bystander " +
-                        "${bystander.uppercase()} is in the " +
-                        "board's candidate set -- it could " +
-                        "be the answer"
-                )
-            }
-            if (candidates.map {
-                    feedbackString(bystander, it)
-                }.distinct().size != 1
-            ) {
-                fail(
-                    "error: $role: bystander " +
-                        "${bystander.uppercase()} does not " +
-                        "score the same against every " +
-                        "candidate -- it does split the family"
-                )
-            }
-            val boardLetters = guesses.flatMap { it.toList() }
-                .toSet()
-            val fresh = bystander.toList().distinct()
-                .filter { it !in boardLetters }
-            val doubles = candidates.map { it[2] }.toSet()
-            if (fresh.size < 2 || fresh.any { it in doubles }) {
-                fail(
-                    "error: $role: bystander " +
-                        "${bystander.uppercase()}: fresh " +
-                        "letters ${fresh} -- the note needs " +
-                        "several fresh letters, none of them " +
-                        "a candidate double $doubles"
-                )
-            }
-            val freshText = fresh.dropLast(1)
-                .joinToString(", ") { it.uppercase().toString() } +
-                " and " + fresh.last().uppercase()
-            val candidateText = candidates.sorted().dropLast(1)
-                .joinToString(", ") { it.uppercase() } +
-                " and " + candidates.sorted().last().uppercase()
-            back += bodyDiv(
-                "${bystander.uppercase()} fits &mdash; " +
-                    "$freshText are all fresh &mdash; but " +
-                    "none can be the double. It scores the " +
-                    "same against $candidateText, so it " +
-                    "splits nothing and cannot solve. " +
-                    "Guess a double."
-            )
-        }
         add(
             role,
             boardFront(answer, guesses, "What's the next guess?"),
-            wrap(back),
+            wrap(bodyDiv(cardText)),
         )
     }
 }

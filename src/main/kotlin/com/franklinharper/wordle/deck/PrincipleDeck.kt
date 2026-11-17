@@ -4,7 +4,7 @@ import com.franklinharper.wordle.core.loadAllGuesses
 
 internal fun DeckBuild.buildPrinciple() {
     // -------------------------------------------------------
-    // 10. Principle drills: buy information with fresh
+    // 11. Principle drills: buy information with fresh
     // letters.
     //
     // The RAISE / PILOT / DINGY board used to be a doubles

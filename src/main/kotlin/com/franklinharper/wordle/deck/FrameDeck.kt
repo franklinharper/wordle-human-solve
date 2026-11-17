@@ -2,7 +2,7 @@ package com.franklinharper.wordle.deck
 
 internal fun DeckBuild.buildFrame() {
     // -------------------------------------------------------
-    // 9. Frame drills: the chant applied to a floating yellow.
+    // 10. Frame drills: the chant applied to a floating yellow.
     //
     // The TRUCE board (2026-11-10, #1970): RAISE came back
     // R yellow, E green — pattern 10002, untabled (the table
