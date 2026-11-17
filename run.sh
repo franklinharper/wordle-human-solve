@@ -15,6 +15,15 @@ cd "$(dirname "$0")"
 APP_ID="wordle"   # must match build/install/<name>
 APP_BIN="build/install/$APP_ID/bin/$APP_ID"
 
+# JVM-cluster Gradle home (Frank, 2026-11-17; see TOOLS.md "Gradle
+# cluster homes"): in the sandbox, builds run in the JVM cluster's own
+# Gradle home, so this repo never contends on another cluster's
+# file-access journal, and its builds reuse the cluster's shared
+# daemon. Elsewhere (no cluster home present) the default applies.
+if [ -d "$HOME/.gradle-jvm" ]; then
+    export GRADLE_USER_HOME="$HOME/.gradle-jvm"
+fi
+
 git pull --ff-only -q 2>/dev/null || echo "$(date -u +%FT%TZ) git pull failed, running existing code"
 
 # Rebuild only when build inputs are newer than the installed app.
@@ -28,9 +37,17 @@ else
 fi
 if "$needs_build"; then
     echo "$(date -u +%FT%TZ) sources changed, rebuilding"
-    # --no-daemon: no lingering Gradle daemon between runs.
+    # Builds run on the JVM cluster's shared daemon (no --no-daemon),
+    # serialized per Gradle home by flock: a concurrent build in this
+    # home queues here instead of timing out on the journal lock.
     # test gates the deploy: installDist never runs if tests fail.
-    if ! ./gradlew --no-daemon test installDist; then
+    GRADLE_CMD=(./gradlew test installDist)
+    if command -v flock >/dev/null 2>&1 &&
+        [ -n "${GRADLE_USER_HOME:-}" ]; then
+        GRADLE_CMD=(flock -w 1800 "$GRADLE_USER_HOME/build.lock"
+            ./gradlew test installDist)
+    fi
+    if ! "${GRADLE_CMD[@]}"; then
         echo "$(date -u +%FT%TZ) build failed" >&2
         [ -x "$APP_BIN" ] || exit 1
         echo "$(date -u +%FT%TZ) running previous install" >&2
