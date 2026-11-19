@@ -61,9 +61,6 @@ internal fun DeckBuild.buildDoubles() {
         ),
     )
 
-    fun isCcy(word: String): Boolean =
-        word[2] == word[3] && word[4] == 'y' && word[2] !in "aeiou"
-
     val doublesCards = listOf(
         DoublesCard(
             "doubles:tally", "tally",

@@ -53,10 +53,6 @@ internal fun DeckBuild.buildPairFrame() {
             )
         }
 
-        fun isCcy(word: String): Boolean =
-            word[2] == word[3] && word[4] == 'y' &&
-                word[2] !in "aeiou"
-
         val candidates = pool.filter { w ->
             guesses.all {
                 feedbackString(it, w) ==
@@ -152,8 +148,8 @@ internal fun DeckBuild.buildPairFrame() {
                 "the four that splits them all. " +
                 "${foil.uppercase()} " +
                 "fits too, but it is not a plausible " +
-                "answer — outside the candidate pool — " +
-                "and it splits nothing."
+                "answer — the standard spelling is " +
+                "LACKEY — and it splits nothing."
         )
         add(
             role,

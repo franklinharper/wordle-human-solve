@@ -199,6 +199,16 @@ internal class DeckBuild(val repoRoot: Path) {
     }
 
     /**
+     * A CCY word: the consonant before the final Y doubles
+     * — slots 3-4 equal, slot 5 the Y, and the doubled
+     * letter not a vowel. Shared by the doubles boards and
+     * the pair-frame board, whose checks must agree on
+     * what CCY means.
+     */
+    fun isCcy(word: String): Boolean =
+        word[2] == word[3] && word[4] == 'y' && word[2] !in "aeiou"
+
+    /**
      * The pair-frame decode (PairFrameDeck): the sentence
      * naming what each of the play's outcomes means, derived
      * from its actual feedback against the candidates —
