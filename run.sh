@@ -39,13 +39,33 @@ if [ -d "$HOME/.gradle-jvm" ]; then
     fi
     export JDK_JAVA_OPTIONS="-Djava.net.preferIPv4Stack=true"
     if [ -n "${https_proxy:-}" ]; then
-        eval "$(python3 -c "
-from urllib.parse import urlparse
-import os
-u = urlparse(os.environ.get('https_proxy',''))
-print('PH=%s; PP=%s; PU=%s; PW=%s' % (u.hostname, u.port, u.username, u.password))
-")"
-        JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyHost=$PH -Dhttps.proxyPort=$PP -Dhttps.proxyUser=$PU -Dhttps.proxyPassword=$PW -Dhttp.proxyHost=$PH -Dhttp.proxyPort=$PP -Dhttp.proxyUser=$PU -Dhttp.proxyPassword=$PW"
+        # Pure-shell proxy parse (the same splits as the
+        # ops.sh scripts): no interpreter in the build path,
+        # and no eval of text generated from the
+        # credential-bearing URL. The sandbox credential is
+        # alphanumeric, so the first-@ / first-: splits are
+        # exact for the URL this sandbox issues.
+        _rest="${https_proxy#*://}"
+        case "$_rest" in
+            *@*)
+                _auth="${_rest%%@*}"
+                _hostport="${_rest##*@}"
+                _user="${_auth%%:*}"
+                _pass="${_auth#*:}"
+                ;;
+            *)
+                _hostport="$_rest"
+                _user=""
+                _pass=""
+                ;;
+        esac
+        _host="${_hostport%%:*}"
+        _port="${_hostport##*:}"
+        JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyHost=$_host -Dhttps.proxyPort=$_port -Dhttp.proxyHost=$_host -Dhttp.proxyPort=$_port"
+        if [ -n "$_user" ]; then
+            JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyUser=$_user -Dhttps.proxyPassword=$_pass -Dhttp.proxyUser=$_user -Dhttp.proxyPassword=$_pass"
+        fi
+        unset _rest _auth _hostport _user _pass _host _port
     fi
 fi
 
