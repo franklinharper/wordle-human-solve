@@ -151,6 +151,21 @@ produces a word, fall back to the chant, slot by slot.
 Triples in the middle (slots 2–4) are a long tail — search
 them, don't scan them.
 
+**The one-gap scan.** When exactly one slot is open and no
+word surfaces, don't free-associate and don't scan the
+keyboard — slot letters through the gap one at a time and
+pronounce each skeleton, the way Floating Yellows does. The
+order is the chant — OTLN – UCY – HDPM – GBF, then its tail
+(K, W, V, then Z, X, Q, J): no new order to learn, and after
+RAISE the only vowels a gap can hide are O and U, which the
+chant reaches first and fifth (A, I and E are settled by the
+opener in every game — placed, yellow, or dead). Skip only
+letters the board has killed; never skip a letter for
+already being on the board — the gap may be its double.
+Recognition is the filter: a skeleton that sounds like a
+word is the candidate; one that doesn't is discarded and
+the scan moves on.
+
 **Floating yellows.** When three letters are yellow and none is
 placed, don't hunt for a word that merely contains them — a
 familiar word will happily park one in a slot the board already
