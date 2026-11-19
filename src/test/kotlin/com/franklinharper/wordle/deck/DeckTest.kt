@@ -63,12 +63,13 @@ class DeckGeneratorTest {
     @Test
     fun buildsAllNotes() {
         val notes = DeckGenerator.build(RepoRoot.resolve())
-        assertEquals(123, notes.size)
-        assertEquals(123, notes.map { it.role }.toSet().size)
+        assertEquals(124, notes.size)
+        assertEquals(124, notes.map { it.role }.toSet().size)
         val byRole = notes.associateBy { it.role }
         assertTrue(byRole.getValue("frame:truce").back.contains("TROPE"))
         assertTrue(byRole.getValue("principle:dicky").back.contains("DICKY"))
         assertTrue(byRole.getValue("pairframe:campy").back.contains("CAMPY"))
+        assertTrue(byRole.getValue("onegap:clout").back.contains("CLOUT"))
         assertFalse(byRole.containsKey("doubles:dizzy"))
         assertFalse(byRole.containsKey("doubles:happy"))
         assertTrue(byRole.getValue("placement:loamy").back.contains("LOAMY"))
