@@ -77,10 +77,11 @@ principles in order:
 
 ### Rule 2: Test untested common letters — scan by the chant, not the keyboard.
 
-**The after-RAISE chant: OTLN – UCY – HDPM – GBF** — the letters RAISE
-doesn't test, ordered by how many answers contain them (O and T each
-appear in 29% of answers, L in 28%, N in 24%). Since RAISE is always
-guess 1, this is the scan every letter hunt uses:
+**The after-RAISE chant: EARO – TILS – NUCY – HDPM – GBF – KWV –
+ZXQJ** — every letter, ordered by how many answers contain it
+(E appears in 45% of answers, A in 39%, R in 36%, O and T in 29%).
+Since RAISE is always guess 1, this is the scan every letter hunt
+uses:
 
 - Run the chant from the top and take the first letter that is still
   untested and fits the frame.
@@ -89,24 +90,22 @@ guess 1, this is the scan every letter hunt uses:
   is geography, not usefulness: it gives Q and W the first auditions,
   and they are among the rarest letters in answers.
 - If every chant letter is already known or dead, the chant is
-  exhausted — what remains is K, W, V, and then the rarest letters
-  of all — Z, X, Q, J, each in under 2% of answers. From there, work
-  from the candidates themselves.
+  exhausted — work from the candidates themselves.
 - Prefer a word that smuggles in **two** high chant letters over one
   that tests a single letter — e.g. after RAISE came back with R, I, E
   yellow, OILER (new: O, L) over WIRER (new: only W).
 
-Where the chant comes from: the 12 most common letters across all
-answers are E, A, R, O, T, L, I, S, N, C, U, Y (~74% of all letter
-slots). Strike out the five letters RAISE already tests and rank
-everything that remains by answers containing the letter (which
-swaps two near-ties: U before C, M before G): O, T, L, N, U, C, Y,
-H, D, P, M, G, B, F, K, W, V, Z, X, Q, J. The chant takes the first
-fourteen, through F. The cut is reachability, not frequency: each
-of the fourteen can be the first untested letter on a real board
-played by this system — RAISE, the table word, then answer words
-(the deck's drills are those boards) — and K, W, V and the rarest
-four have no such board, so they are not in the chant.
+Where the chant comes from: every letter, ranked by how many
+answers contain it — E, A, R, O, T, I, L, S, N, U, C, Y, H, D, P,
+M, G, B, F, K, W, V, Z, X, Q, J (the ranking swaps two near-ties
+against raw slot frequency: U before C, M before G). RAISE's five
+letters sit at their frequency places — E, A and R up front, I
+and S mid-chant — because a scan that cannot name a letter can
+never propose it as a double. On a hunt they cost nothing: RAISE
+has always tested them by the time the chant runs, so the hunt
+skips them and its effective order still starts at O. What varies
+between uses is never the order — it is the filter: hunts skip
+tested letters; the one-gap scan skips only dead ones.
 
 **The ending-pair scan.** When slots 4–5 are both still open and
 the word doesn't end in Y, don't scan letter by letter — scan the
@@ -155,11 +154,11 @@ them, don't scan them.
 word surfaces, don't free-associate and don't scan the
 keyboard — slot letters through the gap one at a time and
 pronounce each skeleton, the way Floating Yellows does. The
-order is the chant — OTLN – UCY – HDPM – GBF, then its tail
-(K, W, V, then Z, X, Q, J): no new order to learn, and after
-RAISE the only vowels a gap can hide are O and U, which the
-chant reaches first and fifth (A, I and E are settled by the
-opener in every game — placed, yellow, or dead). Skip only
+order is the chant — the whole chant, RAISE's letters
+included: a gap can hide a double of any letter already on
+the board, the opener's vowels among them (the second A in
+ALPH_), and the chant is the one order that can propose
+them all. Skip only
 letters the board has killed; never skip a letter for
 already being on the board — the gap may be its double.
 Recognition is the filter: a skeleton that sounds like a

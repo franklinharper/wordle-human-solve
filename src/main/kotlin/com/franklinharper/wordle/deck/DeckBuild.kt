@@ -68,15 +68,18 @@ internal class DeckBuild(val repoRoot: Path) {
     val table: Map<String, String> =
         tableRows.associate { (pattern, word, _) -> pattern to word }
 
-    // The chant is the letters RAISE doesn't test, ranked by
-    // how many answers contain them, cut at F: K, W, V and the
-    // sub-2% tail have no system board that leaves them
-    // first-untested, so they are not in the chant (Frank's
-    // rule, 2026-11-04). CHANT_TEXT is an independent literal;
-    // the equality check ties it to CHANT_CHUNKS, so editing
-    // either one alone fails loudly.
-    val chantChunks = listOf("OTLN", "UCY", "HDPM", "GBF")
-    val chantText = "OTLN – UCY – HDPM – GBF"
+    // The chant is every letter, ranked by how many answers
+    // contain it (Frank's F3 grill, 2026-11-20): RAISE's five
+    // sit at their frequency places — E, A, R up front, I and
+    // S mid-chant — because a scan that cannot name a letter
+    // can never propose it as a double. One order serves
+    // every scan; what varies is the filter (hunts skip
+    // tested letters, the one-gap scan skips only dead ones).
+    // CHANT_TEXT is an independent literal; the equality
+    // check ties it to CHANT_CHUNKS, so editing either one
+    // alone fails loudly.
+    val chantChunks = listOf("EARO", "TILS", "NUCY", "HDPM", "GBF", "KWV", "ZXQJ")
+    val chantText = "EARO – TILS – NUCY – HDPM – GBF – KWV – ZXQJ"
 
     init {
         if (chantText != chantChunks.joinToString(SEPARATOR)) {

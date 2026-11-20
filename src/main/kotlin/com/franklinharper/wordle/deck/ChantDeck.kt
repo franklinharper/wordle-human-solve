@@ -22,8 +22,11 @@ internal fun DeckBuild.buildChant() {
         wrap(bodyDiv("Recite the whole chant.")),
         wrap(
             bodyDiv(chantText) + promptDiv(
-                "The letters RAISE doesn't test, in the order " +
-                    "answers use them. Groups of 4-3-4-3."
+                "Every letter, in the order answers use " +
+                    "them &mdash; RAISE's five sit at their " +
+                    "frequency places, already tested by the " +
+                    "time the chant runs. Groups of " +
+                    "4-4-4-4-3-3-4."
             )
         ),
     )

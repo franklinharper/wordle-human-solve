@@ -16,7 +16,9 @@ internal fun DeckBuild.buildOneGap() {
     // (entered 2026-11-19): slot the chant through the
     // gap and pronounce each skeleton until one sounds
     // like a word. The derivation is asserted, not just
-    // told: the chant reaches U fifth — O completes
+    // told: the live scan reaches U fifth (the merged
+    // chant filtered by this board's dead letters —
+    // RAISE's five and H are skipped): O completes
     // CLOOT, a guess-list word but no answer; T, L and N
     // complete no playable word — and the back's skip
     // list is built from the asserted scan, so the text
@@ -71,18 +73,24 @@ internal fun DeckBuild.buildOneGap() {
         // back's own argument, that it is a Scots word,
         // not one to settle on. The chant's shape is
         // asserted, not assumed (review F2, 2026-11-20):
-        // the scan must reach a U, and O must come first
-        // on the way, because the back's prose and the
-        // skip list below both single O out.
+        // the scan must reach a U, and the first live
+        // letter on the way must be O, because the back's
+        // prose and the skip list below both single O
+        // out. Live means the merged chant filtered by
+        // the board's dead set (F3 grill Q7, 2026-11-20):
+        // E, A, R, I, S and H are dead here, so the live
+        // auditions on the way to U are O, T, L, N.
         val uIndex = chant.indexOf('U')
         if (uIndex < 0) {
             fail("error: $role: the chant has no U to scan to")
         }
+        val dead = knowledge(boardAnswer, guesses).absent
         val gapSkips = chant.substring(0, uIndex)
+            .filter { it.lowercaseChar() !in dead }
         if (gapSkips.firstOrNull() != 'O') {
             fail(
-                "error: $role: the chant must reach O first " +
-                    "on the way to U, got $gapSkips"
+                "error: $role: the first live letter on the " +
+                    "way to U must be O, got $gapSkips"
             )
         }
         val laterSkips = gapSkips.drop(1).toList()

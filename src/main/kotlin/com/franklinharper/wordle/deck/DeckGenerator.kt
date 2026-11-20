@@ -8,7 +8,8 @@ import java.nio.file.Path
  *
  * The deck teaches the memorized parts of his hard-mode system:
  * 1. The guess-2 mnemonic, as a ladder over its twelve words.
- * 2. The after-RAISE chant (OTLN - UCY - HDPM - GBF), as a ladder.
+ * 2. The after-RAISE chant (EARO - TILS - NUCY - HDPM -
+ *    GBF - KWV - ZXQJ), as a ladder.
  * 3. The guess-2 lookup table: RAISE's feedback row -> the table word.
  * 4. Chant drills on real boards: legal lines (RAISE, the table
  *    word, then answer-list words) asking for the first chant
@@ -84,8 +85,8 @@ object DeckGenerator {
         // -------------------------------------------------------
         // Assemble.
         //
-        // 124 cards: 13 mnemonic (12 ladder rungs + the full
-        // text), 5 chant (4 ladder rungs + full recall), 12
+        // 127 cards: 13 mnemonic (12 ladder rungs + the full
+        // text), 8 chant (7 ladder rungs + full recall), 12
         // guess-2 table, 17 chant drills, 5 doubles (the before-Y
         // rule card + 4 boards), 1 pair-frame drill, 16
         // ending-pair scan (3
@@ -96,8 +97,8 @@ object DeckGenerator {
         // scans (10 ending ladder rungs + ending recite +
         // ending trigger, 6 opening ladder rungs + opening
         // recite + opening trigger).
-        if (b.notes.size != 124) {
-            fail("error: deck has ${b.notes.size} notes, expected 124")
+        if (b.notes.size != 127) {
+            fail("error: deck has ${b.notes.size} notes, expected 127")
         }
         return b.notes
     }

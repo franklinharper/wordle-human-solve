@@ -8,8 +8,9 @@ internal fun DeckBuild.buildFrame() {
     // R yellow, E green — pattern 10002, untabled (the table
     // holds R+E both yellow and E green alone, not this mix).
     // The play is derived, not memorized (Frank, 2026-11-13):
-    // the yellow R must move; the chant's first chunk is
-    // OTLN, so its first two letters, O and T, are the fresh
+    // the yellow R must move; the chant's first two untested
+    // letters are O and T (RAISE's five sit in the chant but
+    // are already tested here), so those are the fresh
     // letters to reach for; building them with the R around
     // the green E gives TRO?E, and P completes TROPE. Frank
     // actually played CHORE and still solved in 3 — the card
@@ -48,36 +49,42 @@ internal fun DeckBuild.buildFrame() {
         // The derivation the back teaches, asserted: the
         // recommended guess moves the yellow R off slot 1,
         // keeps the green E at slot 5, and spends its fresh
-        // letters on the chant's first two, O and T.
+        // letters on the chant's first two untested letters,
+        // O and T — the head of the chant as a hunt reads
+        // it, RAISE's already-tested letters skipped (F3
+        // grill Q3, 2026-11-20).
+        val tested = guesses.joinToString("").toSet()
+        val untested = chant.filter { it.lowercaseChar() !in tested }
+        val head = untested.take(2)
         if (recommended[0] == 'r' || 'r' !in recommended ||
             recommended[4] != 'e' ||
-            chant[0].lowercaseChar() !in recommended ||
-            chant[1].lowercaseChar() !in recommended
+            head[0].lowercaseChar() !in recommended ||
+            head[1].lowercaseChar() !in recommended
         ) {
             fail(
                 "error: $role: ${recommended.uppercase()} is not " +
                     "the chant derivation (moved R, chant head " +
-                    "${chant[0]} and ${chant[1]}, green E at 5)"
+                    "$head, green E at 5)"
             )
         }
         // Slot 4, asserted (review F3, 2026-11-14): running
-        // the chant down from the top — past O and T, which
-        // the frame already spends — the letters before P
-        // complete no answer at TRO?E; P is the first that
-        // does. (N and D complete valid guesses, TRONE and
-        // TRODE, but no word you'd know — the back says
-        // exactly that.) The back's skip list is built from
-        // slot4Skips itself, so the text cannot drift from
-        // this assertion (review F2, 2026-11-15).
-        val slot4Skips = chant
-            .substring(0, chant.indexOf('P'))
-            .filter { it != chant[0] && it != chant[1] }
+        // the untested chant down from the top — past O and
+        // T, which the frame already spends — the letters
+        // before P complete no answer at TRO?E; P is the
+        // first that does. (N and D complete valid guesses,
+        // TRONE and TRODE, but no word you'd know — the back
+        // says exactly that.) The back's skip list is built
+        // from slot4Skips itself, so the text cannot drift
+        // from this assertion (review F2, 2026-11-15).
+        val slot4Skips = untested
+            .substring(0, untested.indexOf('P'))
+            .filter { it !in head }
         if (recommended[3] != 'p' ||
             slot4Skips.any { "tro${it.lowercaseChar()}e" in pool }
         ) {
             fail(
                 "error: $role: slot 4 is not derived — the " +
-                    "chant scan past ${chant[0]} and ${chant[1]} " +
+                    "chant scan past $head " +
                     "must reach P first, skipping $slot4Skips"
             )
         }

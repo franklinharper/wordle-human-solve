@@ -322,7 +322,7 @@ private const val MODEL_CSS =
 private const val DECK_DESCRIPTION =
     "Memorized parts of Frank's hard-mode Wordle system: the " +
         "guess-2 mnemonic ladder, the after-RAISE chant " +
-        "(OTLN - UCY - HDPM - GBF), the guess-2 table, chant drills on " +
+        "(EARO - TILS - NUCY - HDPM - GBF - KWV - ZXQJ), the guess-2 table, chant drills on " +
         "real boards, the doubled-consonant-before-Y rule, and the " +
         "ending-pair scan over two-consonant, non-Y endings (ladder " +
         "and drills), and placement drills for boards with three " +
