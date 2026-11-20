@@ -18,7 +18,7 @@ internal fun DeckBuild.buildOneGap() {
     // like a word. The derivation is asserted, not just
     // told: the chant reaches U fifth — O completes
     // CLOOT, a guess-list word but no answer; T, L and N
-    // complete nothing in the pool — and the back's skip
+    // complete no playable word — and the back's skip
     // list is built from the asserted scan, so the text
     // cannot drift from it.
     run {
@@ -60,14 +60,34 @@ internal fun DeckBuild.buildOneGap() {
                     "have the CLO?T frame (greens at 1-3, T at 5)"
             )
         }
-        // The scan, asserted: running the chant from the
-        // top, the letters before U complete no pool word
-        // at CLO?T. O is the special case the back names:
-        // CLOOT is a valid guess but not an answer — a
-        // word to pass over, not to settle on.
-        val gapSkips = chant.substring(0, chant.indexOf('U'))
+        // The scan, asserted against the guess list —
+        // the list the game enforces (review F4,
+        // 2026-11-20): running the chant from the top,
+        // the letters before U complete no playable word
+        // at CLO?T, with one named exception. O completes
+        // CLOOT, a valid guess but no answer — its
+        // absence from the pool is the evidence for
+        // that; the criterion for passing it over is the
+        // back's own argument, that it is a Scots word,
+        // not one to settle on. The chant's shape is
+        // asserted, not assumed (review F2, 2026-11-20):
+        // the scan must reach a U, and O must come first
+        // on the way, because the back's prose and the
+        // skip list below both single O out.
+        val uIndex = chant.indexOf('U')
+        if (uIndex < 0) {
+            fail("error: $role: the chant has no U to scan to")
+        }
+        val gapSkips = chant.substring(0, uIndex)
+        if (gapSkips.firstOrNull() != 'O') {
+            fail(
+                "error: $role: the chant must reach O first " +
+                    "on the way to U, got $gapSkips"
+            )
+        }
+        val laterSkips = gapSkips.drop(1).toList()
         if (play[3] != 'u' ||
-            gapSkips.any { "clo${it.lowercaseChar()}t" in pool }
+            laterSkips.any { "clo${it.lowercaseChar()}t" in allGuesses }
         ) {
             fail(
                 "error: $role: slot 4 is not derived — the " +
@@ -81,7 +101,6 @@ internal fun DeckBuild.buildOneGap() {
                     "but not a candidate — the back says so"
             )
         }
-        val laterSkips = gapSkips.drop(1).toList()
         add(
             role,
             boardFront(boardAnswer, guesses, "What's the next guess?"),

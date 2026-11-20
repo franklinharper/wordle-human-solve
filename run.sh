@@ -44,26 +44,43 @@ if [ -d "$HOME/.gradle-jvm" ]; then
         # and no eval of text generated from the
         # credential-bearing URL. The sandbox credential is
         # alphanumeric, so the first-@ / first-: splits are
-        # exact for the URL this sandbox issues.
+        # exact for the URL this sandbox issues. A part the
+        # URL does not carry stays absent: a split on a
+        # missing delimiter returns the whole string, so
+        # the port flag is emitted only when the host part
+        # contains ':' and the password flag only when the
+        # auth part does (review F1, 2026-11-20).
         _rest="${https_proxy#*://}"
         case "$_rest" in
             *@*)
                 _auth="${_rest%%@*}"
                 _hostport="${_rest##*@}"
                 _user="${_auth%%:*}"
-                _pass="${_auth#*:}"
+                case "$_auth" in
+                    *:*) _pass="${_auth#*:}" ;;
+                    *) _pass="" ;;
+                esac
                 ;;
             *)
                 _hostport="$_rest"
+                _auth=""
                 _user=""
                 _pass=""
                 ;;
         esac
         _host="${_hostport%%:*}"
-        _port="${_hostport##*:}"
-        JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyHost=$_host -Dhttps.proxyPort=$_port -Dhttp.proxyHost=$_host -Dhttp.proxyPort=$_port"
+        JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyHost=$_host -Dhttp.proxyHost=$_host"
+        case "$_hostport" in
+            *:*)
+                _port="${_hostport##*:}"
+                JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyPort=$_port -Dhttp.proxyPort=$_port"
+                ;;
+        esac
         if [ -n "$_user" ]; then
-            JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyUser=$_user -Dhttps.proxyPassword=$_pass -Dhttp.proxyUser=$_user -Dhttp.proxyPassword=$_pass"
+            JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyUser=$_user -Dhttp.proxyUser=$_user"
+            case "$_auth" in
+                *:*) JDK_JAVA_OPTIONS="$JDK_JAVA_OPTIONS -Dhttps.proxyPassword=$_pass -Dhttp.proxyPassword=$_pass" ;;
+            esac
         fi
         unset _rest _auth _hostport _user _pass _host _port
     fi
