@@ -165,6 +165,20 @@ Recognition is the filter: a skeleton that sounds like a
 word is the candidate; one that doesn't is discarded and
 the scan moves on.
 
+**Middle doubles.** E and O are the only letters that double
+side by side, and they do it across the middle — slots 2–3
+and above all 3–4 (107 answers carry an EE or an OO across
+those slots). When E or O is pinned at slot 3 or 4 and the
+neighbouring middle slot is open, try the double first: it
+is the likeliest single letter for that slot — with E pinned
+at 4, E itself tops slot 3's candidates, and with O pinned
+at 4, O tops slot 3's by a wide margin (STEER was won this
+way: E green at 4, the second E at 3). A, I and U never
+double side by side — AA and UU appear in no answers at
+all, II in one (RADII) — so never spend a slot doubling
+them adjacently; when they double, they split (MADAM,
+CIVIC).
+
 **Floating yellows.** When three letters are yellow and none is
 placed, don't hunt for a word that merely contains them — a
 familiar word will happily park one in a slot the board already
