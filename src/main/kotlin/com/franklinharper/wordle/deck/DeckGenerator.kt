@@ -45,6 +45,11 @@ import java.nio.file.Path
  *    whose lesson is the one-gap scan — slot the chant
  *    through the gap and pronounce each skeleton until
  *    one sounds like a word.
+ * 14. Middle doubles: the E/O rule card and four boards —
+ *    a middle E or O pinned green at one slot of a middle
+ *    pair, its twin slot open; every pool completion of
+ *    each board carries the same vowel doubled across a
+ *    middle boundary.
  *
  * Each family is built by a builder function on [DeckBuild] in
  * its own file, adding notes to the shared sink; this object
@@ -73,6 +78,7 @@ object DeckGenerator {
         b.buildTable()
         b.buildApply()
         b.buildDoubles()
+        b.buildMiddleDoubles()
         b.buildPairFrame()
         b.buildPairScan()
         b.buildPairDrills()
@@ -85,10 +91,11 @@ object DeckGenerator {
         // -------------------------------------------------------
         // Assemble.
         //
-        // 127 cards: 13 mnemonic (12 ladder rungs + the full
+        // 132 cards: 13 mnemonic (12 ladder rungs + the full
         // text), 8 chant (7 ladder rungs + full recall), 12
         // guess-2 table, 17 chant drills, 5 doubles (the before-Y
-        // rule card + 4 boards), 1 pair-frame drill, 16
+        // rule card + 4 boards), 5 middle doubles (the E/O rule
+        // card + 4 boards), 1 pair-frame drill, 16
         // ending-pair scan (3
         // first-letter chunk rungs + the first-letters recall +
         // 12 seconds cards), 24 ending-pair drills, 8 placement
@@ -97,8 +104,8 @@ object DeckGenerator {
         // scans (10 ending ladder rungs + ending recite +
         // ending trigger, 6 opening ladder rungs + opening
         // recite + opening trigger).
-        if (b.notes.size != 127) {
-            fail("error: deck has ${b.notes.size} notes, expected 127")
+        if (b.notes.size != 132) {
+            fail("error: deck has ${b.notes.size} notes, expected 132")
         }
         return b.notes
     }
