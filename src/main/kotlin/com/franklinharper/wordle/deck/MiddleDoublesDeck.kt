@@ -27,9 +27,11 @@ internal fun DeckBuild.buildMiddleDoubles() {
     // all carry the same vowel doubled across a middle
     // boundary (the shape purity the CCY boards assert,
     // transposed). The back names the play and every other
-    // word the board admits over pool and guess list
-    // together -- possible solutions from the player's
-    // seat, the pair drills' convention.
+    // double-carrying word the board admits over pool and
+    // guess list together (review F4, 2026-11-25: guess-only
+    // fits that do not carry the double -- ERNED and ERRED
+    // on the BREED board -- are not named under a
+    // "Double the E" headline).
     add(
         "middle:rule",
         wrap(bodyDiv("Which vowels double side by side, and where?")),
@@ -39,8 +41,9 @@ internal fun DeckBuild.buildMiddleDoubles() {
                     "middle, slots 2&ndash;3 and above all " +
                     "3&ndash;4 (107 answers). A pinned middle " +
                     "E or O: try its double next door first. " +
-                    "A, I and U never double side by side " +
-                    "&mdash; their doubles split."
+                    "A and U never double side by side, and I " +
+                    "only in RADII &mdash; never spend a slot " +
+                    "on an adjacent A, I or U double."
             )
         ),
     )
@@ -103,10 +106,13 @@ internal fun DeckBuild.buildMiddleDoubles() {
         val greens = knowledge(answer, guesses).greens
         val pinned = listOf(firstSlot, firstSlot + 1)
             .filter { greens[it] == vowel }
-        if (pinned.size != 1 ||
-            greens.containsKey(firstSlot) &&
-            greens.containsKey(firstSlot + 1)
-        ) {
+        val exactlyOnePinned = pinned.size == 1
+        // The twin slot must carry no green at all: a green
+        // there in a different letter would still leave
+        // pinned.size == 1, so it needs its own check.
+        val twinOpen = !(greens.containsKey(firstSlot) &&
+            greens.containsKey(firstSlot + 1))
+        if (!exactlyOnePinned || !twinOpen) {
             fail(
                 "error: $role: greens on the double's slots " +
                     "are $greens -- exactly one slot of the " +
@@ -136,9 +142,11 @@ internal fun DeckBuild.buildMiddleDoubles() {
             )
         }
         val alsoFits = allGuesses.filter { w ->
-            w != answer && guesses.all {
-                feedbackString(it, w) == feedbackString(it, answer)
-            }
+            w != answer && hasMiddleDouble(w, vowel) &&
+                guesses.all {
+                    feedbackString(it, w) ==
+                        feedbackString(it, answer)
+                }
         }.sorted()
         val headline = "Double the ${vowel.uppercaseChar()}:"
         val cardText = "$headline <b>${answer.uppercase()}</b>" +

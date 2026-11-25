@@ -71,6 +71,8 @@ class DeckGeneratorTest {
         assertTrue(byRole.getValue("pairframe:campy").back.contains("CAMPY"))
         assertTrue(byRole.getValue("onegap:clout").back.contains("CLOUT"))
         assertTrue(byRole.getValue("middle:breed").back.contains("BREED"))
+        assertTrue(byRole.getValue("middle:breed").back.contains("PREED"))
+        assertFalse(byRole.getValue("middle:breed").back.contains("ERRED"))
         assertTrue(byRole.getValue("middle:pooch").back.contains("POOCH"))
         assertFalse(byRole.containsKey("doubles:dizzy"))
         assertFalse(byRole.containsKey("doubles:happy"))

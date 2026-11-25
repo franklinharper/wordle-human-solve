@@ -168,8 +168,9 @@ the scan moves on.
 **Middle doubles.** E and O are the only letters that double
 side by side, and they do it across the middle — slots 2–3
 and above all 3–4 (107 answers carry an EE or an OO across
-those slots). When E or O is pinned at slot 3 or 4 and the
-neighbouring middle slot is open, try the double first: it
+those slots). When E or O is pinned at one slot of a
+middle pair — slots 2–3 or 3–4 — and the pair's other slot
+is open, try the double first: across the 3–4 boundary it
 is the likeliest single letter for that slot — with E pinned
 at 4, E itself tops slot 3's candidates, and with O pinned
 at 4, O tops slot 3's by a wide margin (STEER was won this
